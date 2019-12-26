@@ -22,8 +22,6 @@ layui.use(['table','laydate', 'form'], function(){
             ,{field: 'name', align: 'center',title: '商户名称'}
             ,{field: 'partner', align: 'center',title: '商户号'}
             ,{field: 'subject', align: 'center',title: '标题'}
-            ,{field: 'charset$', align: 'center',title: '编码方式'}
-            ,{field: 'signType$', align: 'center',title: '加密方式'}
             ,{field: 'privateKey', align: 'center',title: '私钥'}
             ,{field: 'publicKey', align: 'center',title: '公钥'}
             ,{field: 'weight', align: 'center',title: '权重值'}
@@ -244,8 +242,6 @@ layui.use(['table','laydate', 'form'], function(){
             name: $('#name').val(),
             partner: $('#partner').val(),
             subject: $('#subject').val(),
-            charset: $('#charset').val(),
-            signType: $('#signType').val(),
             privateKey: $('#privateKey').val(),
             publicKey: $('#publicKey').val(),
             weight: $('#weight').val(),

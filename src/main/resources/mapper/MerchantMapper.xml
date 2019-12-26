@@ -9,8 +9,6 @@
         <result column="name" property="name" />
         <result column="partner" property="partner" />
         <result column="subject" property="subject" />
-        <result column="charset" property="charset" />
-        <result column="sign_type" property="signType" />
         <result column="private_key" property="privateKey" />
         <result column="public_key" property="publicKey" />
         <result column="weight" property="weight" />

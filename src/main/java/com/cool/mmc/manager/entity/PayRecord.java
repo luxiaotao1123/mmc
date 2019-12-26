@@ -1,15 +1,16 @@
 package com.cool.mmc.manager.entity;
 
-import com.core.common.Cools;import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.enums.IdType;
-import com.core.common.SpringUtils;
-import com.cool.mmc.manager.service.MerchantService;
 import com.baomidou.mybatisplus.annotations.TableField;
+import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.enums.IdType;
+import com.cool.mmc.manager.service.MerchantService;
+import com.core.common.Cools;
+import com.core.common.SpringUtils;
+
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import com.baomidou.mybatisplus.annotations.TableName;
-import java.io.Serializable;
 
 @TableName("man_pay_record")
 public class PayRecord implements Serializable {

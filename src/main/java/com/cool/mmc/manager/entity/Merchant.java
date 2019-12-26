@@ -1,17 +1,17 @@
 package com.cool.mmc.manager.entity;
 
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableName;
+import com.core.common.Cools;import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.enums.IdType;
-import com.cool.mmc.system.entity.User;
-import com.cool.mmc.system.service.UserService;
-import com.core.common.Cools;
-import com.core.common.SpringUtils;
-
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotations.TableField;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import com.core.common.SpringUtils;
+import com.cool.mmc.manager.service.UserService;
+
+import com.baomidou.mybatisplus.annotations.TableName;
+import java.io.Serializable;
 
 @TableName("man_merchant")
 public class Merchant implements Serializable {
@@ -44,17 +44,6 @@ public class Merchant implements Serializable {
      * 标题
      */
     private String subject;
-
-    /**
-     * 编码方式 1: utf-8  2: gbk  
-     */
-    private Short charset;
-
-    /**
-     * 加密方式 1: RSA2  2: AES  
-     */
-    @TableField("sign_type")
-    private Short signType;
 
     /**
      * 私钥
@@ -107,13 +96,11 @@ public class Merchant implements Serializable {
 
     public Merchant() {}
 
-    public Merchant(String appId,String name,String partner,String subject,Short charset,Short signType,String privateKey,String publicKey,Integer weight,Integer sort,String memo,Date createTime,Date updateTime,Long editor,Short status) {
+    public Merchant(String appId,String name,String partner,String subject,String privateKey,String publicKey,Integer weight,Integer sort,String memo,Date createTime,Date updateTime,Long editor,Short status) {
         this.appId = appId;
         this.name = name;
         this.partner = partner;
         this.subject = subject;
-        this.charset = charset;
-        this.signType = signType;
         this.privateKey = privateKey;
         this.publicKey = publicKey;
         this.weight = weight;
@@ -130,8 +117,6 @@ public class Merchant implements Serializable {
 //            null,    // 商户名称[非空]
 //            null,    // 商户号[非空]
 //            null,    // 标题[非空]
-//            null,    // 编码方式[非空]
-//            null,    // 加密方式
 //            null,    // 私钥[非空]
 //            null,    // 公钥
 //            null,    // 权重值
@@ -181,46 +166,6 @@ public class Merchant implements Serializable {
 
     public void setSubject(String subject) {
         this.subject = subject;
-    }
-
-    public Short getCharset() {
-        return charset;
-    }
-
-    public String getCharset$(){
-        if (null == this.charset){ return null; }
-        switch (this.charset){
-            case 1:
-                return "utf-8";
-            case 2:
-                return "gbk";
-            default:
-                return String.valueOf(this.charset);
-        }
-    }
-
-    public void setCharset(Short charset) {
-        this.charset = charset;
-    }
-
-    public Short getSignType() {
-        return signType;
-    }
-
-    public String getSignType$(){
-        if (null == this.signType){ return null; }
-        switch (this.signType){
-            case 1:
-                return "RSA2";
-            case 2:
-                return "AES";
-            default:
-                return String.valueOf(this.signType);
-        }
-    }
-
-    public void setSignType(Short signType) {
-        this.signType = signType;
     }
 
     public String getPrivateKey() {
