@@ -1,0 +1,40 @@
+/*自动补全*/
+.cool-auto-complete .layui-unselect.layui-form-select {
+    display: none;
+}
+
+.cool-auto-complete-div {
+    cursor: pointer;
+}
+
+.cool-auto-complete-window {
+    width: 100%;
+    display: none;
+    position: absolute;
+    line-height: normal;
+    z-index: 999;
+}
+
+.cool-auto-complete-window-input {
+
+    height: 28px;
+    box-sizing: border-box;
+    border: 1px solid #dedede;
+
+    width: 100%;
+}
+
+.cool-auto-complete-window-select {
+    width: 100%;
+    border: 1px solid #dedede;
+    margin: 0;
+    height: 142px;
+
+}
+
+.cool-auto-complete-window-select option{
+    padding: 3px 2px;
+}
+.cool-auto-complete-window-select option:first-child{
+    color:#aaaaaa;
+}

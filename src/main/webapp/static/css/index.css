@@ -1,0 +1,120 @@
+/* 用户功能栏*/
+.layui-side.layui-bg-black.layui-side-menu::-webkit-scrollbar {
+    width: 0 !important
+}
+#person {
+    position: relative;
+    z-index:2;
+    margin: 40px 0;
+    text-align: center
+}
+#person-username {
+    font-size: large;
+    top: 35px;
+    left: 70px;
+}
+.dropdown-list {
+    display: inline-block
+}
+.dropdown-item {
+    background:transparent;
+    position: absolute;
+    width: 100%;
+    left: 0;
+}
+#person:hover dd {
+    display: block;
+}
+#person:hover dt {
+    transform: rotate(180deg) translate(0, 4px);
+}
+/*小箭头*/
+.dropdown-list dt {
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid;
+    border-top-color: rgba(255,255,255,.7);
+    padding-top: 3px;
+}
+/*选项*/
+#person dd {
+    top: 100%;
+    left: 0;
+    width:100%;
+    position: absolute;
+    line-height: 32px;
+    display: none;
+    padding-top: 3px;
+    z-index:999;
+}
+.dropdown-item ul {
+    width:80%;
+    margin:0 auto;
+    background:#222;
+    box-shadow: 0 0 5px rgba(200,200,200,0.03);
+    border-radius: 5px;
+}
+.dropdown-item ul li a {
+    color:#555;
+}
+
+
+
+
+/*侧边菜单栏*/
+#cool-menu-tree li {
+    cursor:pointer;
+}
+.site-active {
+    text-indent: 1em;
+}
+
+.layui-side.layui-bg-black.layui-side-menu {
+    position: absolute;
+    top: 0;
+    z-index: 1;
+}
+.layui-side-scroll {
+    height: auto;
+}
+
+/* <!--内容主体--> */
+.layui-tab-title {
+    box-sizing: border-box;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+}
+.layui-layout-admin .layui-body {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: -1;
+}
+/*选项卡*/
+.layui-body .layui-tab.layui-tab-card {
+    height: 100%;
+    margin: 0;
+    border-width: 0;
+}
+/*选项卡标题*/
+.layui-tab-title {
+    border-bottom-width: 0px;
+}
+/*选项卡内容*/
+.layui-tab-content {
+    position: absolute;
+    top: 40px;
+    bottom: 4px;
+    width: 100%;
+    padding: 0;
+}
+.layui-tab-item.layui-show {
+    height: 100%;
+}
+
+.site-active {
+    -moz-user-select:none;/*火狐*/
+    -webkit-user-select:none;/*webkit浏览器*/
+    -ms-user-select:none;/*IE10*/
+    -khtml-user-select:none;/*早期浏览器*/
+    user-select:none;
+}

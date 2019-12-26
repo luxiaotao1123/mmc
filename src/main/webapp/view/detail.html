@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+    <style>
+        #container {
+            padding: 15px;
+            margin-top: 15px
+        }
+        .layui-card-body {
+            padding: 20px 15px 5px 15px;
+        }
+        .layui-form-item {
+            margin-bottom: 18px;
+        }
+        .layui-form-label {
+            color: #999!important;;
+            width: 60px;
+        }
+        .layui-input-block {
+            margin-left: 90px;
+        }
+        #update-password {
+            padding: 0 20px 0 15px;
+        }
+        .layui-btn .layui-icon {
+            margin-right: 0;
+        }
+    </style>
+</head>
+<body id="body">
+<div id="container">
+    <fieldset class="layui-elem-field">
+        <legend>设置我的资料</legend>
+        <div class="layui-card-body">
+            <div id="person-detail" class="layui-form">
+                <div class="layui-form-item" style="display: none">
+                    <label class="layui-form-label">编号</label>
+                    <div class="layui-input-inline">
+                        <input id="id" class="layui-input" type="text" placeholder="请输入" autocomplete="off">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">角色</label>
+                    <div class="layui-input-inline">
+                        <input id="roleName" class="layui-input" type="text" placeholder="请输入" autocomplete="off" disabled="disabled">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">当前角色不可更改为其它角色</div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">账号名</label>
+                    <div class="layui-input-inline">
+                        <input id="username" class="layui-input" type="text" placeholder="请输入" autocomplete="off">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">手机号</label>
+                    <div class="layui-input-inline">
+                        <input id="mobile" class="layui-input" type="text" placeholder="请输入" autocomplete="off">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">重要！一般用于后台登入</div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">密码</label>
+                    <div class="layui-input-inline">
+                        <input id="password" class="layui-input" type="text" placeholder="请输入" autocomplete="off" style="display: none">
+                        <button id="update-password" class="layui-btn layui-btn-primary">
+                            <i class="layui-icon">&#xe620;</i>
+                            修改密码
+                        </button>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">注册时间</label>
+                    <div class="layui-input-inline">
+                        <input id="createTime$" class="layui-input" type="text" placeholder="请输入" autocomplete="off" disabled="disabled">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">不可修改</div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button type="button" class="layui-btn layui-btn-normal" lay-submit lay-filter="save">确认修改</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>
+</body>
+<script type="text/javascript" src="/static/js/jquery/jquery-3.3.1.min.js"></script>
+<script src="/static/layui/layui.js"></script>
+<script>
+    layui.use(['form'], function(){
+        var form = layui.form,
+            layer = layui.layer,
+            $ = layui.jquery;
+
+        // 初始化表单数据
+        $.ajax({
+            url: "/user/detail/auth",
+            headers: {'token': localStorage.getItem('token')},
+            method: 'POST',
+            success: function (res) {
+                if (res.code === 200){
+                    var user = res.data;
+                    for (var val in user) {
+                        $('#person-detail').find(":input[id='" + val + "']").val(user[val]);
+                    }
+                } else if (res.code === 403){
+                    top.location.href = "/";
+                } else {
+                    layer.msg(res.msg);
+                }
+            }
+        });
+
+        // 修改密码
+        $(document).on('click','#update-password', function () {
+            layer.open({
+                type: 2,
+                title: '修改密码',
+                maxmin: true,
+                area: ['350px', '310px'],
+                offset: ['120px', '350px'],
+                shadeClose: false,
+                content: '/password',
+                success: function(layero, index){
+
+                }
+            })
+        });
+
+
+        // 保存修改
+        form.on('submit(save)', function (data) {
+            var user = {
+                id: $('#id').val(),
+                username: $('#username').val(),
+                mobile: $("#mobile").val(),
+            };
+            layer.confirm('确定修改资料吗？', function(){
+                $.ajax({
+                    url: "/user/update/auth",
+                    headers: {'token': localStorage.getItem('token')},
+                    data: user,
+                    method: 'POST',
+                    success: function (res) {
+                        if (res.code === 200){
+                            layer.msg(res.msg);
+                            localStorage.setItem("username", user.username);
+                            parent.$('#person-username').text(localStorage.getItem('username'));
+                        } else if (res.code === 403){
+                            top.location.href = "/";
+                        } else {
+                            layer.msg(res.msg);
+                        }
+                    }
+                });
+            });
+            return false;
+        });
+    });
+</script>
+</html>

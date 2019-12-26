@@ -1,0 +1,136 @@
+/*搜索栏*/
+.layui-form.layui-card-header {
+    padding: 20px 0 5px 0;
+    height: auto;
+}
+#search-box {
+    margin-left: 10px;
+    z-index: 999;
+    position: relative;
+}
+#search-box .layui-inline{
+    margin-bottom: 10px;
+    margin-right: 15px;
+}
+#search-box .layui-input-inline {
+    width: 150px;
+}
+.layui-form-label{
+    font-size: 100%;
+    padding: 9px 0 9px 5px;
+    text-align: right;
+}
+#data-search-btn {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0;
+}
+#data-search-btn.layui-btn-container .layui-btn{
+    margin-right: 30px;
+}
+
+/*头工具栏*/
+.layui-table-tool-temp {
+    padding-right: 70px;
+}
+.layui-btn .layui-icon {
+    margin: 1px 5px;
+}
+#btn-add{
+    background: #007DDB
+}
+#btn-delete{
+    background: #ff5722
+}
+#btn-export{
+    float: right;
+}
+
+/*表格*/
+div .layui-table-tool .layui-table-tool-self .layui-inline[title='导出']{
+    display: none;
+}
+.layui-form.layui-border-box.layui-table-view{
+    margin: 30px 0 0 0;
+    /*position: absolute;*/
+    /*top: 140px;*/
+    width: 100%;
+    border-width: 0;
+}
+.layui-table-box{
+    padding-bottom: 10px;
+}
+.layui-table-body.layui-table-main{
+    overflow: hidden;
+}
+.layui-table-page{
+    border-width: 0;
+}
+
+/*详情*/
+#detail .layui-form-label{
+    white-space: nowrap;
+    font-size: 100%;
+    padding: 9px 0 9px 5px;
+    text-align: right;
+}
+#detail {
+    padding: 25px 0 15px 0;
+    margin: 0 20px 0 30px;
+}
+#detail .layui-inline {
+    margin: 10px 15px 15px 0;
+}
+#detail .layui-input-inline {
+    margin-right: 40px;
+    margin-left: 85px;
+    display: block;
+}
+.layui-bg-gray {
+    margin-top: 40px;
+}
+#prompt {
+    margin-top: 20px;
+    width: 90%;
+    text-indent: 40px;
+    color: #505050;
+}
+#data-detail-btn {
+    padding-top: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#data-detail-btn.layui-btn-container .layui-btn{
+    margin-right: 30px;
+}
+.not-null {
+    color:red;
+}
+
+/*图片*/
+.cool-img {
+    cursor:pointer;
+    width: 200px;
+    height: 200px;
+}
+
+
+
+/*
+    布局
+ */
+.col:empty{min-height:32px;height: inherit;z-index:1;position:relative;box-sizing: border-box;}
+.col:empty:after{
+    z-index:0;display:flex;align-items: center;justify-content: center;
+    clear: both;content:attr(title);position:absolute;
+    background:rgba(0,0,0,0.04);top:2px;left:2px;right:2px;bottom:2px;
+    text-align:center;color:rgba(0,0,0,0.1); border-radius: inherit;
+}
+.col{
+    height: inherit;
+}
+
+

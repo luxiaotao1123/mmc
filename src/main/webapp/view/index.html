@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>商户管理平台</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css">
+    <link rel="stylesheet" href="/static/css/index.css">
+    <link rel="shortcut icon" href="/static/image/doge.png" type="image/x-icon"  id='in_icon'/>
+</head>
+<body class="layui-layout-body">
+    <div class="layui-layout layui-layout-admin">
+
+        <!--用户功能栏-->
+        <div class="layui-side layui-bg-black layui-side-menu">
+            <div id="person">
+                <span id="person-username">请先登录</span>
+                <dl class="dropdown-list">
+                    <dt></dt>
+                    <dd class="dropdown-item">
+                        <ul>
+                            <li><a id="logout" href="/">注销</a></li>
+                        </ul>
+                    </dd>
+                </dl>
+            </div>
+            <!--侧边导航栏-->
+            <div class="layui-side-scroll">
+                <ul id="cool-menu-tree" class="layui-nav layui-nav-tree"></ul>
+            </div>
+        </div>
+
+        <!--内容主体-->
+        <div class="layui-body">
+            <!--选项卡-->
+            <div class="layui-tab layui-tab-card" lay-allowclose="true" lay-filter="cool-tab">
+                <ul class="layui-tab-title ">
+                    <li class="layui-this" lay-id="home">首页</li>
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <iframe data-frameid="home" scrolling="auto" frameborder="0" src="home" style="width:100%;height: 100%"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+<script type="text/javascript" src="/static/js/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="/static/js/common.js"></script>
+<script type="text/javascript" src="/static/layui/layui.js"></script>
+<script>
+    layui.use('element', function(){
+        var element = layui.element;
+        var $ = layui.jquery;
+
+        $(function () {
+            if ("" === localStorage.getItem('token')){
+                top.location.href = "/login";
+            }
+
+            $.ajax({
+                url: "/menu/auth",
+                headers: {'token': localStorage.getItem('token')},
+                method: 'POST',
+                success: function (res) {
+                    if (res.code === 200){
+                        var menuHtml = "";
+                        if (res.data != null){
+                            for (var i = 0; i < res.data.length; i++) {
+                                menuHtml += '<li class="layui-nav-item">\n';
+                                menuHtml += '<a>' + res.data[i].menu + '</a>\n';
+                                menuHtml += '<dl class="layui-nav-child">\n';
+                                for (var j = 0; j < res.data[i].subMenu.length; j++) {
+                                    menuHtml += '<dd><a class="site-active" data-title="' + res.data[i].subMenu[j].name + '" data-url="/' + res.data[i].subMenu[j].code + '" data-id="' + res.data[i].subMenu[j].code + '" target="main">' + res.data[i].subMenu[j].name + '</a></dd>\n'
+                                }
+                                menuHtml += '</dl>\n</li>\n';
+                            }
+                        }
+                        $('#cool-menu-tree').append(menuHtml);
+                        element.init();
+                    } else if (res.code === 403){
+                        top.location.href = "/login";
+                    }else {
+                        layer.alert(res.msg)
+                    }
+                }
+            })
+        });
+
+        $('#person-username').text(localStorage.getItem('username'));
+
+        // 选项卡事件定义
+        var tabAction = {
+            tabAdd: function (id,name,url) {
+                element.tabAdd('cool-tab', {
+                    title: name,
+                    content: '<iframe data-frameid="'+id+'" scrolling="auto" frameborder="0" src="'+url+'" style="width:100%;height: 100%"></iframe>',
+                    id: id
+                });
+                element.render('tab');
+            },
+            tabChange: function(id) {
+                element.tabChange('cool-tab', id);
+            },
+            tabDelete: function (id) {
+                element.tabDelete("cool-tab", id);
+            }
+        };
+
+        // 监听侧边导航栏点击事件
+        $(document).on('click','.site-active', function () {
+            var site = $(this);
+            if ($(".layui-tab-title li[lay-id]").length > 0){
+                var exist = false;
+                $.each($('.layui-tab-title li[lay-id]'), function () {
+                    if ($(this).attr("lay-id") === site.attr("data-id")) {
+                        exist = true;
+                    }
+                });
+                if (exist === false){
+                    tabAction.tabAdd(site.attr("data-id"), site.attr("data-title"), site.attr("data-url"));
+                }
+            } else {
+                tabAction.tabAdd(site.attr("data-id"), site.attr("data-title"), site.attr("data-url"));
+            }
+            tabAction.tabChange(site.attr("data-id"));
+        });
+    });
+    $(document).on('click','#logout',function () {
+       localStorage.removeItem("token");
+    });
+    var linkImg = document.getElementById('in_icon');
+    window.onfocus = function () {
+        document.title = 'Cool';
+        linkImg.href = '/static/image/doge.png'
+    };
+    window.onblur = function () {
+        document.title = '快回来~页面崩溃了';
+        linkImg.href = '/static/image/cry.gif'
+    };
+</script>
+</body>
+</html>
