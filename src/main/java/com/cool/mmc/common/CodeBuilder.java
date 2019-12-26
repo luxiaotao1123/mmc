@@ -9,11 +9,11 @@ public class CodeBuilder {
 
     public static void main(String[] args) throws Exception {
         CoolGenerator generator = new CoolGenerator();
-        generator.url="localhost:3306/cool";
+        generator.url="47.111.25.152:3306/mmc";
         generator.username="root";
-        generator.password="xltys1995";
-        generator.table="sys_config";
-        generator.packagePath="com.cool.mmc.system";
+        generator.password="liU8huhUmznydHlq";
+        generator.table="man_pay_record";
+        generator.packagePath="com.cool.mmc.manager";
         generator.build();
     }
 

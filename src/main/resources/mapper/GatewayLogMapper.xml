@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cool.mmc.manager.mapper.GatewayLogMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.cool.mmc.manager.entity.GatewayLog">
+        <id column="id" property="id" />
+        <result column="merchant_id" property="merchantId" />
+        <result column="url" property="url" />
+        <result column="client_ip" property="clientIp" />
+        <result column="request" property="request" />
+        <result column="response" property="response" />
+        <result column="create_time" property="createTime" />
+        <result column="status" property="status" />
+
+    </resultMap>
+
+</mapper>
