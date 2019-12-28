@@ -5,13 +5,16 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.cool.mmc.manager.entity.Merchant">
         <id column="id" property="id" />
+        <result column="user_id" property="userId" />
         <result column="product_id" property="productId" />
-        <result column="app_id" property="appId" />
         <result column="name" property="name" />
+        <result column="app_id" property="appId" />
         <result column="partner" property="partner" />
         <result column="subject" property="subject" />
         <result column="private_key" property="privateKey" />
+        <result column="public_key" property="publicKey" />
         <result column="cert_path" property="certPath" />
+        <result column="cert_pwd" property="certPwd" />
         <result column="weight" property="weight" />
         <result column="sort" property="sort" />
         <result column="state" property="state" />

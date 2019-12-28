@@ -26,21 +26,27 @@ public class Merchant implements Serializable {
     private Long id;
 
     /**
+     * 所属会员
+     */
+    @TableField("user_id")
+    private Long userId;
+
+    /**
      * 所属接口
      */
     @TableField("product_id")
     private Long productId;
 
     /**
+     * 商家姓名
+     */
+    private String name;
+
+    /**
      * 应用ID
      */
     @TableField("app_id")
     private String appId;
-
-    /**
-     * 商家姓名
-     */
-    private String name;
 
     /**
      * 商户号
@@ -59,10 +65,22 @@ public class Merchant implements Serializable {
     private String privateKey;
 
     /**
+     * 公钥
+     */
+    @TableField("public_key")
+    private String publicKey;
+
+    /**
      * 证书路径
      */
     @TableField("cert_path")
     private String certPath;
+
+    /**
+     * 证书密码
+     */
+    @TableField("cert_pwd")
+    private String certPwd;
 
     /**
      * 权重值
@@ -108,14 +126,17 @@ public class Merchant implements Serializable {
 
     public Merchant() {}
 
-    public Merchant(Long productId,String appId,String name,String partner,String subject,String privateKey,String certPath,Integer weight,Integer sort,Short state,String memo,Date createTime,Date updateTime,Long editor,Short status) {
+    public Merchant(Long userId,Long productId,String name,String appId,String partner,String subject,String privateKey,String publicKey,String certPath,String certPwd,Integer weight,Integer sort,Short state,String memo,Date createTime,Date updateTime,Long editor,Short status) {
+        this.userId = userId;
         this.productId = productId;
-        this.appId = appId;
         this.name = name;
+        this.appId = appId;
         this.partner = partner;
         this.subject = subject;
         this.privateKey = privateKey;
+        this.publicKey = publicKey;
         this.certPath = certPath;
+        this.certPwd = certPwd;
         this.weight = weight;
         this.sort = sort;
         this.state = state;
@@ -127,13 +148,16 @@ public class Merchant implements Serializable {
     }
 
 //    Merchant merchant = new Merchant(
+//            null,    // 所属商户[非空]
 //            null,    // 所属接口[非空]
-//            null,    // 应用ID[非空]
 //            null,    // 商家姓名[非空]
+//            null,    // 应用ID[非空]
 //            null,    // 商户号[非空]
 //            null,    // 标题[非空]
 //            null,    // 密钥[非空]
+//            null,    // 公钥
 //            null,    // 证书路径
+//            null,    // 证书密码
 //            null,    // 权重值
 //            null,    // 排序
 //            null,    // 轮回状态[非空]
@@ -150,6 +174,23 @@ public class Merchant implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public String getUserId$(){
+        UserService service = SpringUtils.getBean(UserService.class);
+        User user = service.selectById(this.userId);
+        if (!Cools.isEmpty(user)){
+            return user.getUsername();
+        }
+        return null;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public Long getProductId() {
@@ -169,20 +210,20 @@ public class Merchant implements Serializable {
         this.productId = productId;
     }
 
-    public String getAppId() {
-        return appId;
-    }
-
-    public void setAppId(String appId) {
-        this.appId = appId;
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getAppId() {
+        return appId;
+    }
+
+    public void setAppId(String appId) {
+        this.appId = appId;
     }
 
     public String getPartner() {
@@ -209,12 +250,28 @@ public class Merchant implements Serializable {
         this.privateKey = privateKey;
     }
 
+    public String getPublicKey() {
+        return publicKey;
+    }
+
+    public void setPublicKey(String publicKey) {
+        this.publicKey = publicKey;
+    }
+
     public String getCertPath() {
         return certPath;
     }
 
     public void setCertPath(String certPath) {
         this.certPath = certPath;
+    }
+
+    public String getCertPwd() {
+        return certPwd;
+    }
+
+    public void setCertPwd(String certPwd) {
+        this.certPwd = certPwd;
     }
 
     public Integer getWeight() {

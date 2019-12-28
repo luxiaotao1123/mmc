@@ -18,13 +18,16 @@ layui.use(['table','laydate', 'form'], function(){
         cols: [[
             {type: 'checkbox', fixed: 'left'}
             ,{field: 'id', title: 'ID', sort: true,align: 'center', fixed: 'left', width: 80}
+            ,{field: 'userId$', align: 'center',title: '所属会员',event: 'userId', style: 'text-decoration: underline;cursor:pointer'}
             ,{field: 'productId$', align: 'center',title: '所属接口',event: 'productId', style: 'text-decoration: underline;cursor:pointer'}
-            ,{field: 'appId', align: 'center',title: '应用ID'}
             ,{field: 'name', align: 'center',title: '商家姓名'}
+            ,{field: 'appId', align: 'center',title: '应用ID'}
             ,{field: 'partner', align: 'center',title: '商户号'}
             ,{field: 'subject', align: 'center',title: '标题'}
             ,{field: 'privateKey', align: 'center',title: '密钥'}
+            ,{field: 'publicKey', align: 'center',title: '公钥'}
             ,{field: 'certPath', align: 'center',title: '证书路径'}
+            ,{field: 'certPwd', align: 'center',title: '证书密码'}
             ,{field: 'weight', align: 'center',title: '权重值'}
             ,{field: 'sort', align: 'center',title: '排序'}
             ,{field: 'state$', align: 'center',title: '轮回状态'}
@@ -194,6 +197,41 @@ layui.use(['table','laydate', 'form'], function(){
                     }
                 });
                 break;
+            case 'userId':
+                var param = top.reObject(data).userId;
+                if (param === undefined) {
+                    layer.msg("无数据");
+                } else {
+                   layer.open({
+                       type: 2,
+                       title: '所属详情',
+                       maxmin: true,
+                       area: [top.detailHeight, top.detailWidth],
+                       shadeClose: false,
+                       content: 'user_detail',
+                       success: function(layero, index){
+                           $.ajax({
+                               url: "/user/"+ param +"/auth",
+                               headers: {'token': localStorage.getItem('token')},
+                               method: 'GET',
+                               success: function (res) {
+                                   if (res.code === 200){
+                                       setFormVal(layer.getChildFrame('#detail', index), res.data, true);
+                                       top.convertDisabled(layer.getChildFrame('#data-detail :input', index), true);
+                                       layer.getChildFrame('#data-detail-submit', index).hide();
+                                       detailScreen(index);
+                                       layero.find('iframe')[0].contentWindow.layui.form.render('select');
+                                   } else if (res.code === 403){
+                                       parent.location.href = "/";
+                                   }else {
+                                       layer.msg(res.msg)
+                                   }
+                               }
+                           })
+                       }
+                   });
+                }
+                break;
             case 'productId':
                 var param = top.reObject(data).productId;
                 if (param === undefined) {
@@ -275,13 +313,16 @@ layui.use(['table','laydate', 'form'], function(){
         });
         var data = {
             id: $('#id').val(),
+            userId: $('#userId').val(),
             productId: $('#productId').val(),
-            appId: $('#appId').val(),
             name: $('#name').val(),
+            appId: $('#appId').val(),
             partner: $('#partner').val(),
             subject: $('#subject').val(),
             privateKey: $('#privateKey').val(),
+            publicKey: $('#publicKey').val(),
             certPath: $('#certPath').val(),
+            certPwd: $('#certPwd').val(),
             weight: $('#weight').val(),
             sort: $('#sort').val(),
             state: $('#state').val(),
