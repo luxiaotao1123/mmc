@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.cool.mmc.common.CodeRes;
 import com.cool.mmc.system.entity.*;
 import com.cool.mmc.system.service.*;
+import com.core.annotations.ManagerAuth;
 import com.core.common.Cools;
 import com.core.common.R;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,11 +60,13 @@ public class AuthController extends BaseController {
     }
 
     @RequestMapping("/user/detail/auth")
+    @ManagerAuth
     public R userDetail(){
         return R.ok(userService.selectById(getUserId()));
     }
 
     @RequestMapping("/menu/auth")
+    @ManagerAuth
     public R menu(){
         User user = userService.selectById(getUserId());
         // 获取所有一级菜单
@@ -99,6 +102,7 @@ public class AuthController extends BaseController {
     }
 
     @RequestMapping("/power/list/auth")
+    @ManagerAuth
     public R powerList(){
         List<Resource> oneLevels = resourceService.selectList(new EntityWrapper<Resource>().eq("level", 1).eq("status", 1).orderBy("sort"));
         List<Map> result = new ArrayList<>();
@@ -142,6 +146,7 @@ public class AuthController extends BaseController {
     }
 
     @RequestMapping(value = "/power/{roleId}/auth")
+    @ManagerAuth
     public R get(@PathVariable("roleId") Long roleId) {
         List<String> result = new ArrayList<>();
         // 菜单
@@ -166,6 +171,7 @@ public class AuthController extends BaseController {
     }
 
     @RequestMapping("/power/auth")
+    @ManagerAuth
     public R power(Long roleId, String[] powers){
         roleResourceService.delete(new EntityWrapper<RoleResource>().eq("role_id", roleId));
         rolePermissionService.delete(new EntityWrapper<RolePermission>().eq("role_id", roleId));

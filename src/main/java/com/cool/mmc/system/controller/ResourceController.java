@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.cool.mmc.system.entity.Resource;
 import com.cool.mmc.system.service.ResourceService;
+import com.core.annotations.ManagerAuth;
 import com.core.common.Cools;
 import com.core.common.DateUtils;
 import com.core.common.R;
@@ -33,12 +34,14 @@ public class ResourceController extends AbstractBaseController {
 
     @RequestMapping(value = "/resource/{id}/auth")
     @ResponseBody
+    @ManagerAuth
     public R get(@PathVariable("id") Long id) {
         return R.ok(resourceService.selectById(String.valueOf(id)));
     }
 
     @RequestMapping(value = "/resource/list/auth")
     @ResponseBody
+    @ManagerAuth
     public R list(@RequestParam(defaultValue = "1")Integer curr,
                   @RequestParam(defaultValue = "10")Integer limit,
                   @RequestParam Map<String, Object> param){
@@ -63,6 +66,7 @@ public class ResourceController extends AbstractBaseController {
 
     @RequestMapping(value = "/resource/edit/auth")
     @ResponseBody
+    @ManagerAuth
     public R edit(Resource resource) {
         if (Cools.isEmpty(resource)){
             return R.error();
@@ -80,6 +84,7 @@ public class ResourceController extends AbstractBaseController {
 
     @RequestMapping(value = "/resource/add/auth")
     @ResponseBody
+    @ManagerAuth
     public R add(Resource resource) {
         resourceService.insert(resource);
         return R.ok();
@@ -87,6 +92,7 @@ public class ResourceController extends AbstractBaseController {
 
 	@RequestMapping(value = "/resource/update/auth")
     @ResponseBody
+    @ManagerAuth
     public R update(Resource resource){
         if (Cools.isEmpty(resource) || null==resource.getId()){
             return R.error();
@@ -97,6 +103,7 @@ public class ResourceController extends AbstractBaseController {
 
     @RequestMapping(value = "/resource/delete/auth")
     @ResponseBody
+    @ManagerAuth
     public R delete(Integer[] ids){
         if (Cools.isEmpty(ids)){
             return R.error();
@@ -107,6 +114,7 @@ public class ResourceController extends AbstractBaseController {
 
     @RequestMapping(value = "/resource/export/auth")
     @ResponseBody
+    @ManagerAuth
     public R export(@RequestBody JSONObject param){
         List<String> fields = JSONObject.parseArray(param.getJSONArray("fields").toJSONString(), String.class);
         EntityWrapper<Resource> wrapper = new EntityWrapper<>();
@@ -118,6 +126,7 @@ public class ResourceController extends AbstractBaseController {
 
     @RequestMapping(value = "/resourceQuery/auth")
     @ResponseBody
+    @ManagerAuth
     public R query(String condition) {
         EntityWrapper<Resource> wrapper = new EntityWrapper<>();
         wrapper.like("name", condition);

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.cool.mmc.system.entity.Api;
 import com.cool.mmc.system.service.ApiService;
+import com.core.annotations.ManagerAuth;
 import com.core.common.Cools;
 import com.core.common.DateUtils;
 import com.core.common.R;
@@ -33,12 +34,14 @@ public class ApiController extends AbstractBaseController {
 
     @RequestMapping(value = "/api/{id}/auth")
     @ResponseBody
+    @ManagerAuth
     public R get(@PathVariable("id") Long id) {
         return R.ok(apiService.selectById(String.valueOf(id)));
     }
 
     @RequestMapping(value = "/api/list/auth")
     @ResponseBody
+    @ManagerAuth
     public R list(@RequestParam(defaultValue = "1")Integer curr,
                   @RequestParam(defaultValue = "10")Integer limit,
                   @RequestParam Map<String, Object> param){
@@ -63,6 +66,7 @@ public class ApiController extends AbstractBaseController {
 
     @RequestMapping(value = "/api/edit/auth")
     @ResponseBody
+    @ManagerAuth
     public R edit(Api api) {
         if (Cools.isEmpty(api)){
             return R.error();
@@ -77,6 +81,7 @@ public class ApiController extends AbstractBaseController {
 
     @RequestMapping(value = "/api/add/auth")
     @ResponseBody
+    @ManagerAuth
     public R add(Api api) {
         apiService.insert(api);
         return R.ok();
@@ -84,6 +89,7 @@ public class ApiController extends AbstractBaseController {
 
 	@RequestMapping(value = "/api/update/auth")
     @ResponseBody
+    @ManagerAuth
     public R update(Api api){
         if (Cools.isEmpty(api) || null==api.getId()){
             return R.error();
@@ -94,6 +100,7 @@ public class ApiController extends AbstractBaseController {
 
     @RequestMapping(value = "/api/delete/auth")
     @ResponseBody
+    @ManagerAuth
     public R delete(Integer[] ids){
         if (Cools.isEmpty(ids)){
             return R.error();
@@ -104,6 +111,7 @@ public class ApiController extends AbstractBaseController {
 
     @RequestMapping(value = "/api/export/auth")
     @ResponseBody
+    @ManagerAuth
     public R export(@RequestBody JSONObject param){
         List<String> fields = JSONObject.parseArray(param.getJSONArray("fields").toJSONString(), String.class);
         EntityWrapper<Api> wrapper = new EntityWrapper<>();
@@ -115,6 +123,7 @@ public class ApiController extends AbstractBaseController {
 
     @RequestMapping(value = "/apiQuery/auth")
     @ResponseBody
+    @ManagerAuth
     public R query(String condition) {
         EntityWrapper<Api> wrapper = new EntityWrapper<>();
         wrapper.like("id", condition);

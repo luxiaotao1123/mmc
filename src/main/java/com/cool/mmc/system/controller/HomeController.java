@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.cool.mmc.system.service.OperateLogService;
 import com.cool.mmc.system.service.UserLoginService;
 import com.cool.mmc.system.service.UserService;
+import com.core.annotations.ManagerAuth;
 import com.core.common.Arith;
 import com.core.common.R;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,7 @@ public class HomeController {
     private UserLoginService userLoginService;
 
     @RequestMapping("/top")
+    @ManagerAuth
     public R top(){
         int logTotal = operateLogService.selectCount(new EntityWrapper<>());
         int logWeek = operateLogService.selectCountByCurrentWeek();
@@ -44,6 +46,7 @@ public class HomeController {
 
 
     @RequestMapping("/report")
+    @ManagerAuth
     public R top(@RequestParam(defaultValue = "1", value = "type", required = false)Integer type){
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());

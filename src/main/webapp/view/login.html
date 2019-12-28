@@ -2,49 +2,103 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>商户管理平台</title>
-    <link rel="stylesheet" href="/static/css/bg.css">
-    <link rel="stylesheet" href="/static/css/login.css">
-    <link rel="shortcut icon" href="/static/image/doge.png" type="image/x-icon"  id='in_icon'/>
-</head>
+    <title>系统登录</title>
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+    <script type="text/javascript" src="/static/layui/layui.js"></script>
 
-<body>
-<div class="wrapper">
-    <div class="cool-container clearfix">
-        <div class="cool-center">
-            <h3>商户管理平台</h3>
-            <br>
-            <input id="mobile" value="" placeholder="手机号"  class="cool-input cool-row-3">
-            <br><br>
-            <input type="password" id="password" value="" placeholder="密码" class="cool-input cool-row-3">
-            <br><br>
-            <button id="login" class="cool-button-default" lay-submit="" lay-filter="login" type="button">登录</button>
+    <style>
+        html{
+            height: 100%;
+        }
+        body.login-bg {
+            color: #777;
+            height: 100%;
+            background-image: url("/static/image/bg-imgage.jpg");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: top center;
+        }
+
+        #login-wrapper {
+            box-sizing:border-box;
+            background: #fff;
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            margin-top: -210px;
+            margin-left: -220px;
+            width: 440px;
+            min-height: 420px;
+            padding: 50px;
+            text-align: center;
+            border-radius: 5px;
+
+            transform-origin: 50% 50%;
+            animation: loading 1s 0s forwards;
+            transform: rotateX(0deg);
+        }
+
+        #login-wrapper h2 {
+            font-size: 26px;
+            margin-bottom: 30px;
+        }
+
+        .layadmin-user-login-body .layui-form-item {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .layadmin-user-login-body .layui-form-item .layui-input {
+            height: 42px;
+            padding-left: 40px;
+            font-size: 16px;
+            border: 1px solid #c8cccf;
+            color: inherit;
+        }
+        .login-submit {
+            margin-top: 30px;
+        }
+        .layadmin-user-login-icon {
+            position: absolute;
+            left: 1px;
+            top: 1px;
+            width: 38px;
+            line-height: 40px;
+            text-align: center;
+            color: #B2B2B2;
+            font-size: 18px;
+        }
+        .layui-btn-normal {
+            background-color: #0767aa;
+            font-size: 20px;
+            border-radius: 4px;
+            height: 52px;
+        }
+    </style>
+</head>
+<body class="login-bg">
+
+<div id="login-wrapper">
+    <header>
+        <h2>系统登录</h2>
+    </header>
+    <div class="layui-form layadmin-user-login-body">
+        <div class="layui-form-item">
+            <label class="layui-icon layui-icon-cellphone layadmin-user-login-icon"></label>
+            <input id="mobile" class="layui-input" type="text" name="mobile" lay-verify="mobile" placeholder="用户名">
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-icon layui-icon-password layadmin-user-login-icon"></label>
+            <input id="password" class="layui-input" type="password" name="password" lay-verify="password" placeholder="密码">
         </div>
     </div>
-    <ul class="bg-bubbles">
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-    </ul>
+    <div class="layui-form-item login-submit">
+        <button class="layui-btn layui-btn-fluid layui-btn-normal" lay-submit="" lay-filter="login">登 录</button>
+    </div>
 </div>
 
 </body>
 <script type="text/javascript" src="/static/js/jquery/jquery-3.3.1.min.js"></script>
-<script src="/static/layui/layui.js"></script>
-<script>
+<script type="text/javascript">
     layui.use(['form','layer'],function () {
         var form = layui.form,
             layer = layui.layer,
@@ -78,7 +132,7 @@
                         localStorage.setItem("username", res.data.username);
                         window.location.href = "/index";
                     } else {
-                        layer.msg(res.msg)
+                        layer.msg(res.msg, {offset: '200px'});
                     }
                 }
             });
@@ -92,14 +146,5 @@
         });
 
     });
-    var linkImg = document.getElementById('in_icon');
-    window.onfocus = function () {
-        document.title = 'Cool';
-        linkImg.href = '/static/image/doge.png'
-    };
-    window.onblur = function () {
-        document.title = '快回来~页面崩溃了';
-        linkImg.href = '/static/image/cry.gif'
-    };
 </script>
 </html>

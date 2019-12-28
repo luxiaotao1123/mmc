@@ -297,6 +297,7 @@
     function initTop() {
         $.ajax({
             url: "/home/top",
+            headers: {'token': localStorage.getItem('token')},
             method: 'POST',
             success: function (res) {
                 if (res.code === 200){
@@ -305,7 +306,7 @@
                     $('#userTotal').text(res.data.userTotal);
                     $('#live').text(res.data.live);
                 } else if (res.code === 403){
-                    top.location.href = "/";
+                    top.location.href = "/login";
                 } else {
                     layer.msg(res.msg);
                 }
@@ -320,6 +321,7 @@
         var seriesDate=[];
         $.ajax({
             url: "/home/report",
+            headers: {'token': localStorage.getItem('token')},
             data: {type: type},
             method: 'POST',
             success: function (res) {
@@ -333,7 +335,7 @@
                     reportView.series[0].data=seriesDate;
                     myChart.setOption(reportView, true)
                 } else if (res.code === 403){
-                    top.location.href = "/";
+                    top.location.href = "/login";
                 } else {
                     layer.msg(res.msg);
                 }

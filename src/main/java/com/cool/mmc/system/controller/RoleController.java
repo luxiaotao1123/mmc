@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.cool.mmc.system.entity.Role;
 import com.cool.mmc.system.service.RoleService;
+import com.core.annotations.ManagerAuth;
 import com.core.common.Cools;
 import com.core.common.DateUtils;
 import com.core.common.R;
@@ -38,12 +39,14 @@ public class RoleController extends AbstractBaseController {
 
     @RequestMapping(value = "/role/{id}/auth")
     @ResponseBody
+    @ManagerAuth
     public R get(@PathVariable("id") Long id) {
         return R.ok(roleService.selectById(String.valueOf(id)));
     }
 
     @RequestMapping(value = "/role/list/auth")
     @ResponseBody
+    @ManagerAuth
     public R list(@RequestParam(defaultValue = "1")Integer curr,
                   @RequestParam(defaultValue = "10")Integer limit,
                   @RequestParam Map<String, Object> param){
@@ -68,6 +71,7 @@ public class RoleController extends AbstractBaseController {
 
     @RequestMapping(value = "/role/edit/auth")
     @ResponseBody
+    @ManagerAuth
     public R edit(Role role) {
         if (Cools.isEmpty(role)){
             return R.error();
@@ -82,6 +86,7 @@ public class RoleController extends AbstractBaseController {
 
     @RequestMapping(value = "/role/add/auth")
     @ResponseBody
+    @ManagerAuth
     public R add(Role role) {
         roleService.insert(role);
         return R.ok();
@@ -89,6 +94,7 @@ public class RoleController extends AbstractBaseController {
 
 	@RequestMapping(value = "/role/update/auth")
     @ResponseBody
+    @ManagerAuth
     public R update(Role role){
         if (Cools.isEmpty(role) || null==role.getId()){
             return R.error();
@@ -99,6 +105,7 @@ public class RoleController extends AbstractBaseController {
 
     @RequestMapping(value = "/role/delete/auth")
     @ResponseBody
+    @ManagerAuth
     public R delete(Integer[] ids){
         if (Cools.isEmpty(ids)){
             return R.error();
@@ -109,6 +116,7 @@ public class RoleController extends AbstractBaseController {
 
     @RequestMapping(value = "/role/export/auth")
     @ResponseBody
+    @ManagerAuth
     public R export(@RequestBody JSONObject param){
         List<String> fields = JSONObject.parseArray(param.getJSONArray("fields").toJSONString(), String.class);
         EntityWrapper<Role> wrapper = new EntityWrapper<>();
@@ -120,6 +128,7 @@ public class RoleController extends AbstractBaseController {
 
     @RequestMapping(value = "/roleQuery/auth")
     @ResponseBody
+    @ManagerAuth
     public R query(String condition) {
         EntityWrapper<Role> wrapper = new EntityWrapper<>();
         wrapper.like("name", condition);

@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.cool.mmc.system.entity.UserLogin;
 import com.cool.mmc.system.service.UserLoginService;
+import com.core.annotations.ManagerAuth;
 import com.core.common.Cools;
 import com.core.common.DateUtils;
 import com.core.common.R;
@@ -33,12 +34,14 @@ public class UserLoginController extends AbstractBaseController {
 
     @RequestMapping(value = "/userLogin/{id}/auth")
     @ResponseBody
+    @ManagerAuth
     public R get(@PathVariable("id") Long id) {
         return R.ok(userLoginService.selectById(String.valueOf(id)));
     }
 
     @RequestMapping(value = "/userLogin/list/auth")
     @ResponseBody
+    @ManagerAuth
     public R list(@RequestParam(defaultValue = "1")Integer curr,
                   @RequestParam(defaultValue = "10")Integer limit,
                   @RequestParam Map<String, Object> param){
@@ -63,6 +66,7 @@ public class UserLoginController extends AbstractBaseController {
 
     @RequestMapping(value = "/userLogin/edit/auth")
     @ResponseBody
+    @ManagerAuth
     public R edit(UserLogin userLogin) {
         if (Cools.isEmpty(userLogin)){
             return R.error();
@@ -77,6 +81,7 @@ public class UserLoginController extends AbstractBaseController {
 
     @RequestMapping(value = "/userLogin/add/auth")
     @ResponseBody
+    @ManagerAuth
     public R add(UserLogin userLogin) {
         userLoginService.insert(userLogin);
         return R.ok();
@@ -84,6 +89,7 @@ public class UserLoginController extends AbstractBaseController {
 
 	@RequestMapping(value = "/userLogin/update/auth")
     @ResponseBody
+    @ManagerAuth
     public R update(UserLogin userLogin){
         if (Cools.isEmpty(userLogin) || null==userLogin.getId()){
             return R.error();
@@ -94,6 +100,7 @@ public class UserLoginController extends AbstractBaseController {
 
     @RequestMapping(value = "/userLogin/delete/auth")
     @ResponseBody
+    @ManagerAuth
     public R delete(Integer[] ids){
         if (Cools.isEmpty(ids)){
             return R.error();
@@ -104,6 +111,7 @@ public class UserLoginController extends AbstractBaseController {
 
     @RequestMapping(value = "/userLogin/export/auth")
     @ResponseBody
+    @ManagerAuth
     public R export(@RequestBody JSONObject param){
         List<String> fields = JSONObject.parseArray(param.getJSONArray("fields").toJSONString(), String.class);
         EntityWrapper<UserLogin> wrapper = new EntityWrapper<>();
@@ -115,6 +123,7 @@ public class UserLoginController extends AbstractBaseController {
 
     @RequestMapping(value = "/userLoginQuery/auth")
     @ResponseBody
+    @ManagerAuth
     public R query(String condition) {
         EntityWrapper<UserLogin> wrapper = new EntityWrapper<>();
         wrapper.like("token", condition);

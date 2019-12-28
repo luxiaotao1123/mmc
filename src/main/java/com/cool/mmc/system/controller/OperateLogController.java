@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.cool.mmc.system.entity.OperateLog;
 import com.cool.mmc.system.service.OperateLogService;
+import com.core.annotations.ManagerAuth;
 import com.core.common.Cools;
 import com.core.common.DateUtils;
 import com.core.common.R;
@@ -33,12 +34,14 @@ public class OperateLogController extends AbstractBaseController {
 
     @RequestMapping(value = "/operateLog/{id}/auth")
     @ResponseBody
+    @ManagerAuth
     public R get(@PathVariable("id") Long id) {
         return R.ok(operateLogService.selectById(String.valueOf(id)));
     }
 
     @RequestMapping(value = "/operateLog/list/auth")
     @ResponseBody
+    @ManagerAuth
     public R list(@RequestParam(defaultValue = "1")Integer curr,
                   @RequestParam(defaultValue = "10")Integer limit,
                   @RequestParam Map<String, Object> param){
@@ -63,6 +66,7 @@ public class OperateLogController extends AbstractBaseController {
 
     @RequestMapping(value = "/operateLog/edit/auth")
     @ResponseBody
+    @ManagerAuth
     public R edit(OperateLog operateLog) {
         if (Cools.isEmpty(operateLog)){
             return R.error();
@@ -77,6 +81,7 @@ public class OperateLogController extends AbstractBaseController {
 
     @RequestMapping(value = "/operateLog/add/auth")
     @ResponseBody
+    @ManagerAuth
     public R add(OperateLog operateLog) {
         operateLogService.insert(operateLog);
         return R.ok();
@@ -84,6 +89,7 @@ public class OperateLogController extends AbstractBaseController {
 
 	@RequestMapping(value = "/operateLog/update/auth")
     @ResponseBody
+    @ManagerAuth
     public R update(OperateLog operateLog){
         if (Cools.isEmpty(operateLog) || null==operateLog.getId()){
             return R.error();
@@ -94,6 +100,7 @@ public class OperateLogController extends AbstractBaseController {
 
     @RequestMapping(value = "/operateLog/delete/auth")
     @ResponseBody
+    @ManagerAuth
     public R delete(Integer[] ids){
         if (Cools.isEmpty(ids)){
             return R.error();
@@ -104,6 +111,7 @@ public class OperateLogController extends AbstractBaseController {
 
     @RequestMapping(value = "/operateLog/export/auth")
     @ResponseBody
+    @ManagerAuth
     public R export(@RequestBody JSONObject param){
         List<String> fields = JSONObject.parseArray(param.getJSONArray("fields").toJSONString(), String.class);
         EntityWrapper<OperateLog> wrapper = new EntityWrapper<>();
@@ -115,6 +123,7 @@ public class OperateLogController extends AbstractBaseController {
 
     @RequestMapping(value = "/operateLogQuery/auth")
     @ResponseBody
+    @ManagerAuth
     public R query(String condition) {
         EntityWrapper<OperateLog> wrapper = new EntityWrapper<>();
         wrapper.like("id", condition);

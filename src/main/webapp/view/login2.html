@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Cool</title>
+    <link rel="stylesheet" href="/static/css/bg.css">
+    <link rel="stylesheet" href="/static/css/login.css">
+    <link rel="shortcut icon" href="/static/image/doge.png" type="image/x-icon"  id='in_icon'/>
+</head>
+
+<body>
+<div class="wrapper">
+    <div class="cool-container clearfix">
+        <div class="cool-center">
+            <h3>车辆管理系统</h3>
+            <br>
+            <input id="mobile" value="" placeholder="手机号"  class="cool-input cool-row-3">
+            <br><br>
+            <input type="password" id="password" value="" placeholder="密码" class="cool-input cool-row-3">
+            <br><br>
+            <button id="login" class="cool-button-default" lay-submit="" lay-filter="login" type="button">登录</button>
+        </div>
+    </div>
+    <ul class="bg-bubbles">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+</div>
+
+</body>
+<script type="text/javascript" src="/static/js/jquery/jquery-3.3.1.min.js"></script>
+<script src="/static/layui/layui.js"></script>
+<script>
+    layui.use(['form','layer'],function () {
+        var form = layui.form,
+            layer = layui.layer,
+            $ = layui.jquery;
+
+        form.verify({
+            mobile: function (val) {
+                if (val === "") {
+                    return "请输入手机号";
+                }
+            },
+            password: function (val) {
+                if (val === "") {
+                    return "请输入密码";
+                }
+            }
+        });
+
+        form.on('submit(login)', function (data) {
+            var user = {
+                mobile: $("#mobile").val(),
+                password: $("#password").val()
+            };
+            $.ajax({
+                url: "/login.action",
+                data: user,
+                method: 'POST',
+                success: function (res) {
+                    if (res.code === 200){
+                        localStorage.setItem("token", res.data.token);
+                        localStorage.setItem("username", res.data.username);
+                        window.location.href = "/index";
+                    } else {
+                        layer.msg(res.msg)
+                    }
+                }
+            });
+            return false;
+        });
+
+        $('body').keydown(function () {
+            if (event.keyCode === 13) {
+                $("#login").click();
+            }
+        });
+
+    });
+    var linkImg = document.getElementById('in_icon');
+    window.onfocus = function () {
+        document.title = 'Cool';
+        linkImg.href = '/static/image/doge.png'
+    };
+    window.onblur = function () {
+        document.title = '快回来~页面崩溃了';
+        linkImg.href = '/static/image/cry.gif'
+    };
+</script>
+</html>

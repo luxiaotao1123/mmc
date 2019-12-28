@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.cool.mmc.system.entity.Permission;
 import com.cool.mmc.system.service.PermissionService;
+import com.core.annotations.ManagerAuth;
 import com.core.common.Cools;
 import com.core.common.DateUtils;
 import com.core.common.R;
@@ -33,12 +34,14 @@ public class PermissionController extends AbstractBaseController {
 
     @RequestMapping(value = "/permission/{id}/auth")
     @ResponseBody
+    @ManagerAuth
     public R get(@PathVariable("id") Long id) {
         return R.ok(permissionService.selectById(String.valueOf(id)));
     }
 
     @RequestMapping(value = "/permission/list/auth")
     @ResponseBody
+    @ManagerAuth
     public R list(@RequestParam(defaultValue = "1")Integer curr,
                   @RequestParam(defaultValue = "10")Integer limit,
                   @RequestParam Map<String, Object> param){
@@ -63,6 +66,7 @@ public class PermissionController extends AbstractBaseController {
 
     @RequestMapping(value = "/permission/edit/auth")
     @ResponseBody
+    @ManagerAuth
     public R edit(Permission permission) {
         if (Cools.isEmpty(permission)){
             return R.error();
@@ -77,6 +81,7 @@ public class PermissionController extends AbstractBaseController {
 
     @RequestMapping(value = "/permission/add/auth")
     @ResponseBody
+    @ManagerAuth
     public R add(Permission permission) {
         permissionService.insert(permission);
         return R.ok();
@@ -84,6 +89,7 @@ public class PermissionController extends AbstractBaseController {
 
 	@RequestMapping(value = "/permission/update/auth")
     @ResponseBody
+    @ManagerAuth
     public R update(Permission permission){
         if (Cools.isEmpty(permission) || null==permission.getId()){
             return R.error();
@@ -94,6 +100,7 @@ public class PermissionController extends AbstractBaseController {
 
     @RequestMapping(value = "/permission/delete/auth")
     @ResponseBody
+    @ManagerAuth
     public R delete(Integer[] ids){
         if (Cools.isEmpty(ids)){
             return R.error();
@@ -104,6 +111,7 @@ public class PermissionController extends AbstractBaseController {
 
     @RequestMapping(value = "/permission/export/auth")
     @ResponseBody
+    @ManagerAuth
     public R export(@RequestBody JSONObject param){
         List<String> fields = JSONObject.parseArray(param.getJSONArray("fields").toJSONString(), String.class);
         EntityWrapper<Permission> wrapper = new EntityWrapper<>();
@@ -115,6 +123,7 @@ public class PermissionController extends AbstractBaseController {
 
     @RequestMapping(value = "/permissionQuery/auth")
     @ResponseBody
+    @ManagerAuth
     public R query(String condition) {
         EntityWrapper<Permission> wrapper = new EntityWrapper<>();
         wrapper.like("name", condition);

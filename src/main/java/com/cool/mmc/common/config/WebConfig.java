@@ -22,9 +22,10 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(adminInterceptor)
-                .addPathPatterns("/**/auth")
+                .addPathPatterns("/**")
                 // 首页，登陆页，登录action
-                .excludePathPatterns("/index","/","/login.action");
+//                .excludePathPatterns("/index","/","/login.action")
+                ;
     }
 
     @Bean

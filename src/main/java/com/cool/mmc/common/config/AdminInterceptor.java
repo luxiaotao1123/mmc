@@ -15,10 +15,8 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.lang.reflect.Method;
 
 /**
@@ -50,14 +48,14 @@ public class AdminInterceptor extends HandlerInterceptorAdapter {
         if (method.isAnnotationPresent(ManagerAuth.class)){
             ManagerAuth annotation = method.getAnnotation(ManagerAuth.class);
             if (annotation.value().equals(ManagerAuth.Auth.CHECK)){
-                // todo
+                return check(request, response);
             }
         }
-        return check(request, response, handlerMethod);
+        return true;
     }
 
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable ModelAndView modelAndView) throws Exception {
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable ModelAndView modelAndView) {
         Object obj = request.getAttribute("operateLog");
         if (obj instanceof OperateLog) {
             OperateLog operate = (OperateLog) obj;
@@ -66,7 +64,7 @@ public class AdminInterceptor extends HandlerInterceptorAdapter {
         }
     }
 
-    private boolean check(HttpServletRequest request, HttpServletResponse response, HandlerMethod handlerMethod) throws IOException, ServletException {
+    private boolean check(HttpServletRequest request, HttpServletResponse response) {
         try {
             String token = request.getHeader("token");
             UserLogin userLogin = userLoginService.selectOne(new EntityWrapper<UserLogin>().eq("token", token));
