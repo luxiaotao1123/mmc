@@ -2,6 +2,7 @@ package com.cool.mmc.common.pay;
 
 import com.cool.mmc.common.entity.IWxPayConfig;
 import com.cool.mmc.common.entity.WxPayData;
+import com.cool.mmc.common.entity.enums.WxPayType;
 import com.core.common.DateUtils;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.PostMethod;
@@ -22,10 +23,24 @@ public abstract class WxPaymentServiceSupport implements TPaymentService {
     // 统一下单API
     private static final String UNIFIED_ORDER_API = "https://api.mch.weixin.qq.com/pay/unifiedorder";
 
+    /**
+     * h5
+     */
+    protected static String getH5UnifiedOrderResult(int totalFee, String body, String clientIp, String outTradeNo, IWxPayConfig wxPayConfig) throws Exception {
+        WxPayData data = new WxPayData();
+        data.setValue("body", body);
+        data.setValue("total_fee", totalFee);
+        data.setValue("device_info", "WEB");
+        data.setValue("trade_type", WxPayType.MWEB.toString());
+        data.setValue("spbill_create_ip", clientIp);
+        // data.setValue("product_id", "123123");
 
-    /*************************************************************************************************************/
-    /************************************************ 统一下单 ******************************************************/
-    /*************************************************************************************************************/
+        return getUnifiedOrderResult(data, outTradeNo, wxPayConfig);
+    }
+
+    /**
+     * 统一下单
+     */
     private static String getUnifiedOrderResult(WxPayData data, String outTradeNo, IWxPayConfig wxPayConfig) throws Exception {
         Date now = new Date();
         // 统一下单
@@ -68,6 +83,7 @@ public abstract class WxPaymentServiceSupport implements TPaymentService {
         return post(UNIFIED_ORDER_API, xml, "utf-8");
     }
 
+    // 私有方法 ----------------------------------------------------------------------------------------------------------
 
     /**
      * 随机字符串
