@@ -15,13 +15,29 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 微信支付体系增强
+ * 微信支付体系增强 + 适配器模式
  * Created by vincent on 2019-12-28
  */
 public abstract class WxPaymentServiceSupport implements TPaymentService {
 
     // 统一下单API
     private static final String UNIFIED_ORDER_API = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+
+    /**
+     * 适配二维码串
+     */
+    @Override
+    public String getCodeUrl() {
+        return "";
+    }
+
+    /**
+     * 二维码通知
+     */
+    @Override
+    public Object codeUrlNotify(Object notifyData) {
+        return false;
+    }
 
     /**
      * h5
@@ -33,8 +49,21 @@ public abstract class WxPaymentServiceSupport implements TPaymentService {
         data.setValue("device_info", "WEB");
         data.setValue("trade_type", WxPayType.MWEB.toString());
         data.setValue("spbill_create_ip", clientIp);
-        // data.setValue("product_id", "123123");
 
+        return getUnifiedOrderResult(data, outTradeNo, wxPayConfig);
+    }
+
+    /**
+     * 扫码支付
+     */
+    protected static String getNativeUnifiedOrderResult(int totalFee, String body, String clientIp, String outTradeNo, IWxPayConfig wxPayConfig, String productId) throws Exception {
+        WxPayData data = new WxPayData();
+        data.setValue("body", body);
+        data.setValue("total_fee", totalFee);
+        data.setValue("device_info", "PC");
+        data.setValue("trade_type", WxPayType.NATIVE.toString());
+        data.setValue("spbill_create_ip", clientIp);
+        data.setValue("product_id", productId);
         return getUnifiedOrderResult(data, outTradeNo, wxPayConfig);
     }
 
@@ -88,7 +117,7 @@ public abstract class WxPaymentServiceSupport implements TPaymentService {
     /**
      * 随机字符串
      */
-    private static String createNonceStr() {
+    protected static String createNonceStr() {
         String strUUID= UUID.randomUUID().toString();
         return strUUID.replaceAll("-", "");
     }

@@ -1,6 +1,7 @@
 package com.cool.mmc.common.pay.impl;
 
 import com.cool.mmc.common.CodeRes;
+import com.cool.mmc.common.entity.H5WxPayConfig;
 import com.cool.mmc.common.entity.IWxPayConfig;
 import com.cool.mmc.common.entity.WxPayData;
 import com.cool.mmc.common.pay.WxPaymentServiceSupport;
@@ -17,55 +18,25 @@ import org.springframework.stereotype.Service;
 @Service("wxH5Service")
 public class WxH5Service extends WxPaymentServiceSupport {
 
-
     @Override
-    public Object getAuth(String outTradeNo, Double money, String clientIp, String openId) {
+    public Object getAuth(String outTradeNo, Double money, String productId, String clientIp, String openId) {
         try {
             if(null == clientIp || !HttpTools.isboolIp(clientIp)){
                 clientIp = "127.0.0.1";
             }
             Merchant merchant = new Merchant();
-            IWxPayConfig iWxPayConfig = new IWxPayConfig() {
-                @Override
-                public String getPrivateKey() {
-                    return null;
-                }
-
-                @Override
-                public String getAppId() {
-                    return null;
-                }
-
-                @Override
-                public String getMchId() {
-                    return null;
-                }
-
-                @Override
-                public String getNotifyUrl() {
-                    return null;
-                }
-
-                @Override
-                public String getCertPath() {
-                    return null;
-                }
-
-                @Override
-                public String getCertPwd() {
-                    return null;
-                }
-            };
+            merchant.setSubject("递递叭叭测试");
+            IWxPayConfig wxPayConfig = new H5WxPayConfig();
             int totalFee = (int) Arith.multiplys(0, money, 100);
             String result = getH5UnifiedOrderResult(
                     totalFee
                     , merchant.getSubject()
                     , clientIp
                     , outTradeNo
-                    , iWxPayConfig);
+                    , wxPayConfig);
 
             WxPayData res = new WxPayData();
-            res.setValues(iWxPayConfig);
+            res.setValues(wxPayConfig);
             res.fromXml(result);
 
             return res.getValue("mweb_url");
