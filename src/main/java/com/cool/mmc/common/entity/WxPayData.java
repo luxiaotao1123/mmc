@@ -2,13 +2,13 @@ package com.cool.mmc.common.entity;
 
 import com.alibaba.fastjson.JSON;
 import com.cool.mmc.common.utils.Item;
-import com.cool.mmc.common.utils.KeyedDigest;
 import com.cool.mmc.common.utils.Xml;
 import com.core.common.Cools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -18,6 +18,7 @@ public class WxPayData implements Serializable {
 
 	private static Logger log = LoggerFactory.getLogger(WxPayData.class);
 	private static final long serialVersionUID = 2908927494985838824L;
+	private static char[] hexDigits = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
 	private HashMap<String, Object> m_values = new HashMap<>();
 
@@ -101,7 +102,7 @@ public class WxPayData implements Serializable {
 		}
 		String result = sb.toString();
 		result += "key=" + wxPayConfig.getPrivateKey();
-		return KeyedDigest.getKeyedDigestMD5(result).toUpperCase();
+		return md5(result).toUpperCase();
 	}
 
 	/**
@@ -135,6 +136,25 @@ public class WxPayData implements Serializable {
 			buff = new StringBuilder(buff.substring(0, buff.length() - 1));
 		return buff.toString();
 	}
+
+	public static String md5(String string){
+		try{
+			MessageDigest md5=MessageDigest.getInstance("MD5");
+			byte[] bytes=md5.digest(string.getBytes("utf-8"));
+			char[] chars = new char[bytes.length * 2];
+			for (int i = 0; i < bytes.length; i++) {
+				int b = bytes[i];
+				chars[i * 2] = hexDigits[(b & 0xF0) >> 4];
+				chars[i * 2 + 1] = hexDigits[b & 0x0F];
+			}
+			return new String(chars);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+
 
 	public void setValue(String key, Object value) {
 		m_values.put(key, value);

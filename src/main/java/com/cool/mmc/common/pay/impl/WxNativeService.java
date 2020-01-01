@@ -69,20 +69,25 @@ public class WxNativeService extends WxPaymentServiceSupport {
     }
 
     public static void main(String[] args) {
+        String nonceStr = createNonceStr();
+        long l = System.currentTimeMillis();
         IWxPayConfig wxPayConfig = new NativeWxPayConfig();
         WxPayData payData = new WxPayData();
-//        payData.setValue("appid", wxPayConfig.getAppId());// 公众账号ID
-//        payData.setValue("mch_id", wxPayConfig.getMchId());// 商户号
-        payData.setValue("time_stamp", String.valueOf(System.currentTimeMillis()/1000));
-//        payData.setValue("nonce_str", createNonceStr());
+        payData.setValue("appid", wxPayConfig.getAppId());// 公众账号ID
+        payData.setValue("mch_id", wxPayConfig.getMchId());// 商户号
+        payData.setValue("time_stamp", String.valueOf(l/1000));
+        payData.setValue("nonce_str", nonceStr);
         payData.setValue("product_id", "88888");
         payData.setValues(wxPayConfig);
         String sign = payData.makeSign();
 
-        String res = "weixin://wxpay/bizpayurl?sign=".concat(sign).concat("&appid=")
-                .concat(wxPayConfig.getAppId()).concat("&mch_id=").concat(wxPayConfig.getMchId())
-                .concat("&product_id=").concat("88888").concat("&time_stamp=").concat(String.valueOf(System.currentTimeMillis()/1000))
-                .concat("&nonce_str=").concat(createNonceStr());
+        String res = "weixin://wxpay/bizpayurl?sign=".concat(sign)
+                .concat("&appid=").concat(wxPayConfig.getAppId())
+                .concat("&mch_id=").concat(wxPayConfig.getMchId())
+                .concat("&product_id=").concat("88888")
+                .concat("&time_stamp=").concat(String.valueOf(l/1000))
+                .concat("&nonce_str=").concat(nonceStr);
         System.out.println(res);
     }
 }
+// ce81002bdfaf4572a595944ef2c9a57d

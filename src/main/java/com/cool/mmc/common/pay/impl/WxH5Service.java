@@ -35,6 +35,7 @@ public class WxH5Service extends WxPaymentServiceSupport {
                     , outTradeNo
                     , wxPayConfig);
 
+            System.out.println(result);
             WxPayData res = new WxPayData();
             res.setValues(wxPayConfig);
             res.fromXml(result);

@@ -10,6 +10,11 @@ public class NativeWxPayConfig implements IWxPayConfig {
         return "dbc5cf176c48a4d763bbd8eb3e010985";
     }
 
+//    @Override
+//    public String getAppId() {
+//        return "wx773e38b57a7c1687";
+//    }
+
     @Override
     public String getAppId() {
         return "wx773e38b57a7c1687";

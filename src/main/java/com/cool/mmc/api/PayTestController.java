@@ -19,7 +19,7 @@ public class PayTestController {
     @GetMapping("/wx/h5")
     public String wxH5(){
 
-        Object result = wxH5Service.getAuth("dadsadsad11", 10.0,"999", " 47.96.118.52", null);
+        Object result = wxH5Service.getAuth("dadsadsad11", 10.0,"999", "47.96.118.52", null);
         return String.valueOf(result);
     }
 
