@@ -16,11 +16,22 @@ public class PayTestController {
     @Autowired
     private TPaymentService wxH5Service;
 
+    @Autowired
+    private TPaymentService wxNativeService;
+
     @GetMapping("/wx/h5")
     public String wxH5(){
 
         Object result = wxH5Service.getAuth("dadsadsad11", 10.0,"999", "47.96.118.52", null);
         return String.valueOf(result);
     }
+
+    @GetMapping("/wx/native")
+    public String wxNative(){
+
+        Object result = wxNativeService.getAuth("dadsad1sad11", 0.1,"999", "47.96.118.52", null);
+        return String.valueOf(result);
+    }
+
 
 }
