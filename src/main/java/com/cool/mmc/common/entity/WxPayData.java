@@ -108,7 +108,7 @@ public class WxPayData implements Serializable {
 	/**
 	 * 检测签名是否正确
 	 */
-	private boolean checkSign() throws Exception {
+	public boolean checkSign() throws Exception {
 		if(null == getValue("sign")  || "".equals(String.valueOf(getValue("sign")))){
 			throw new Exception("WxPayData签名不存在!");
 		}

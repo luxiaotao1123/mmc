@@ -8,6 +8,7 @@ import com.cool.mmc.common.pay.WxPaymentServiceSupport;
 import com.cool.mmc.common.utils.HttpTools;
 import com.cool.mmc.manager.entity.Merchant;
 import com.core.common.Arith;
+import com.core.common.Cools;
 import com.core.exception.CoolException;
 import org.springframework.stereotype.Service;
 
@@ -65,7 +66,40 @@ public class WxNativeService extends WxPaymentServiceSupport {
 
     @Override
     public boolean asyncNotify(Object notifyData) {
-        return false;
+        String out_trade_no;
+        String notifyStr = (String) notifyData;
+        if (Cools.isEmpty(notifyStr)) {
+            return false;
+        }
+        // 转换数据格式并验证签名
+        WxPayData wxPayData = new WxPayData();
+
+        try {
+            wxPayData.fromXml(notifyStr);
+            out_trade_no = wxPayData.getValue("out_trade_no").toString();
+            IWxPayConfig wxPayConfig = new NativeWxPayConfig();
+            wxPayData.setValues(wxPayConfig);
+            wxPayData.checkSign();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
+        }
+        // 检查支付结果中transaction_id是否存在
+        if (!wxPayData.isSet("transaction_id")) {
+            System.err.println("订单号不存在");
+            return false;
+        }
+
+        String transaction_id = wxPayData.getValue("transaction_id").toString();
+
+        // 在对业务数据进行状态检查和处理之前，要采用数据锁进行并发控制，以避免函数重入造成的数据混乱
+        try {
+            System.out.println("====>> " +transaction_id);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public static void main(String[] args) {
