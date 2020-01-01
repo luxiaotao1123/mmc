@@ -1,22 +1,34 @@
-//package com.cool.mmc.common.service;
-//
-//import org.springframework.stereotype.Service;
-//
-///**
-// * Created by vincent on 2019-12-26
-// */
-//@Service
-//public class PaymentService {
-//
-//    public Object executePayMoney(Long memberId, Long orderId, Double money, String clientIp, PayTypeEnum payType, PayCompanyType company, String openId, Boolean weChatV2) {
-//        TPaymentService tPaymentService = PayUtils.getPaymentService(company);
-//        String trackNo = tPaymentService.getTrackNo(orderId != null ? orderId : memberId, payType);
-//        Object result = tPaymentService.getAuth(trackNo, money,clientIp, openId, weChatV2);
-//        if (company.equals(PayCompanyType.weChat)){
-//            trackNo = (null != weChatV2 && weChatV2)?trackNo+"N":trackNo+"O";
-//        }
-//        executeSavePayRecord(trackNo, memberId, money, payType, company);
-//        return result;
-//    }
-//
-//}
+package com.cool.mmc.common.service;
+
+import com.cool.mmc.common.entity.enums.PayCompanyType;
+import com.cool.mmc.common.pay.PayUtils;
+import com.cool.mmc.common.pay.TPaymentService;
+import com.core.common.SpringUtils;
+import org.springframework.stereotype.Service;
+
+/**
+ * <strong>支付体系</strong>
+ * Created by vincent on 2019-04-19
+ */
+@Service
+public class PaymentService {
+
+    public static PaymentService getBean(){
+        return SpringUtils.getBean(PaymentService.class);
+    }
+
+    public Object executePayMoney(PayCompanyType company, Long userId, String orderId, Double money, String clientIp, String openId, String productId) {
+        TPaymentService service = PayUtils.getPaymentService(company);
+        return service.getAuth(orderId, money, productId, clientIp, openId);
+    }
+
+    public boolean executePayMoneyNotify(Object notifyData, PayCompanyType company) {
+        TPaymentService service = PayUtils.getPaymentService(company);
+        return service.asyncNotify(notifyData);
+    }
+
+    public synchronized void executePaySuccess(String out_trade_no, String transaction_id, String buyer_email) {
+        // todo 业务处理
+    }
+
+}

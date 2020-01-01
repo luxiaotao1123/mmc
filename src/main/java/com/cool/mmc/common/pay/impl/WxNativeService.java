@@ -5,6 +5,7 @@ import com.cool.mmc.common.entity.IWxPayConfig;
 import com.cool.mmc.common.entity.NativeWxPayConfig;
 import com.cool.mmc.common.entity.WxPayData;
 import com.cool.mmc.common.pay.WxPaymentServiceSupport;
+import com.cool.mmc.common.service.PaymentService;
 import com.cool.mmc.common.utils.HttpTools;
 import com.cool.mmc.manager.entity.Merchant;
 import com.core.common.Arith;
@@ -17,23 +18,6 @@ import org.springframework.stereotype.Service;
  */
 @Service("wxNativeService")
 public class WxNativeService extends WxPaymentServiceSupport {
-
-    @Override
-    public String getCodeUrl() {
-        WxPayData payData = new WxPayData();
-        payData.setValue("time_stamp", String.valueOf(System.currentTimeMillis()/1000));
-        payData.setValue("nonce_str", createNonceStr());
-        payData.setValue("product_id", "88888");
-        payData.setValues(new NativeWxPayConfig());
-        String sign = payData.makeSign();
-        return "";
-    }
-
-    @Override
-    public Object codeUrlNotify(Object notifyData) {
-
-        return false;
-    }
 
     @Override
     public Object getAuth(String outTradeNo, Double money, String productId, String clientIp, String openId) {
@@ -93,6 +77,7 @@ public class WxNativeService extends WxPaymentServiceSupport {
 
         // 在对业务数据进行状态检查和处理之前，要采用数据锁进行并发控制，以避免函数重入造成的数据混乱
         try {
+            PaymentService.getBean().executePaySuccess(out_trade_no, transaction_id, String.valueOf(wxPayData.getValue("openid")));
             System.out.println("====>> " +transaction_id);
             return true;
         } catch (Exception e) {
