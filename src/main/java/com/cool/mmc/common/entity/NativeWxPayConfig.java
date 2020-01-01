@@ -27,7 +27,7 @@ public class NativeWxPayConfig implements IWxPayConfig {
 
     @Override
     public String getNotifyUrl() {
-        return "zg.hzddbb.com/callback/v1/native";
+        return "http://zg.hzddbb.com/callback/v1/wechat/native_notify";
     }
 
     @Override
