@@ -4,6 +4,7 @@ import com.cool.mmc.common.pay.TPaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -27,9 +28,9 @@ public class PayTestController {
     }
 
     @GetMapping("/wx/native")
-    public String wxNative(){
+    public String wxNative(@RequestParam String no){
 
-        Object result = wxNativeService.getAuth("dadsad1sad11", 0.1,"999", "47.96.118.52", null);
+        Object result = wxNativeService.getAuth(no, 0.1,"999", "47.96.118.52", null);
         return String.valueOf(result);
     }
 
