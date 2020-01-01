@@ -1,6 +1,8 @@
 package com.cool.mmc.api;
 
 import com.cool.mmc.common.entity.WxPayData;
+import com.cool.mmc.common.pay.TPaymentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -43,6 +45,9 @@ public class CallBackController {
         return res.toXml();
     }
 
+    @Autowired
+    private TPaymentService wxNativeService;
+
     @RequestMapping("/wechat/native_notify")
     @ResponseBody
     public String nativeNotify(HttpServletRequest request) throws Exception {
@@ -56,7 +61,7 @@ public class CallBackController {
                 outStream.write(data, 0, count);
             String result = new String(outStream.toByteArray(), StandardCharsets.UTF_8);
             System.out.println(result);
-            if (true){
+            if (wxNativeService.asyncNotify(result)){
                 return "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
             }else {
                 res.setValue("return_code", "FAIL");
