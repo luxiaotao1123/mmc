@@ -75,11 +75,11 @@ public class WxNativeService extends WxPaymentServiceSupport {
         WxPayData wxPayData = new WxPayData();
 
         try {
-            wxPayData.fromXml(notifyStr);
-            out_trade_no = wxPayData.getValue("out_trade_no").toString();
             IWxPayConfig wxPayConfig = new NativeWxPayConfig();
             wxPayData.setValues(wxPayConfig);
-            wxPayData.checkSign();
+            wxPayData.fromXml(notifyStr);
+            out_trade_no = wxPayData.getValue("out_trade_no").toString();
+
         } catch (Exception ex) {
             ex.printStackTrace();
             return false;
