@@ -52,7 +52,6 @@ public class WxNativeService extends WxPaymentServiceSupport {
                     , outTradeNo
                     , wxPayConfig
                     , productId);
-            System.out.println(result);
             WxPayData res = new WxPayData();
             res.setValues(wxPayConfig);
             res.fromXml(result);

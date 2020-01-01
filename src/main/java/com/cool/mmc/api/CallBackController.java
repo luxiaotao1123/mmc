@@ -58,7 +58,6 @@ public class CallBackController {
             while ((count = input.read(data, 0, 1024)) != -1)
                 outStream.write(data, 0, count);
             String result = new String(outStream.toByteArray(), StandardCharsets.UTF_8);
-            System.out.println(result);
             if (PayUtils.getPaymentService(PayCompanyType.wxNative).asyncNotify(result)) {
                 return "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
             }else {
