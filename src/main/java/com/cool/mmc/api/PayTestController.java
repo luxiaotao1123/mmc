@@ -1,6 +1,7 @@
 package com.cool.mmc.api;
 
-import com.cool.mmc.common.pay.TPaymentService;
+import com.cool.mmc.common.entity.enums.PayCompanyType;
+import com.cool.mmc.common.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,22 +16,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class PayTestController {
 
     @Autowired
-    private TPaymentService wxH5Service;
+    private PaymentService paymentService;
 
-    @Autowired
-    private TPaymentService wxNativeService;
 
     @GetMapping("/wx/h5")
-    public String wxH5(){
-
-        Object result = wxH5Service.getAuth("dadsadsad11", 10.0,"999", "47.96.118.52", null);
+    public String wxH5(@RequestParam String no){
+        Object result = paymentService.executePayMoney(PayCompanyType.wxH5, null, no, 0.1, "47.96.118.52", null, "232");
         return String.valueOf(result);
     }
 
     @GetMapping("/wx/native")
     public String wxNative(@RequestParam String no){
-
-        Object result = wxNativeService.getAuth(no, 0.1,"999", "47.96.118.52", null);
+        Object result = paymentService.executePayMoney(PayCompanyType.wxNative, null, no, 0.1, "47.96.118.52", null, "232");
         return String.valueOf(result);
     }
 

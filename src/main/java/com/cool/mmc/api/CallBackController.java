@@ -2,7 +2,8 @@ package com.cool.mmc.api;
 
 import com.cool.mmc.common.entity.WxPayData;
 import com.cool.mmc.common.entity.enums.PayCompanyType;
-import com.cool.mmc.common.utils.PayUtils;
+import com.cool.mmc.common.service.PaymentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,6 +19,9 @@ import java.nio.charset.StandardCharsets;
 @Controller
 @RequestMapping("/callback/v1")
 public class CallBackController {
+
+    @Autowired
+    private PaymentService paymentService;
 
     @RequestMapping("/wechat/codeurl_notify")
     @ResponseBody
@@ -58,7 +62,7 @@ public class CallBackController {
             while ((count = input.read(data, 0, 1024)) != -1)
                 outStream.write(data, 0, count);
             String result = new String(outStream.toByteArray(), StandardCharsets.UTF_8);
-            if (PayUtils.getPaymentService(PayCompanyType.wxNative).asyncNotify(result)) {
+            if (paymentService.executePayMoneyNotify(result, PayCompanyType.wxNative)) {
                 return "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
             }else {
                 res.setValue("return_code", "FAIL");
