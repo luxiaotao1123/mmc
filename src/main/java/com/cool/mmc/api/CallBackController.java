@@ -2,7 +2,7 @@ package com.cool.mmc.api;
 
 import com.cool.mmc.common.entity.WxPayData;
 import com.cool.mmc.common.entity.enums.PayCompanyType;
-import com.cool.mmc.common.pay.PayUtils;
+import com.cool.mmc.common.utils.PayUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;

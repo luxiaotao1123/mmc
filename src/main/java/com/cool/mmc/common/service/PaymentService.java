@@ -1,7 +1,7 @@
 package com.cool.mmc.common.service;
 
 import com.cool.mmc.common.entity.enums.PayCompanyType;
-import com.cool.mmc.common.pay.PayUtils;
+import com.cool.mmc.common.utils.PayUtils;
 import com.cool.mmc.common.pay.TPaymentService;
 import com.core.common.SpringUtils;
 import org.springframework.stereotype.Service;

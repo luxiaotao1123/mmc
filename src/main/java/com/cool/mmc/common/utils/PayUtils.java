@@ -1,6 +1,7 @@
-package com.cool.mmc.common.pay;
+package com.cool.mmc.common.utils;
 
 import com.cool.mmc.common.entity.enums.PayCompanyType;
+import com.cool.mmc.common.pay.TPaymentService;
 import com.core.common.SpringUtils;
 
 /**
