@@ -3,7 +3,9 @@ package com.cool.mmc.common.service;
 import com.cool.mmc.common.entity.enums.PayCompanyType;
 import com.cool.mmc.common.utils.PayUtils;
 import com.cool.mmc.common.pay.TPaymentService;
+import com.cool.mmc.manager.service.MerchantService;
 import com.core.common.SpringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,6 +18,9 @@ public class PaymentService {
     public static PaymentService getBean(){
         return SpringUtils.getBean(PaymentService.class);
     }
+
+    @Autowired
+    private MerchantService merchantService;
 
     public Object executePayMoney(PayCompanyType company, Long userId, String orderId, Double money, String clientIp, String openId, String productId) {
         TPaymentService service = PayUtils.getPaymentService(company);

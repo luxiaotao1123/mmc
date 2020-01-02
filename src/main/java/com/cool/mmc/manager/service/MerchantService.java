@@ -5,4 +5,6 @@ import com.baomidou.mybatisplus.service.IService;
 
 public interface MerchantService extends IService<Merchant> {
 
+    Merchant poll(Long productId);
+
 }

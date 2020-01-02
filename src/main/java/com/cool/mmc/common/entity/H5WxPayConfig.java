@@ -22,7 +22,7 @@ public class H5WxPayConfig implements IWxPayConfig {
 
     @Override
     public String getNotifyUrl() {
-        return "zg.hzddbb.com/callback/v1/h5";
+        return "http://zg.hzddbb.com/callback/v1/h5";
     }
 
     @Override
