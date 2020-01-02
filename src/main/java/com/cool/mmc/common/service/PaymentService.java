@@ -38,7 +38,7 @@ public class PaymentService {
             throw new CoolException(CodeRes.EMPTY);
         }
         Merchant merchant = merchantService.poll(product.getId());
-        PayConfig payConfig = new PayConfig(merchant.getPrivateKey(), merchant.getAppId(), merchant.getPartner(), null, null, null, merchant.getSubject());
+        PayConfig payConfig = new PayConfig(merchant.getPrivateKey(), merchant.getAppId(), merchant.getPartner(), product.getNotifyUrl(), null, null, merchant.getSubject());
         TPaymentService service = PayUtils.getPaymentService(company);
         return service.getAuth(payConfig, orderId, money, productId, clientIp, openId);
     }
