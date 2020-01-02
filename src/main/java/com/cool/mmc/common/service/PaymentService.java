@@ -38,7 +38,16 @@ public class PaymentService {
     @Autowired
     private PayRecordService payRecordService;
 
-    public Object executePayMoney(PayCompanyType company, Long userId, String orderId, Double money, String clientIp, String openId, String productId) {
+    /**
+     * 发起支付，获取支付串
+     * @param orderId 外部订单号
+     * @param money 金额
+     * @param clientIp 客户端ip
+     * @param openId 微信openId
+     * @param productId 微信二维码支付产品ID
+     * @return the result
+     */
+    public Object executePayMoney(PayCompanyType company, String orderId, Double money, String clientIp, String openId, String productId) {
         Product product = productService.selectOne(new EntityWrapper<Product>().eq("flag", company.getFlag()));
         if (Cools.isEmpty(product)) {
             throw new CoolException(CodeRes.EMPTY);
@@ -60,15 +69,26 @@ public class PaymentService {
         return service.getAuth(payConfig, orderId, money, productId, clientIp, openId);
     }
 
+    /**
+     * 异步通知
+     * @param notifyData 通知数据
+     * @return the bool
+     */
     public boolean executePayMoneyNotify(Object notifyData, PayCompanyType company) {
         TPaymentService service = PayUtils.getPaymentService(company);
         return service.asyncNotify(notifyData);
     }
 
+    /**
+     * 系统业务处理
+     * @param out_trade_no 外部订单号
+     * @param transaction_id 第三方支付系统订单号
+     * @param buyer_email 支付人id
+     */
     public synchronized void executePaySuccess(String out_trade_no, String transaction_id, String buyer_email) {
         // 更新支付日志
         PayRecord payRecord = payRecordService.selectOne(new EntityWrapper<PayRecord>().eq("out_trade_no", out_trade_no));
-        payRecord.setState((short) 2);
+        payRecord.setState((short) 3);
         payRecordService.updateById(payRecord);
     }
 

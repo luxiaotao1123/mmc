@@ -21,13 +21,13 @@ public class PayTestController {
 
     @GetMapping("/wx/h5")
     public String wxH5(@RequestParam String no){
-        Object result = paymentService.executePayMoney(PayCompanyType.wxH5, null, no, 0.1, "47.96.118.52", null, "232");
+        Object result = paymentService.executePayMoney(PayCompanyType.wxH5, no, 0.1, "47.96.118.52", null, "232");
         return String.valueOf(result);
     }
 
     @GetMapping("/wx/native")
     public String wxNative(@RequestParam String no){
-        Object result = paymentService.executePayMoney(PayCompanyType.wxNative, null, no, 0.1, "47.96.118.52", null, "232");
+        Object result = paymentService.executePayMoney(PayCompanyType.wxNative, no, 0.1, "47.96.118.52", null, "232");
         return String.valueOf(result);
     }
 
