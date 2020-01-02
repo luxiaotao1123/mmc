@@ -4,17 +4,21 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.cool.mmc.common.CodeRes;
 import com.cool.mmc.common.entity.PayConfig;
 import com.cool.mmc.common.entity.enums.PayCompanyType;
-import com.cool.mmc.common.utils.PayUtils;
 import com.cool.mmc.common.pay.TPaymentService;
+import com.cool.mmc.common.utils.PayUtils;
 import com.cool.mmc.manager.entity.Merchant;
+import com.cool.mmc.manager.entity.PayRecord;
 import com.cool.mmc.manager.entity.Product;
 import com.cool.mmc.manager.service.MerchantService;
+import com.cool.mmc.manager.service.PayRecordService;
 import com.cool.mmc.manager.service.ProductService;
 import com.core.common.Cools;
 import com.core.common.SpringUtils;
 import com.core.exception.CoolException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 /**
  * <strong>支付体系</strong>
@@ -31,6 +35,8 @@ public class PaymentService {
     private MerchantService merchantService;
     @Autowired
     private ProductService productService;
+    @Autowired
+    private PayRecordService payRecordService;
 
     public Object executePayMoney(PayCompanyType company, Long userId, String orderId, Double money, String clientIp, String openId, String productId) {
         Product product = productService.selectOne(new EntityWrapper<Product>().eq("flag", company.getFlag()));
@@ -39,6 +45,17 @@ public class PaymentService {
         }
         Merchant merchant = merchantService.poll(product.getId());
         PayConfig payConfig = new PayConfig(merchant.getPrivateKey(), merchant.getAppId(), merchant.getPartner(), product.getNotifyUrl(), null, null, merchant.getSubject());
+        // 支付日志
+        PayRecord payRecord = new PayRecord(
+            product.getId(),    // 所属接口[非空]
+            merchant.getId(),    // 所属商户[非空]
+            orderId,    // 外部订单号[非空]
+            money,    // 金额[非空]
+             (short) 1,    // 支付状态[非空]
+            new Date()    // 添加时间[非空]
+        );
+        payRecordService.insert(payRecord);
+        // 请求支付串
         TPaymentService service = PayUtils.getPaymentService(company);
         return service.getAuth(payConfig, orderId, money, productId, clientIp, openId);
     }
@@ -49,7 +66,10 @@ public class PaymentService {
     }
 
     public synchronized void executePaySuccess(String out_trade_no, String transaction_id, String buyer_email) {
-        // todo 业务处理
+        // 更新支付日志
+        PayRecord payRecord = payRecordService.selectOne(new EntityWrapper<PayRecord>().eq("out_trade_no", out_trade_no));
+        payRecord.setState((short) 2);
+        payRecordService.updateById(payRecord);
     }
 
 }
