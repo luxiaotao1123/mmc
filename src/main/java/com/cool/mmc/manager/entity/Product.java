@@ -1,9 +1,9 @@
 package com.cool.mmc.manager.entity;
 
-import com.core.common.Cools;import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
 
-import com.baomidou.mybatisplus.annotations.TableName;
 import java.io.Serializable;
 
 @TableName("man_product")
@@ -31,6 +31,11 @@ public class Product implements Serializable {
      * 所属平台 1: 微信  2: 支付宝  
      */
     private Short platform;
+
+    /**
+     * 回调地址
+     */
+    private String notifyUrl;
 
     /**
      * 状态 1: 正常  0: 禁用  
@@ -95,6 +100,14 @@ public class Product implements Serializable {
 
     public void setPlatform(Short platform) {
         this.platform = platform;
+    }
+
+    public String getNotifyUrl() {
+        return notifyUrl;
+    }
+
+    public void setNotifyUrl(String notifyUrl) {
+        this.notifyUrl = notifyUrl;
     }
 
     public Short getStatus() {

@@ -8,6 +8,7 @@
         <result column="name" property="name" />
         <result column="flag" property="flag" />
         <result column="platform" property="platform" />
+        <result column="notify_url" property="notifyUrl" />
         <result column="status" property="status" />
 
     </resultMap>

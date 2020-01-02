@@ -21,6 +21,7 @@ layui.use(['table','laydate', 'form'], function(){
             ,{field: 'name', align: 'center',title: '接口名称'}
             ,{field: 'flag', align: 'center',title: '标识'}
             ,{field: 'platform$', align: 'center',title: '所属平台'}
+            ,{field: 'notifyUrl', align: 'center',title: '回调地址'}
             ,{field: 'status$', align: 'center',title: '状态'}
 
             ,{fixed: 'right', title:'操作', align: 'center', toolbar: '#operate', width:150}
@@ -197,6 +198,7 @@ layui.use(['table','laydate', 'form'], function(){
             name: $('#name').val(),
             flag: $('#flag').val(),
             platform: $('#platform').val(),
+            notifyUrl: $('#notifyUrl').val(),
             status: $('#status').val(),
 
         };
