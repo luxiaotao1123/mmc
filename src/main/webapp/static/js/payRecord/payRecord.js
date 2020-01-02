@@ -20,7 +20,9 @@ layui.use(['table','laydate', 'form'], function(){
             ,{field: 'id', title: 'ID', sort: true,align: 'center', fixed: 'left', width: 80}
             ,{field: 'productId$', align: 'center',title: '所属接口',event: 'productId', style: 'text-decoration: underline;cursor:pointer'}
             ,{field: 'merchantId$', align: 'center',title: '所属商户',event: 'merchantId', style: 'text-decoration: underline;cursor:pointer'}
+            ,{field: 'outTradeNo', align: 'center',title: '外部订单号'}
             ,{field: 'money', align: 'center',title: '金额'}
+            ,{field: 'state$', align: 'center',title: '支付状态'}
             ,{field: 'createTime$', align: 'center',title: '添加时间'}
 
             ,{fixed: 'right', title:'操作', align: 'center', toolbar: '#operate', width:150}
@@ -266,7 +268,9 @@ layui.use(['table','laydate', 'form'], function(){
             id: $('#id').val(),
             productId: $('#productId').val(),
             merchantId: $('#merchantId').val(),
+            outTradeNo: $('#outTradeNo').val(),
             money: $('#money').val(),
+            state: $('#state').val(),
             createTime: top.strToDate($('#createTime\\$').val()),
 
         };

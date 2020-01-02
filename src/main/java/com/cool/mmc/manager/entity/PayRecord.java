@@ -37,9 +37,20 @@ public class PayRecord implements Serializable {
     private Long merchantId;
 
     /**
+     * 外部订单号
+     */
+    @TableField("out_trade_no")
+    private String outTradeNo;
+
+    /**
      * 金额
      */
     private Double money;
+
+    /**
+     * 支付状态 1: 初始化  2: 已回调  3: 成功  4: 失败  
+     */
+    private Short state;
 
     /**
      * 添加时间
@@ -49,17 +60,21 @@ public class PayRecord implements Serializable {
 
     public PayRecord() {}
 
-    public PayRecord(Long productId,Long merchantId,Double money,Date createTime) {
+    public PayRecord(Long productId,Long merchantId,String outTradeNo,Double money,Short state,Date createTime) {
         this.productId = productId;
         this.merchantId = merchantId;
+        this.outTradeNo = outTradeNo;
         this.money = money;
+        this.state = state;
         this.createTime = createTime;
     }
 
 //    PayRecord payRecord = new PayRecord(
 //            null,    // 所属接口[非空]
 //            null,    // 所属商户[非空]
+//            null,    // 外部订单号[非空]
 //            null,    // 金额[非空]
+//            null,    // 支付状态[非空]
 //            null    // 添加时间[非空]
 //    );
 
@@ -105,12 +120,44 @@ public class PayRecord implements Serializable {
         this.merchantId = merchantId;
     }
 
+    public String getOutTradeNo() {
+        return outTradeNo;
+    }
+
+    public void setOutTradeNo(String outTradeNo) {
+        this.outTradeNo = outTradeNo;
+    }
+
     public Double getMoney() {
         return money;
     }
 
     public void setMoney(Double money) {
         this.money = money;
+    }
+
+    public Short getState() {
+        return state;
+    }
+
+    public String getState$(){
+        if (null == this.state){ return null; }
+        switch (this.state){
+            case 1:
+                return "初始化";
+            case 2:
+                return "已回调";
+            case 3:
+                return "成功";
+            case 4:
+                return "失败";
+            default:
+                return String.valueOf(this.state);
+        }
+    }
+
+    public void setState(Short state) {
+        this.state = state;
     }
 
     public Date getCreateTime() {

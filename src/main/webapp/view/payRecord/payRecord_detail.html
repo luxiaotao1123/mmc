@@ -46,9 +46,27 @@
             </div>
         </div>
         <div class="layui-inline"  style="width:31%;">
+            <label class="layui-form-label"><span class="not-null">*</span>外部订单号：</label>
+            <div class="layui-input-inline">
+                <input id="outTradeNo" class="layui-input" type="text" lay-verify="required" >
+            </div>
+        </div>
+        <div class="layui-inline"  style="width:31%;">
             <label class="layui-form-label"><span class="not-null">*</span>金　　额：</label>
             <div class="layui-input-inline">
                 <input id="money" class="layui-input" type="text" lay-verify="required" >
+            </div>
+        </div>
+        <div class="layui-inline"  style="width:31%;">
+            <label class="layui-form-label"><span class="not-null">*</span>支付状态：</label>
+            <div class="layui-input-inline">
+                <select id="state" lay-verify="required">
+                    <option value="" style="display: none"></option>
+                    <option value="1">初始化</option>
+                    <option value="2">已回调</option>
+                    <option value="3">成功</option>
+                    <option value="4">失败</option>
+                </select>
             </div>
         </div>
         <div class="layui-inline"  style="width:31%;">

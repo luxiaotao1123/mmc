@@ -7,7 +7,9 @@
         <id column="id" property="id" />
         <result column="product_id" property="productId" />
         <result column="merchant_id" property="merchantId" />
+        <result column="out_trade_no" property="outTradeNo" />
         <result column="money" property="money" />
+        <result column="state" property="state" />
         <result column="create_time" property="createTime" />
 
     </resultMap>
