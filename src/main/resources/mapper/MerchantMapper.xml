@@ -27,7 +27,10 @@
     </resultMap>
 
     <select id="poll" resultMap="BaseResultMap">
-        select * from man_merchant where 1=1 and product_id=#{productId} order by id desc limit 0,1
+        select * from man_merchant
+        where 1=1 and product_id=#{productId} and state=1 and status=1
+        order by id desc
+        limit 0,1
     </select>
 
 </mapper>
