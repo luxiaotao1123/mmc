@@ -7,7 +7,6 @@ import com.cool.mmc.common.entity.WxPayData;
 import com.cool.mmc.common.pay.WxPaymentServiceSupport;
 import com.cool.mmc.common.service.PaymentService;
 import com.cool.mmc.common.utils.HttpTools;
-import com.cool.mmc.manager.entity.Merchant;
 import com.core.common.Arith;
 import com.core.common.Cools;
 import com.core.exception.CoolException;
@@ -20,24 +19,21 @@ import org.springframework.stereotype.Service;
 public class WxNativeService extends WxPaymentServiceSupport {
 
     @Override
-    public Object getAuth(String outTradeNo, Double money, String productId, String clientIp, String openId) {
+    public Object getAuth(IWxPayConfig payConfig, String outTradeNo, Double money, String productId, String clientIp, String openId) {
         try {
             if(null == clientIp || !HttpTools.isboolIp(clientIp)){
                 clientIp = "127.0.0.1";
             }
-            Merchant merchant = new Merchant();
-            merchant.setSubject("递递叭叭测试");
-            IWxPayConfig wxPayConfig = new NativeWxPayConfig();
             int totalFee = (int) Arith.multiplys(0, money, 100);
             String result = getNativeUnifiedOrderResult(
                     totalFee
-                    , merchant.getSubject()
+                    , payConfig.getSubject()
                     , clientIp
                     , outTradeNo
-                    , wxPayConfig
+                    , payConfig
                     , productId);
             WxPayData res = new WxPayData();
-            res.setValues(wxPayConfig);
+            res.setValues(payConfig);
             res.fromXml(result);
 
             return res.getValue("code_url");

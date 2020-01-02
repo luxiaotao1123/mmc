@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 public class WxH5Service extends WxPaymentServiceSupport {
 
     @Override
-    public Object getAuth(String outTradeNo, Double money, String productId, String clientIp, String openId) {
+    public Object getAuth(IWxPayConfig payConfig, String outTradeNo, Double money, String productId, String clientIp, String openId) {
         try {
             if(null == clientIp || !HttpTools.isboolIp(clientIp)){
                 clientIp = "127.0.0.1";

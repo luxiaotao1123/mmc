@@ -1,10 +1,18 @@
 package com.cool.mmc.common.service;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.cool.mmc.common.CodeRes;
+import com.cool.mmc.common.entity.PayConfig;
 import com.cool.mmc.common.entity.enums.PayCompanyType;
 import com.cool.mmc.common.utils.PayUtils;
 import com.cool.mmc.common.pay.TPaymentService;
+import com.cool.mmc.manager.entity.Merchant;
+import com.cool.mmc.manager.entity.Product;
 import com.cool.mmc.manager.service.MerchantService;
+import com.cool.mmc.manager.service.ProductService;
+import com.core.common.Cools;
 import com.core.common.SpringUtils;
+import com.core.exception.CoolException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,10 +29,18 @@ public class PaymentService {
 
     @Autowired
     private MerchantService merchantService;
+    @Autowired
+    private ProductService productService;
 
     public Object executePayMoney(PayCompanyType company, Long userId, String orderId, Double money, String clientIp, String openId, String productId) {
+        Product product = productService.selectOne(new EntityWrapper<Product>().eq("flag", company.getFlag()));
+        if (Cools.isEmpty(product)) {
+            throw new CoolException(CodeRes.EMPTY);
+        }
+        Merchant merchant = merchantService.poll(product.getId());
+        PayConfig payConfig = new PayConfig(merchant.getPrivateKey(), merchant.getAppId(), merchant.getPartner(), null, null, null, merchant.getSubject());
         TPaymentService service = PayUtils.getPaymentService(company);
-        return service.getAuth(orderId, money, productId, clientIp, openId);
+        return service.getAuth(payConfig, orderId, money, productId, clientIp, openId);
     }
 
     public boolean executePayMoneyNotify(Object notifyData, PayCompanyType company) {

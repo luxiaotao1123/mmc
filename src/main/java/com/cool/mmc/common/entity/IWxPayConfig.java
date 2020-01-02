@@ -32,4 +32,8 @@ public interface IWxPayConfig {
 	 */
 	public String getCertPwd();
 
+	/**
+	 * 交易描述
+	 */
+	public String getSubject();
 }

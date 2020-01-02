@@ -5,26 +5,43 @@ package com.cool.mmc.common.entity.enums;
  */
 public enum PayCompanyType {
 
-    aliPay(1,"支付宝"),
-    wxH5(2,"微信H5支付"),
-    wxNative(3, "微信扫码支付"),
+    aliPay(1, "ALIPAY", "支付宝"),
+    wxH5(2, "WECHAT_H5", "微信H5支付"),
+    wxNative(3, "WECHAT_NATIVE", "微信扫码支付"),
     ;
 
-    private String description;
     private int code;
-    PayCompanyType(int code, String description){
+    private String flag;
+    private String description;
+
+    PayCompanyType(int code, String flag, String description){
         this.code = code;
+        this.flag = flag;
         this.description = description;
-    }
-    public String getDescription() {
-        return description;
     }
 
     public int getCode() {
         return code;
     }
 
-    public void setCode(final int code) {
+    public void setCode(int code) {
         this.code = code;
     }
+
+    public String getFlag() {
+        return flag;
+    }
+
+    public void setFlag(String flag) {
+        this.flag = flag;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
 }

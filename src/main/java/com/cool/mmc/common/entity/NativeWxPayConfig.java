@@ -34,4 +34,9 @@ public class NativeWxPayConfig implements IWxPayConfig {
     public String getCertPwd() {
         return null;
     }
+
+    @Override
+    public String getSubject() {
+        return null;
+    }
 }
