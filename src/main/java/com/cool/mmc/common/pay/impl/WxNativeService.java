@@ -1,6 +1,5 @@
 package com.cool.mmc.common.pay.impl;
 
-import com.cool.mmc.common.CodeRes;
 import com.cool.mmc.common.entity.IWxPayConfig;
 import com.cool.mmc.common.entity.NativeWxPayConfig;
 import com.cool.mmc.common.entity.PayConfig;
@@ -46,7 +45,7 @@ public class WxNativeService extends WxPaymentServiceSupport {
             return res.getValue("code_url");
         } catch (Exception e) {
             e.printStackTrace();
-            throw new CoolException(CodeRes.ERROR);
+            throw new CoolException(e.getMessage());
         }
     }
 

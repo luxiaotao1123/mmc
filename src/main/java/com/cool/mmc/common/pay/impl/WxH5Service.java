@@ -1,6 +1,5 @@
 package com.cool.mmc.common.pay.impl;
 
-import com.cool.mmc.common.CodeRes;
 import com.cool.mmc.common.entity.IWxPayConfig;
 import com.cool.mmc.common.entity.PayConfig;
 import com.cool.mmc.common.entity.WxPayData;
@@ -50,7 +49,7 @@ public class WxH5Service extends WxPaymentServiceSupport {
             return res.getValue("mweb_url");
         } catch (Exception e) {
             e.printStackTrace();
-            throw new CoolException(CodeRes.ERROR);
+            throw new CoolException(e.getMessage());
         }
     }
 
