@@ -76,5 +76,30 @@ public class CallBackController {
     }
 
 
+    @RequestMapping("/wechat/h5_notify")
+    @ResponseBody
+    public String h5Notify(HttpServletRequest request) throws Exception {
+        WxPayData res = new WxPayData();
+        try {
+            InputStream input = request.getInputStream();
+            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+            byte[] data = new byte[1024];
+            int count;
+            while ((count = input.read(data, 0, 1024)) != -1)
+                outStream.write(data, 0, count);
+            String result = new String(outStream.toByteArray(), StandardCharsets.UTF_8);
+            if (paymentService.executePayMoneyNotify(result, PayCompanyType.wxH5)) {
+                return "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
+            }else {
+                res.setValue("return_code", "FAIL");
+                res.setValue("return_msg", "FAIL");
+            }
+        } catch (Exception e) {
+            res.setValue("return_code", "FAIL");
+            res.setValue("return_msg", "支付结果中微信订单号不存在");
+        }
+        return res.toXml();
+    }
+
 
 }
