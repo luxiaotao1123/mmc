@@ -38,11 +38,14 @@ public class WxH5Service extends WxPaymentServiceSupport {
             WxPayData res = new WxPayData();
             res.setValues(payConfig);
             res.fromXml(result);
+            if (res.getValue("return_code")!=null && !String.valueOf(res.getValue("return_code")).toUpperCase().equals("SUCCESS")) {
+                throw new Exception(String.valueOf(res.getValue("return_msg")));
+            }
             if (!res.checkSign()) {
                 throw new Exception("签名验证失败"+result);
             }
             if (res.getValue("err_code")!=null) {
-                throw new CoolException(String.valueOf(res.getValue("err_code_des")));
+                throw new Exception(String.valueOf(res.getValue("err_code_des")));
             }
 
             System.out.println(result);
