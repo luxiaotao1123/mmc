@@ -6,6 +6,7 @@ import com.cool.mmc.common.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,7 +24,7 @@ public class CallBackController {
     @Autowired
     private PaymentService paymentService;
 
-    @RequestMapping("/wechat/codeurl_notify")
+    @RequestMapping(value = "/wechat/codeurl_notify", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public String weChatCodeUrl(HttpServletRequest request) throws Exception {
         WxPayData res = new WxPayData();
@@ -50,7 +51,7 @@ public class CallBackController {
     }
 
 
-    @RequestMapping("/wechat/native_notify")
+    @RequestMapping(value ="/wechat/native_notify", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public String nativeNotify(HttpServletRequest request) throws Exception {
         WxPayData res = new WxPayData();
@@ -76,7 +77,7 @@ public class CallBackController {
     }
 
 
-    @RequestMapping("/wechat/h5_notify")
+    @RequestMapping(value = "/wechat/h5_notify", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public String h5Notify(HttpServletRequest request) throws Exception {
         WxPayData res = new WxPayData();
