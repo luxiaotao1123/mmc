@@ -7,6 +7,8 @@ import com.cool.mmc.manager.service.ProductService;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.core.common.SpringUtils;
 import com.cool.mmc.manager.service.MerchantService;
+import com.core.common.SpringUtils;
+import com.cool.mmc.manager.service.OauthService;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -37,6 +39,12 @@ public class PayRecord implements Serializable {
     private Long merchantId;
 
     /**
+     * 所属平台
+     */
+    @TableField("oauth_id")
+    private Long oauthId;
+
+    /**
      * 外部订单号
      */
     @TableField("out_trade_no")
@@ -60,9 +68,10 @@ public class PayRecord implements Serializable {
 
     public PayRecord() {}
 
-    public PayRecord(Long productId,Long merchantId,String outTradeNo,Double money,Short state,Date createTime) {
+    public PayRecord(Long productId,Long merchantId,Long oauthId,String outTradeNo,Double money,Short state,Date createTime) {
         this.productId = productId;
         this.merchantId = merchantId;
+        this.oauthId = oauthId;
         this.outTradeNo = outTradeNo;
         this.money = money;
         this.state = state;
@@ -72,6 +81,7 @@ public class PayRecord implements Serializable {
 //    PayRecord payRecord = new PayRecord(
 //            null,    // 所属接口[非空]
 //            null,    // 所属商户[非空]
+//            null,    // 所属平台[非空]
 //            null,    // 外部订单号[非空]
 //            null,    // 金额[非空]
 //            null,    // 支付状态[非空]
@@ -118,6 +128,23 @@ public class PayRecord implements Serializable {
 
     public void setMerchantId(Long merchantId) {
         this.merchantId = merchantId;
+    }
+
+    public Long getOauthId() {
+        return oauthId;
+    }
+
+    public String getOauthId$(){
+        OauthService service = SpringUtils.getBean(OauthService.class);
+        Oauth oauth = service.selectById(this.oauthId);
+        if (!Cools.isEmpty(oauth)){
+            return oauth.getAccount();
+        }
+        return null;
+    }
+
+    public void setOauthId(Long oauthId) {
+        this.oauthId = oauthId;
     }
 
     public String getOutTradeNo() {

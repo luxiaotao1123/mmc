@@ -45,15 +45,15 @@
         </div>
     </div>
     <div class="layui-inline">
-        <label class="layui-form-label">支付状态：</label>
-        <div class="layui-input-inline">
-            <select name="state">
-                <option value="" style="display: none"></option>
-                <option value="1">初始化</option>
-                <option value="2">已回调</option>
-                <option value="3">成功</option>
-                <option value="4">失败</option>
-            </select>
+        <label class="layui-form-label">所属平台：</label>
+        <div class="layui-input-inline cool-auto-complete">
+            <input id="oauthId" class="layui-input" name="oauth_id" type="text" placeholder="请输入" autocomplete="off" style="display: none">
+            <input id="oauthId$" class="layui-input cool-auto-complete-div" onclick="autoShow(this.id)" type="text" placeholder="请输入" onfocus=this.blur()>
+            <div class="cool-auto-complete-window">
+                <input class="cool-auto-complete-window-input" data-key="oauthQueryByoauthId" onkeyup="autoLoad(this.getAttribute('data-key'))">
+                <select class="cool-auto-complete-window-select" data-key="oauthQueryByoauthIdSelect" onchange="confirmed(this.getAttribute('data-key'))" multiple="multiple">
+                </select>
+            </div>
         </div>
     </div>
 

@@ -58,6 +58,7 @@ public class PaymentService {
         PayRecord payRecord = new PayRecord(
             product.getId(),    // 所属接口[非空]
             merchant.getId(),    // 所属商户[非空]
+            null,
             orderId,    // 外部订单号[非空]
             money,    // 金额[非空]
              (short) 1,    // 支付状态[非空]

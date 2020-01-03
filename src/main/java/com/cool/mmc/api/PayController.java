@@ -7,7 +7,6 @@ import com.cool.mmc.common.entity.enums.PayCompanyType;
 import com.cool.mmc.common.service.PaymentService;
 import com.cool.mmc.manager.entity.Oauth;
 import com.cool.mmc.manager.service.OauthService;
-import com.cool.mmc.manager.service.PayRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,9 +29,6 @@ public class PayController {
 
     @Autowired
     private OauthService oauthService;
-
-    @Autowired
-    private PayRecordService payRecordService;
 
     @GetMapping("/wx/h5")
     public Result wxH5(HttpServletRequest request, @RequestParam String username, @RequestParam String key, @RequestParam String orderId,

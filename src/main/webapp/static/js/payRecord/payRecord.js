@@ -20,6 +20,7 @@ layui.use(['table','laydate', 'form'], function(){
             ,{field: 'id', title: 'ID', sort: true,align: 'center', fixed: 'left', width: 80}
             ,{field: 'productId$', align: 'center',title: '所属接口',event: 'productId', style: 'text-decoration: underline;cursor:pointer'}
             ,{field: 'merchantId$', align: 'center',title: '所属商户',event: 'merchantId', style: 'text-decoration: underline;cursor:pointer'}
+            ,{field: 'oauthId$', align: 'center',title: '所属平台',event: 'oauthId', style: 'text-decoration: underline;cursor:pointer'}
             ,{field: 'outTradeNo', align: 'center',title: '外部订单号'}
             ,{field: 'money', align: 'center',title: '金额'}
             ,{field: 'state$', align: 'center',title: '支付状态'}
@@ -255,6 +256,41 @@ layui.use(['table','laydate', 'form'], function(){
                    });
                 }
                 break;
+            case 'oauthId':
+                var param = top.reObject(data).oauthId;
+                if (param === undefined) {
+                    layer.msg("无数据");
+                } else {
+                   layer.open({
+                       type: 2,
+                       title: '所属详情',
+                       maxmin: true,
+                       area: [top.detailHeight, top.detailWidth],
+                       shadeClose: false,
+                       content: 'oauth_detail',
+                       success: function(layero, index){
+                           $.ajax({
+                               url: "/oauth/"+ param +"/auth",
+                               headers: {'token': localStorage.getItem('token')},
+                               method: 'GET',
+                               success: function (res) {
+                                   if (res.code === 200){
+                                       setFormVal(layer.getChildFrame('#detail', index), res.data, true);
+                                       top.convertDisabled(layer.getChildFrame('#data-detail :input', index), true);
+                                       layer.getChildFrame('#data-detail-submit', index).hide();
+                                       detailScreen(index);
+                                       layero.find('iframe')[0].contentWindow.layui.form.render('select');
+                                   } else if (res.code === 403){
+                                       parent.location.href = "/";
+                                   }else {
+                                       layer.msg(res.msg)
+                                   }
+                               }
+                           })
+                       }
+                   });
+                }
+                break;
 
         }
     });
@@ -268,6 +304,7 @@ layui.use(['table','laydate', 'form'], function(){
             id: $('#id').val(),
             productId: $('#productId').val(),
             merchantId: $('#merchantId').val(),
+            oauthId: $('#oauthId').val(),
             outTradeNo: $('#outTradeNo').val(),
             money: $('#money').val(),
             state: $('#state').val(),
