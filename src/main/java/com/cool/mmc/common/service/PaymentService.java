@@ -130,6 +130,7 @@ public class PaymentService {
         timer.setData(map.toString());
         timer.setCreateTime(new Date());
         timer.setStatus(0);
+        timer.setCount(0);
         timerService.insert(timer);
         return false;
     }
