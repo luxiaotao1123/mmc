@@ -123,7 +123,7 @@ public class OauthController extends AbstractBaseController {
         for (Oauth oauth : page.getRecords()){
             Map<String, Object> map = new HashMap<>();
             map.put("id", oauth.getId());
-            map.put("value", oauth.getId());
+            map.put("value", oauth.getAccount());
             result.add(map);
         }
         return R.ok(result);

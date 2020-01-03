@@ -6,7 +6,6 @@ import com.cool.mmc.api.tools.Result;
 import com.cool.mmc.common.entity.enums.PayCompanyType;
 import com.cool.mmc.common.service.PaymentService;
 import com.cool.mmc.manager.entity.Oauth;
-import com.cool.mmc.manager.entity.PayRecord;
 import com.cool.mmc.manager.service.OauthService;
 import com.cool.mmc.manager.service.PayRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,18 +38,18 @@ public class PayController {
     public Result wxH5(HttpServletRequest request, @RequestParam String username, @RequestParam String key, @RequestParam String orderId,
                        @RequestParam double money){
         Result result=new Result();
-        Map<String,Object> map=new HashMap();
+        Map<String,Object> map=new HashMap<>();
         Oauth check = check(username, key);
-        if (check.equals(null)) {
+        if (check == null) {
             result.setMessage("签名验证失败");
             return result;
         }
-        if(orderId.equals(null)||money==0.00){
+        if(orderId == null ||money==0.00){
             result.setMessage("参数缺失");
             return result;
         }
         Object msg = paymentService.executePayMoney(PayCompanyType.wxH5, orderId, money, IpTool.getRemoteAddr(request),null, null);
-        if(msg.equals(null)){
+        if(msg == null){
             result.setMessage("订单创建失败");
             return result;
         }
@@ -69,16 +67,16 @@ public class PayController {
         Result result=new Result();
         Map<String,Object> map=new HashMap();
         Oauth check = check(username, key);
-        if (check.equals(null)) {
+        if (check == null) {
             result.setMessage("签名验证失败");
             return result;
         }
-        if(orderId.equals(null)||money==0.00){
+        if(orderId == null ||money==0.00){
             result.setMessage("参数缺失");
             return result;
         }
         Object msg = paymentService.executePayMoney(PayCompanyType.wxNative, orderId, money, IpTool.getRemoteAddr(request),null, null);
-        if(msg.equals(null)){
+        if(msg == null){
             result.setMessage("订单创建失败");
             return result;
         }
