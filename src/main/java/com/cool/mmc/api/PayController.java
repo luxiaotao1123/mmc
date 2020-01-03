@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +43,7 @@ public class PayController {
             result.setMessage("参数缺失");
             return result;
         }
-        Object msg = paymentService.executePayMoney(PayCompanyType.wxH5, orderId, money, IpTool.getRemoteAddr(request),null, null);
+        Object msg = paymentService.executePayMoney(PayCompanyType.wxH5, orderId, money, IpTool.getRemoteAddr(request),null, null,check.getId());
         if(msg == null){
             result.setMessage("订单创建失败");
             return result;
@@ -71,7 +70,7 @@ public class PayController {
             result.setMessage("参数缺失");
             return result;
         }
-        Object msg = paymentService.executePayMoney(PayCompanyType.wxNative, orderId, money, IpTool.getRemoteAddr(request),null, null);
+        Object msg = paymentService.executePayMoney(PayCompanyType.wxNative, orderId, money, IpTool.getRemoteAddr(request),null, null,check.getId());
         if(msg == null){
             result.setMessage("订单创建失败");
             return result;

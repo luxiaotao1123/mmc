@@ -1,15 +1,18 @@
 package com.cool.mmc.common.service;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.cool.mmc.api.tools.HttpSend;
 import com.cool.mmc.common.CodeRes;
 import com.cool.mmc.common.entity.PayConfig;
 import com.cool.mmc.common.entity.enums.PayCompanyType;
 import com.cool.mmc.common.pay.TPaymentService;
 import com.cool.mmc.common.utils.PayUtils;
 import com.cool.mmc.manager.entity.Merchant;
+import com.cool.mmc.manager.entity.Oauth;
 import com.cool.mmc.manager.entity.PayRecord;
 import com.cool.mmc.manager.entity.Product;
 import com.cool.mmc.manager.service.MerchantService;
+import com.cool.mmc.manager.service.OauthService;
 import com.cool.mmc.manager.service.PayRecordService;
 import com.cool.mmc.manager.service.ProductService;
 import com.core.common.Cools;
@@ -37,7 +40,8 @@ public class PaymentService {
     private ProductService productService;
     @Autowired
     private PayRecordService payRecordService;
-
+    @Autowired
+    private OauthService oauthService;
     /**
      * 发起支付，获取支付串
      * @param orderId 外部订单号
@@ -47,7 +51,7 @@ public class PaymentService {
      * @param productId 微信二维码支付产品ID
      * @return the result
      */
-    public Object executePayMoney(PayCompanyType company, String orderId, Double money, String clientIp, String openId, String productId) {
+    public Object executePayMoney(PayCompanyType company, String orderId, Double money, String clientIp, String openId, String productId,Long oauthId) {
         Product product = productService.selectOne(new EntityWrapper<Product>().eq("flag", company.getFlag()));
         if (Cools.isEmpty(product)) {
             throw new CoolException(CodeRes.EMPTY);
@@ -58,7 +62,7 @@ public class PaymentService {
         PayRecord payRecord = new PayRecord(
             product.getId(),    // 所属接口[非空]
             merchant.getId(),    // 所属商户[非空]
-            null,
+            oauthId,
             orderId,    // 外部订单号[非空]
             money,    // 金额[非空]
              (short) 1,    // 支付状态[非空]
@@ -91,6 +95,8 @@ public class PaymentService {
         PayRecord payRecord = payRecordService.selectOne(new EntityWrapper<PayRecord>().eq("out_trade_no", out_trade_no));
         payRecord.setState((short) 3);
         payRecordService.updateById(payRecord);
+        oauthService.selectOne(new EntityWrapper<Oauth>().eq("id", payRecord.getOauthId()));
+        //HttpSend.doPost()
     }
 
     /**
