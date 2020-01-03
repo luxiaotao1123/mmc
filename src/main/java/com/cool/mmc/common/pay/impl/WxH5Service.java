@@ -7,7 +7,6 @@ import com.cool.mmc.common.entity.WxPayData;
 import com.cool.mmc.common.pay.WxPaymentServiceSupport;
 import com.cool.mmc.common.service.PaymentService;
 import com.cool.mmc.common.utils.HttpTools;
-import com.cool.mmc.manager.entity.Merchant;
 import com.core.common.Arith;
 import com.core.common.Cools;
 import com.core.exception.CoolException;
@@ -29,20 +28,17 @@ public class WxH5Service extends WxPaymentServiceSupport {
             if(null == clientIp || !HttpTools.isboolIp(clientIp)){
                 clientIp = "127.0.0.1";
             }
-            Merchant merchant = new Merchant();
-            merchant.setSubject("递递叭叭测试");
-            IWxPayConfig wxPayConfig = new H5WxPayConfig();
             int totalFee = (int) Arith.multiplys(0, money, 100);
             String result = getH5UnifiedOrderResult(
                     totalFee
-                    , merchant.getSubject()
+                    , payConfig.getSubject()
                     , clientIp
                     , outTradeNo
-                    , wxPayConfig);
+                    , payConfig);
 
             System.out.println(result);
             WxPayData res = new WxPayData();
-            res.setValues(wxPayConfig);
+            res.setValues(payConfig);
             res.fromXml(result);
 
             return res.getValue("mweb_url");
