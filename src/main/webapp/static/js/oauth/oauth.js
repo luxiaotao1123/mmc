@@ -24,6 +24,7 @@ layui.use(['table','laydate', 'form'], function(){
             ,{field: 'callbackUrl', align: 'center',title: '回调地址'}
             ,{field: 'createTime$', align: 'center',title: '添加时间'}
             ,{field: 'updateTime$', align: 'center',title: '修改时间'}
+            ,{field: 'status$', align: 'center',title: '状态'}
 
             ,{fixed: 'right', title:'操作', align: 'center', toolbar: '#operate', width:150}
         ]],
@@ -237,6 +238,7 @@ layui.use(['table','laydate', 'form'], function(){
             callbackUrl: $('#callbackUrl').val(),
             createTime: top.strToDate($('#createTime\\$').val()),
             updateTime: top.strToDate($('#updateTime\\$').val()),
+            status: $('#status').val(),
 
         };
         $.ajax({
