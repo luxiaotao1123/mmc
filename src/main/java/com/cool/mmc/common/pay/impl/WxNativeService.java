@@ -39,6 +39,10 @@ public class WxNativeService extends WxPaymentServiceSupport {
             if (!res.checkSign()) {
                 throw new Exception("签名验证失败"+result);
             }
+            if (res.getValue("err_code")!=null) {
+                throw new CoolException(String.valueOf(res.getValue("err_code_des")));
+            }
+
             return res.getValue("code_url");
         } catch (Exception e) {
             e.printStackTrace();
