@@ -1,5 +1,7 @@
 package com.cool.mmc.common.service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.cool.mmc.api.tools.HttpSend;
 import com.cool.mmc.common.CodeRes;
@@ -7,14 +9,8 @@ import com.cool.mmc.common.entity.PayConfig;
 import com.cool.mmc.common.entity.enums.PayCompanyType;
 import com.cool.mmc.common.pay.TPaymentService;
 import com.cool.mmc.common.utils.PayUtils;
-import com.cool.mmc.manager.entity.Merchant;
-import com.cool.mmc.manager.entity.Oauth;
-import com.cool.mmc.manager.entity.PayRecord;
-import com.cool.mmc.manager.entity.Product;
-import com.cool.mmc.manager.service.MerchantService;
-import com.cool.mmc.manager.service.OauthService;
-import com.cool.mmc.manager.service.PayRecordService;
-import com.cool.mmc.manager.service.ProductService;
+import com.cool.mmc.manager.entity.*;
+import com.cool.mmc.manager.service.*;
 import com.core.common.Cools;
 import com.core.common.SpringUtils;
 import com.core.exception.CoolException;
@@ -22,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <strong>支付体系</strong>
@@ -42,6 +40,8 @@ public class PaymentService {
     private PayRecordService payRecordService;
     @Autowired
     private OauthService oauthService;
+    @Autowired
+    private TimerService timerService;
     /**
      * 发起支付，获取支付串
      * @param orderId 外部订单号
@@ -95,8 +95,7 @@ public class PaymentService {
         PayRecord payRecord = payRecordService.selectOne(new EntityWrapper<PayRecord>().eq("out_trade_no", out_trade_no));
         payRecord.setState((short) 3);
         payRecordService.updateById(payRecord);
-        oauthService.selectOne(new EntityWrapper<Oauth>().eq("id", payRecord.getOauthId()));
-        //HttpSend.doPost()
+        OauthSend(payRecord);
     }
 
     /**
@@ -111,6 +110,28 @@ public class PaymentService {
             return null;
         }
         return new PayConfig(merchant.getPrivateKey(), merchant.getAppId(), merchant.getPartner(), null, null, null, merchant.getSubject());
+    }
+
+    /**
+     * 统一通知平台方法
+     */
+    public Boolean OauthSend(PayRecord payRecord) {
+        Oauth oauth = oauthService.selectOne(new EntityWrapper<Oauth>().eq("id", payRecord.getOauthId()));
+        Map<String,Object> map=new HashMap<>();
+        map.put("out_trade_no",payRecord.getOutTradeNo());
+        map.put("code","200");
+        String post = HttpSend.doPost(oauth.getCallbackUrl(), map);
+        JSONObject jsonObject = JSONObject.parseObject(post);
+        if(jsonObject.getString("code")=="200"){
+            return true;
+        }
+        Timer timer=new Timer();
+        timer.setUrl(oauth.getCallbackUrl());
+        timer.setData(map.toString());
+        timer.setCreateTime(new Date());
+        timer.setStatus(0);
+        timerService.insert(timer);
+        return false;
     }
 
 }
