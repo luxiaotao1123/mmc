@@ -58,6 +58,11 @@ public class Oauth implements Serializable {
     @TableField("update_time")
     private Date updateTime;
 
+    /**
+     * 状态 1: 正常  0: 禁用
+     */
+    private Short status;
+
     public Oauth() {}
 
     public Oauth(Long userId,String account,String sign,String callbackUrl,Date createTime,Date updateTime) {
@@ -155,6 +160,26 @@ public class Oauth implements Serializable {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Short getStatus() {
+        return status;
+    }
+
+    public String getStatus$(){
+        if (null == this.status){ return null; }
+        switch (this.status){
+            case 1:
+                return "正常";
+            case 0:
+                return "禁用";
+            default:
+                return String.valueOf(this.status);
+        }
+    }
+
+    public void setStatus(Short status) {
+        this.status = status;
     }
 
 
