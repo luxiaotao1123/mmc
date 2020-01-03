@@ -3,6 +3,7 @@ package com.cool.mmc.common.pay.impl;
 import com.cool.mmc.common.CodeRes;
 import com.cool.mmc.common.entity.IWxPayConfig;
 import com.cool.mmc.common.entity.NativeWxPayConfig;
+import com.cool.mmc.common.entity.PayConfig;
 import com.cool.mmc.common.entity.WxPayData;
 import com.cool.mmc.common.pay.WxPaymentServiceSupport;
 import com.cool.mmc.common.service.PaymentService;
@@ -35,7 +36,9 @@ public class WxNativeService extends WxPaymentServiceSupport {
             WxPayData res = new WxPayData();
             res.setValues(payConfig);
             res.fromXml(result);
-
+            if (!res.checkSign()) {
+                throw new Exception("签名验证失败"+result);
+            }
             return res.getValue("code_url");
         } catch (Exception e) {
             e.printStackTrace();
@@ -54,11 +57,16 @@ public class WxNativeService extends WxPaymentServiceSupport {
         WxPayData wxPayData = new WxPayData();
 
         try {
-            IWxPayConfig wxPayConfig = new NativeWxPayConfig();
-            wxPayData.setValues(wxPayConfig);
             wxPayData.fromXml(notifyStr);
             out_trade_no = wxPayData.getValue("out_trade_no").toString();
-
+            PayConfig payConfig = PaymentService.getBean().getPayConfig(out_trade_no);
+            if (null == payConfig) {
+                throw new Exception("payConfig验签失败，没有轨迹订单：[out_trade_no] ===>> "+out_trade_no);
+            }
+            wxPayData.setValues(payConfig);
+            if (!wxPayData.checkSign()) {
+                throw new Exception("签名验证失败"+notifyStr);
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
             return false;

@@ -73,13 +73,6 @@ public class WxPayData implements Serializable {
 				m_values.put(item.getName(), item.getCData());
 			}
 		}
-		// 错误是没有签名
-		if (getValue("return_code") != null && !getValue("return_code").equals("SUCCESS")) {
-			return;
-		}
-		if (!checkSign()){
-			throw new Exception("签名验证失败"+xml);
-		}
 	}
 
 	/**
@@ -109,6 +102,10 @@ public class WxPayData implements Serializable {
 	 * 检测签名是否正确
 	 */
 	public boolean checkSign() throws Exception {
+		// 错误是没有签名
+		if (getValue("return_code") != null && !getValue("return_code").equals("SUCCESS")) {
+			return true;
+		}
 		if(null == getValue("sign")  || "".equals(String.valueOf(getValue("sign")))){
 			throw new Exception("WxPayData签名不存在!");
 		}

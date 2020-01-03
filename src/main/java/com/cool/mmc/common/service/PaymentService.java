@@ -92,4 +92,18 @@ public class PaymentService {
         payRecordService.updateById(payRecord);
     }
 
+    /**
+     * 外部订单号轨迹获取支付配置
+     * @param out_trade_no 外部订单号
+     * @return 支付配置类
+     */
+    public PayConfig getPayConfig(String out_trade_no) {
+        PayRecord payRecord = payRecordService.selectOne(new EntityWrapper<PayRecord>().eq("out_trade_no", out_trade_no));
+        Merchant merchant = merchantService.selectById(payRecord.getMerchantId());
+        if (Cools.isEmpty(merchant)) {
+            return null;
+        }
+        return new PayConfig(merchant.getPrivateKey(), merchant.getAppId(), merchant.getPartner(), null, null, null, merchant.getSubject());
+    }
+
 }
