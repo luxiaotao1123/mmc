@@ -50,13 +50,9 @@ public class PayController {
             result.setMessage("参数缺失");
             return result;
         }
-        PayRecord payRecord=new PayRecord((long)1,check.getUserId(),orderId,money,(short)1,new Date());
-        payRecordService.insert(payRecord);
-        Object msg = paymentService.executePayMoney(PayCompanyType.wxH5, check.getUserId()+"", money, IpTool.getRemoteAddr(request),null, null);
+        Object msg = paymentService.executePayMoney(PayCompanyType.wxH5, orderId, money, IpTool.getRemoteAddr(request),null, null);
         if(msg.equals(null)){
             result.setMessage("订单创建失败");
-            payRecord.setState((short)4);
-            payRecordService.insertOrUpdate(payRecord);
             return result;
         }
         map.put("data",String.valueOf(msg));
@@ -81,13 +77,9 @@ public class PayController {
             result.setMessage("参数缺失");
             return result;
         }
-        PayRecord payRecord=new PayRecord((long)2,check.getUserId(),orderId,money,(short)1,new Date());
-        payRecordService.insert(payRecord);
-        Object msg = paymentService.executePayMoney(PayCompanyType.wxNative, check.getUserId()+"", money, IpTool.getRemoteAddr(request),null, null);
+        Object msg = paymentService.executePayMoney(PayCompanyType.wxNative, orderId, money, IpTool.getRemoteAddr(request),null, null);
         if(msg.equals(null)){
             result.setMessage("订单创建失败");
-            payRecord.setState((short)4);
-            payRecordService.insertOrUpdate(payRecord);
             return result;
         }
         map.put("data",String.valueOf(msg));
