@@ -42,6 +42,7 @@ public class WxH5Service extends WxPaymentServiceSupport {
             if (!res.checkSign()) {
                 throw new Exception("签名验证失败"+result);
             }
+            System.out.println(result);
             return res.getValue("mweb_url");
         } catch (Exception e) {
             e.printStackTrace();
