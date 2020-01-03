@@ -1,18 +1,17 @@
 package com.cool.mmc.manager.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
+import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.enums.IdType;
 import com.cool.mmc.system.entity.User;
 import com.cool.mmc.system.service.UserService;
-import com.core.common.Cools;import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.enums.IdType;
+import com.core.common.Cools;
 import com.core.common.SpringUtils;
-import com.baomidou.mybatisplus.annotations.TableField;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
-import com.baomidou.mybatisplus.annotations.TableName;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @TableName("man_oauth")
 public class Oauth implements Serializable {
@@ -26,7 +25,7 @@ public class Oauth implements Serializable {
     private Long id;
 
     /**
-     * 所属商户
+     * 所属会员
      */
     @TableField("user_id")
     private Long userId;
