@@ -48,7 +48,6 @@ public class WxH5Service extends WxPaymentServiceSupport {
                 throw new Exception(String.valueOf(res.getValue("err_code_des")));
             }
 
-            System.out.println(result);
             return res.getValue("mweb_url");
         } catch (Exception e) {
             e.printStackTrace();
