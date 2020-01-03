@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
  * Created by vincent on 2019-12-30
  */
 @RestController
-@RequestMapping("/pay")
+@RequestMapping("/paytest")
 public class PayTestController {
 
     @Autowired
