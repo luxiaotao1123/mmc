@@ -27,13 +27,13 @@ public class PayTestController {
             throw new CoolException(CodeRes.COMMON_00001);
         }
 
-        Object result = paymentService.executePayMoney(PayCompanyType.wxH5, no, 0.1, "47.96.118.52", null, "232");
+        Object result = paymentService.executePayMoney(PayCompanyType.wxH5, no, 0.1, "47.96.118.52", null, "232", 1L);
         return String.valueOf(result);
     }
 
     @GetMapping("/wx/native")
     public String wxNative(@RequestParam String no){
-        Object result = paymentService.executePayMoney(PayCompanyType.wxNative, no, 0.1, "47.96.118.52", null, "232");
+        Object result = paymentService.executePayMoney(PayCompanyType.wxNative, no, 0.1, "47.96.118.52", null, "232", 1L);
         return String.valueOf(result);
     }
 
