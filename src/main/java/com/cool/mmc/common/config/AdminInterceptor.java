@@ -59,7 +59,7 @@ public class AdminInterceptor extends HandlerInterceptorAdapter {
             return true;
         }
         // 跨域设置
-         response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Origin", "*");
         HandlerMethod handlerMethod = (HandlerMethod) handler;
         Method method = handlerMethod.getMethod();
         if (method.isAnnotationPresent(ManagerAuth.class)){
