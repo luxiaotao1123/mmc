@@ -5,11 +5,13 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.cool.mmc.manager.entity.Oauth;
 import com.cool.mmc.manager.entity.Timer;
 import com.cool.mmc.manager.service.TimerService;
+import com.core.common.Cools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,9 +33,12 @@ public class CallBackTask {
         for(Timer timer:timers){
             String post = HttpSend.doPost(timer.getUrl(), JSONObject.parseObject(timer.getData()));
             JSONObject jsonObject = JSONObject.parseObject(post);
-            if(jsonObject.getString("code")=="200"){
-                timer.setStatus(1);
+            if(!Cools.isEmpty(jsonObject.getString("code"))){
+                if(jsonObject.getString("code")=="200"){
+                    timer.setStatus(1);
+                }
             }
+            timer.setUpdateTime(new Date());
             timer.setCount(timer.getCount()+1);
             timerService.updateById(timer);
         }

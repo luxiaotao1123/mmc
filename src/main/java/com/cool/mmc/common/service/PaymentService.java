@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.cool.mmc.api.tools.HttpSend;
+import com.cool.mmc.api.tools.MD5Tool;
 import com.cool.mmc.common.CodeRes;
 import com.cool.mmc.common.entity.PayConfig;
 import com.cool.mmc.common.entity.enums.PayCompanyType;
@@ -95,7 +96,7 @@ public class PaymentService {
         PayRecord payRecord = payRecordService.selectOne(new EntityWrapper<PayRecord>().eq("out_trade_no", out_trade_no));
         payRecord.setState((short) 3);
         payRecordService.updateById(payRecord);
-        OauthSend(payRecord);
+        oauthSend(payRecord);
     }
 
     /**
@@ -115,24 +116,28 @@ public class PaymentService {
     /**
      * 统一通知平台方法
      */
-    public Boolean OauthSend(PayRecord payRecord) {
+    public void oauthSend(PayRecord payRecord) {
         Oauth oauth = oauthService.selectOne(new EntityWrapper<Oauth>().eq("id", payRecord.getOauthId()));
         Map<String,Object> map=new HashMap<>();
-        map.put("out_trade_no",payRecord.getOutTradeNo());
+        String orderId=new MD5Tool(oauth.getSign(),"MD5").encode(payRecord.getOutTradeNo());
+        map.put("out_trade_no",orderId);
         map.put("code","200");
-        String post = HttpSend.doPost(oauth.getCallbackUrl(), map);
+        String post = HttpSend.doPost(oauth.getCallbackUrl(), map)+"";
         JSONObject jsonObject = JSONObject.parseObject(post);
-        if(jsonObject.getString("code")=="200"){
-            return true;
+        if(!Cools.isEmpty(jsonObject.getString("code"))){
+            if(jsonObject.getString("code").equals("200")){
+                return;
+            }
         }
         Timer timer=new Timer();
         timer.setUrl(oauth.getCallbackUrl());
-        timer.setData(map.toString());
+        timer.setData(JSON.toJSONString(map));
         timer.setCreateTime(new Date());
         timer.setStatus(0);
         timer.setCount(0);
         timerService.insert(timer);
-        return false;
+
+        return;
     }
 
 }
