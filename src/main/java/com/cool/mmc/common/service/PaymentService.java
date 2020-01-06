@@ -124,12 +124,17 @@ public class PaymentService {
         String orderId=new MD5Tool(oauth.getSign(),"MD5").encode(payRecord.getOutTradeNo());
         map.put("orderId",orderId);
         map.put("code","200");
-        String post = HttpSend.doPost(oauth.getCallbackUrl(), map)+"";
-        JSONObject jsonObject = JSONObject.parseObject(post);
-        if(!Cools.isEmpty(jsonObject.getString("code"))){
-            if(jsonObject.getString("code").equals("200")){
-                return;
+        String post="";
+        try {
+            post = HttpSend.doPost(oauth.getCallbackUrl(), map);
+            JSONObject jsonObject = JSONObject.parseObject(post);
+            if(!Cools.isEmpty(jsonObject.getString("code"))){
+                if(jsonObject.getString("code").equals("200")){
+                    return;
+                }
             }
+        }catch (Exception e){
+            e.printStackTrace();
         }
         Timer timer=new Timer();
         timer.setUrl(oauth.getCallbackUrl());
@@ -138,7 +143,6 @@ public class PaymentService {
         timer.setStatus(0);
         timer.setCount(0);
         timerService.insert(timer);
-
         return;
     }
 
