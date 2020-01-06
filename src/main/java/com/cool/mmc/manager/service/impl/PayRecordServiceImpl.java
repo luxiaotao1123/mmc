@@ -8,6 +8,9 @@ import com.core.common.Cools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Map;
+
 @Service("payRecordService")
 public class PayRecordServiceImpl extends ServiceImpl<PayRecordMapper, PayRecord> implements PayRecordService {
 
@@ -29,6 +32,23 @@ public class PayRecordServiceImpl extends ServiceImpl<PayRecordMapper, PayRecord
             return payRecordMapper.selectMoney();
         } else {
             return payRecordMapper.selectMoney(userId);
+        }
+    }
+
+    @Override
+    public List<Map<String, Object>> getReport(Long userId, Integer year, Integer month) {
+        if (Cools.isEmpty(month)) {
+            if (Cools.isEmpty(userId)){
+                return payRecordMapper.getReportByYear(year);
+            } else {
+                return payRecordMapper.getReportByYear(userId, year);
+            }
+        } else {
+            if (Cools.isEmpty(userId)){
+                return payRecordMapper.getReportByMonth(year, month);
+            } else {
+                return payRecordMapper.getReportByMonth(userId, year, month);
+            }
         }
     }
 }
