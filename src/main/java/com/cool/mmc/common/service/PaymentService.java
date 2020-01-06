@@ -121,8 +121,14 @@ public class PaymentService {
         System.out.println("回调！oauthSend");
         Oauth oauth = oauthService.selectOne(new EntityWrapper<Oauth>().eq("id", payRecord.getOauthId()));
         Map<String,Object> map=new HashMap<>();
-        String orderId=new MD5Tool(oauth.getSign(),"MD5").encode(payRecord.getOutTradeNo());
-        map.put("orderId",orderId);
+        long timestamp = new Date().getTime();
+        String str=payRecord.getOutTradeNo()+payRecord.getMoney()+timestamp;
+        String sign=new MD5Tool(oauth.getSign(),"MD5").encode(str);
+        map.put("outTradeNo",payRecord.getOutTradeNo());
+        map.put("money",payRecord.getMoney());
+        map.put("msg","支付成功");
+        map.put("timestamp",timestamp);
+        map.put("sign",sign);
         map.put("code","200");
         String post="";
         try {
