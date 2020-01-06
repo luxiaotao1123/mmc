@@ -1,9 +1,13 @@
 package com.cool.mmc.api.tools;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.core.common.Cools;
 
 import java.security.MessageDigest;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MD5Tool {
 
@@ -77,9 +81,12 @@ public class MD5Tool {
 //            System.out.println(encode);
 //            boolean passwordValid = encoderMd5.isPasswordValid("083a8db3ff5b9b4ece3ef2bde03226c8", "test");
 //            System.out.println(passwordValid);
-            JSONObject jsonObject = JSONObject.parseObject("{'csode':'200'}");
-                    if(!Cools.isEmpty(jsonObject.getString("code")))
-            System.out.println(jsonObject.getString("code").equals("200"));
+            long timestamp = new Date().getTime();
+            String str="111"+"0.1"+timestamp;
+            String sign=new MD5Tool("helloworld","MD5").encode(str);
+            new MD5Tool("helloworld","MD5").isPasswordValid("","");
+            System.out.println(sign+"//"+str);
+
         }
 
 }

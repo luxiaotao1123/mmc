@@ -2,6 +2,7 @@ package com.cool.mmc.api;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.cool.mmc.api.tools.IpTool;
+import com.cool.mmc.api.tools.MD5Tool;
 import com.cool.mmc.api.tools.Result;
 import com.cool.mmc.common.entity.enums.PayCompanyType;
 import com.cool.mmc.common.service.PaymentService;
@@ -28,11 +29,11 @@ public class PayController {
     private OauthService oauthService;
 
     @PostMapping("/wx/h5")
-    public Result wxH5(HttpServletRequest request, @RequestParam String username, @RequestParam String key, @RequestParam String orderId,
-                       @RequestParam double money){
+    public Result wxH5(HttpServletRequest request, @RequestParam String appId, @RequestParam String orderId,
+                       @RequestParam double money,@RequestParam String sign){
         Result result=new Result();
         Map<String,Object> map=new HashMap<>();
-        Oauth check = check(username, key);
+        Oauth check = check(appId,orderId,money, sign);
         if (check == null) {
             result.setCode("400");
             result.setMessage("签名验证失败");
@@ -58,11 +59,11 @@ public class PayController {
     }
 
     @PostMapping("/wx/native")
-    public Result wxNative(HttpServletRequest request, @RequestParam String username, @RequestParam String key, @RequestParam String orderId,
-                           @RequestParam double money){
+    public Result wxNative(HttpServletRequest request, @RequestParam String appId, @RequestParam String orderId,
+                           @RequestParam double money,@RequestParam String sign){
         Result result=new Result();
         Map<String,Object> map=new HashMap();
-        Oauth check = check(username, key);
+        Oauth check = check(appId,orderId,money, sign);
         if (check == null) {
             result.setCode("400");
             result.setMessage("签名验证失败");
@@ -89,11 +90,17 @@ public class PayController {
     }
 
 
-    private Oauth check(String username,String key){
-        Oauth oauth=new Oauth();
-        oauth.setAccount(username);
-        oauth.setSign(key);
-        return oauthService.selectOne(new EntityWrapper<>(oauth));
+    private Oauth check(String appId,String orderId,double money,String sign){
+        Oauth oauth = oauthService.selectOne(new EntityWrapper<Oauth>().eq("account", appId));
+        if(oauth==null){
+            return null;
+        }
+        String str=appId+"&"+orderId+"&"+money;
+        String encode = new MD5Tool(oauth.getSign(), "MD5").encode(str);
+        if (encode.equals(sign)){
+            return oauth;
+        }
+        return null;
     }
 
 

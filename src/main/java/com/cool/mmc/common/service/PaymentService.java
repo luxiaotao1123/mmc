@@ -122,7 +122,7 @@ public class PaymentService {
         Oauth oauth = oauthService.selectOne(new EntityWrapper<Oauth>().eq("id", payRecord.getOauthId()));
         Map<String,Object> map=new HashMap<>();
         long timestamp = new Date().getTime();
-        String str=payRecord.getOutTradeNo()+payRecord.getMoney()+timestamp;
+        String str=payRecord.getOutTradeNo()+"&"+payRecord.getMoney()+"&"+timestamp;
         String sign=new MD5Tool(oauth.getSign(),"MD5").encode(str);
         map.put("outTradeNo",payRecord.getOutTradeNo());
         map.put("money",payRecord.getMoney());
