@@ -25,7 +25,6 @@ public class CallBackTask {
     private TimerService timerService;
     @Scheduled(fixedRate=5000)
     public void callback() {
-        System.out.println("回调！");
         List<Timer> timers = timerService.selectList(new EntityWrapper<Timer>().eq("status", 0));
 
         for(Timer timer:timers){
@@ -36,7 +35,7 @@ public class CallBackTask {
                     timer.setStatus(1);
                 }
             }
-            System.out.println(timer.getCount()+1+"循环回答");
+            System.out.println(timer.getCount()+1+"循环回答"+timer.getUrl());
             timer.setUpdateTime(new Date());
             timer.setCount(timer.getCount()+1);
             timerService.updateById(timer);

@@ -93,7 +93,7 @@ public class PaymentService {
      */
     public synchronized void executePaySuccess(String out_trade_no, String transaction_id, String buyer_email) {
         // 更新支付日志
-        System.out.println("回调！");
+        System.out.println("回调！executePaySuccess");
         PayRecord payRecord = payRecordService.selectOne(new EntityWrapper<PayRecord>().eq("out_trade_no", out_trade_no));
         payRecord.setState((short) 3);
         payRecordService.updateById(payRecord);
@@ -118,7 +118,7 @@ public class PaymentService {
      * 统一通知平台方法
      */
     public void oauthSend(PayRecord payRecord) {
-        System.out.println("回调！");
+        System.out.println("回调！oauthSend");
         Oauth oauth = oauthService.selectOne(new EntityWrapper<Oauth>().eq("id", payRecord.getOauthId()));
         Map<String,Object> map=new HashMap<>();
         String orderId=new MD5Tool(oauth.getSign(),"MD5").encode(payRecord.getOutTradeNo());
