@@ -8,15 +8,30 @@ import java.util.Map;
  * message 描述
  * */
 public class Result{
-    private Map<String,Object> data;
-    private String message;
-    private String code;
 
-    public String getCode() {
+    private Integer code;
+    private String message;
+    private Map<String, Object> data;
+
+    public Result() {
+    }
+
+    public Result(Integer code, String message) {
+        this.code = code;
+        this.message = message;
+    }
+
+    public Result(Integer code, String message, Map<String, Object> data) {
+        this.code = code;
+        this.message = message;
+        this.data = data;
+    }
+
+    public Integer getCode() {
         return code;
     }
 
-    public void setCode(String code) {
+    public void setCode(Integer code) {
         this.code = code;
     }
 

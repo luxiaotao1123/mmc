@@ -55,7 +55,7 @@ public class PaymentService {
     public Object executePayMoney(PayCompanyType company, String orderId, Double money, String clientIp, String openId, String productId,Long oauthId) {
         Product product = productService.selectOne(new EntityWrapper<Product>().eq("flag", company.getFlag()));
         if (Cools.isEmpty(product)) {
-            throw new CoolException(CodeRes.EMPTY);
+            throw new CoolException(CodeRes.ERROR);
         }
         Merchant merchant = merchantService.poll(product.getId());
         PayConfig payConfig = new PayConfig(merchant.getPrivateKey(), merchant.getAppId(), merchant.getPartner(), product.getNotifyUrl(), null, null, merchant.getSubject());
