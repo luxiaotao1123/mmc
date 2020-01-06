@@ -13,6 +13,12 @@ public class SignUtils {
 
     private static char[] hexDigits = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
+    /**
+     * 生成签名
+     * @param map 参数集合
+     * @param secret 密钥
+     * @return the sign 签名
+     */
     public static String sign(Map<String, Object> map, String secret) {
         List<String> list = new ArrayList<>();
         for (String key : map.keySet()) {
