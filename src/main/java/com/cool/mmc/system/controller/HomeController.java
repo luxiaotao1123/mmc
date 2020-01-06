@@ -67,26 +67,41 @@ public class HomeController extends BaseController {
         return R.ok(result);
     }
 
-
+    /**
+     * 报表统计
+     * @param type 类型：1，本年月份；2，本月日分
+     * @return
+     */
     @RequestMapping("/report")
     @ManagerAuth
     public R top(@RequestParam(defaultValue = "1", value = "type", required = false)Integer type){
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
 
-        List<Map<String, Object>> report;
+        // 访问量报表
+        List<Map<String, Object>> visitReport;
+        // 金额统计报表
+        List<Map<String, Object>> moneyReport;
         StatsType statsType = StatsType.get(type);
         if (type == 1) {
-            report = operateLogService.getReport(calendar.get(Calendar.YEAR), null);
-            report = fill(report, statsType.start, statsType.end);
+            visitReport = operateLogService.getReport(calendar.get(Calendar.YEAR), null);
+            visitReport = fill(visitReport, statsType.start, statsType.end);
+
+            moneyReport = payRecordService.getReport(null, calendar.get(Calendar.YEAR), null);
+            moneyReport = fill(moneyReport, statsType.start, statsType.end);
+
         } else {
-            report = operateLogService.getReport(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1);
-            report = fill(report, statsType.start, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+            visitReport = operateLogService.getReport(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1);
+            visitReport = fill(visitReport, statsType.start, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+
+            moneyReport = payRecordService.getReport(null, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1);
+            moneyReport = fill(moneyReport, statsType.start, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         }
 
 
         Map<String, Object> result = new HashMap<>();
-        result.put("visits", convert(report, statsType, 2));
+        result.put("visits", convert(visitReport, statsType, 2));
+        result.put("money", convert(moneyReport, statsType, 2));
         return R.ok(result);
     }
 
