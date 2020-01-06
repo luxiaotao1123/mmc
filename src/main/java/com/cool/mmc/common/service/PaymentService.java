@@ -130,6 +130,7 @@ public class PaymentService {
             JSONObject jsonObject = JSONObject.parseObject(post);
             if(!Cools.isEmpty(jsonObject.getString("code"))){
                 if(jsonObject.getString("code").equals("200")){
+                    System.out.println(jsonObject);
                     return;
                 }
             }
