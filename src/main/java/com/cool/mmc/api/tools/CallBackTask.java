@@ -25,6 +25,7 @@ public class CallBackTask {
     private TimerService timerService;
     @Scheduled(fixedRate=5000)
     public void callback() {
+        System.out.println("回调！");
         List<Timer> timers = timerService.selectList(new EntityWrapper<Timer>().eq("status", 0));
 
         for(Timer timer:timers){

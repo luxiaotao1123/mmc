@@ -27,6 +27,7 @@ public class CallBackController {
     @RequestMapping(value = "/wechat/codeurl_notify", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public String weChatCodeUrl(HttpServletRequest request) throws Exception {
+        System.out.println("回调！");
         WxPayData res = new WxPayData();
         try {
             InputStream input = request.getInputStream();
@@ -81,6 +82,7 @@ public class CallBackController {
     @RequestMapping(value = "/wechat/h5_notify", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public String h5Notify(HttpServletRequest request) throws Exception {
+        System.out.println("回调！");
         WxPayData res = new WxPayData();
         try {
             InputStream input = request.getInputStream();
