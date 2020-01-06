@@ -81,7 +81,7 @@ public class PayController {
         }
         map.put("data",String.valueOf(msg));
         map.put("orderId",orderId);
-        result.setCode("400");
+        result.setCode("200");
         result.setData(map);
         result.setMessage("订单创建成功");
 

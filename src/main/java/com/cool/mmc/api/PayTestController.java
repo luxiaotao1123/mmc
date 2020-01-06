@@ -43,7 +43,7 @@ public class PayTestController {
         System.out.println(orderId);
         System.out.println(code);
         Map<String,Object> map=new HashMap<>();
-        map.put("code","201");
+        map.put("code","200");
         return map;
     }
 
