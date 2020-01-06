@@ -54,6 +54,7 @@ public class CallBackController {
     @RequestMapping(value ="/wechat/native_notify", method = {RequestMethod.GET, RequestMethod.POST})
     @ResponseBody
     public String nativeNotify(HttpServletRequest request) throws Exception {
+        System.out.println("回调！");
         WxPayData res = new WxPayData();
         try {
             InputStream input = request.getInputStream();

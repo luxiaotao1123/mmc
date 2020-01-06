@@ -23,7 +23,7 @@ import java.util.List;
 public class CallBackTask {
     @Autowired
     private TimerService timerService;
-    @Scheduled(fixedRate=60000)
+    @Scheduled(fixedRate=5000)
     public void callback() {
         List<Timer> timers = timerService.selectList(new EntityWrapper<Timer>().eq("status", 0));
 
@@ -35,6 +35,7 @@ public class CallBackTask {
                     timer.setStatus(1);
                 }
             }
+            System.out.println(timer.getCount()+1+"循环回答");
             timer.setUpdateTime(new Date());
             timer.setCount(timer.getCount()+1);
             timerService.updateById(timer);

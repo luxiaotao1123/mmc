@@ -39,6 +39,7 @@ public class PayTestController {
 
     @PostMapping("/testBack")
     public Map<String, Object> testBack(@RequestParam String orderId, @RequestParam String code){
+        System.out.println("收到请求应答");
         System.out.println(orderId);
         System.out.println(code);
         Map<String,Object> map=new HashMap<>();
