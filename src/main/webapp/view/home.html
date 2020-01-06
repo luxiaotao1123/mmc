@@ -133,8 +133,8 @@
             <div class="layui-col-md4 col layui-card">
                 <div class="layui-card-header">收入<span class="layui-badge layui-bg-green">年</span></div>
                 <div class="layui-card-body">
-                    <p class="cool-home-top-count">999999</p>
-                    <p class="cool-home-top-total">总收入<span class="cool-home-top-count-span">88万<i class="layui-inline layui-icon layui-icon-dollar"></i></span></p>
+                    <p id="moneyYear" class="cool-home-top-count">999999</p>
+                    <p class="cool-home-top-total">总收入<span id="totalMoney" class="cool-home-top-count-span">88万<i class="layui-inline layui-icon layui-icon-dollar"></i></span></p>
                 </div>
             </div>
         </div>
@@ -305,6 +305,8 @@
                     $('#logTotal').text(res.data.logTotal);
                     $('#userTotal').text(res.data.userTotal);
                     $('#live').text(res.data.live);
+                    $('#moneyYear').text(res.data.moneyYear);
+                    $('#totalMoney').text(res.data.totalMoney + " 元");
                 } else if (res.code === 403){
                     top.location.href = "/login";
                 } else {

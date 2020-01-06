@@ -1,7 +1,12 @@
 package com.cool.mmc.system.controller;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.cool.mmc.common.web.BaseController;
+import com.cool.mmc.manager.service.PayRecordService;
+import com.cool.mmc.system.entity.Role;
+import com.cool.mmc.system.entity.User;
 import com.cool.mmc.system.service.OperateLogService;
+import com.cool.mmc.system.service.RoleService;
 import com.cool.mmc.system.service.UserLoginService;
 import com.cool.mmc.system.service.UserService;
 import com.core.annotations.ManagerAuth;
@@ -19,14 +24,18 @@ import java.util.*;
  */
 @RestController
 @RequestMapping("/home")
-public class HomeController {
+public class HomeController extends BaseController {
 
     @Autowired
     private OperateLogService operateLogService;
     @Autowired
     private UserService userService;
     @Autowired
+    private RoleService roleService;
+    @Autowired
     private UserLoginService userLoginService;
+    @Autowired
+    private PayRecordService payRecordService;
 
     @RequestMapping("/top")
     @ManagerAuth
@@ -35,12 +44,26 @@ public class HomeController {
         int logWeek = operateLogService.selectCountByCurrentWeek();
         int userTotal = userService.selectCount(new EntityWrapper<>());
         int loginWeek = userLoginService.selectCountByCurrentWeek();
+        boolean all = false;
+        if (getUserId() == 9527) {
+            all = true;
+        } else {
+            User user = userService.selectById(getUserId());
+            Role role = roleService.selectById(user.getRoleId());
+            if (role.getCode().toUpperCase().equals("ROOT") || role.getCode().toUpperCase().equals("ADMIN")) {
+                all = true;
+            }
+        }
+        Double moneyYear = payRecordService.selectCountByCurrentYear(all ? null : getUserId());
+        Double totalMoney = payRecordService.selectCount(all ? null : getUserId());
 
         Map<String, Object> result = new HashMap<>();
         result.put("logTotal", logTotal);
         result.put("logWeek", logWeek);
         result.put("userTotal", userTotal);
         result.put("live", Arith.multiplys(0, Arith.divides(2, loginWeek, userTotal), 100)+"%");
+        result.put("moneyYear", moneyYear);
+        result.put("totalMoney", totalMoney);
         return R.ok(result);
     }
 
