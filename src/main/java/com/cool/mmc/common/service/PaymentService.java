@@ -128,9 +128,9 @@ public class PaymentService {
         try {
             post = HttpSend.doPost(oauth.getCallbackUrl(), map);
             JSONObject jsonObject = JSONObject.parseObject(post);
+            System.out.println(jsonObject);
             if(!Cools.isEmpty(jsonObject.getString("code"))){
                 if(jsonObject.getString("code").equals("200")){
-                    System.out.println(jsonObject);
                     return;
                 }
             }

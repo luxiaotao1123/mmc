@@ -26,14 +26,17 @@ public class CallBackTask {
     @Scheduled(fixedRate=5000)
     public void callback() {
         List<Timer> timers = timerService.selectList(new EntityWrapper<Timer>().eq("status", 0));
-
         for(Timer timer:timers){
-            String post = HttpSend.doPost(timer.getUrl(), JSONObject.parseObject(timer.getData()));
-            JSONObject jsonObject = JSONObject.parseObject(post);
-            if(!Cools.isEmpty(jsonObject.getString("code"))){
-                if(jsonObject.getString("code").equals("200")){
-                    timer.setStatus(1);
+            try {
+                String post = HttpSend.doPost(timer.getUrl(), JSONObject.parseObject(timer.getData()));
+                JSONObject jsonObject = JSONObject.parseObject(post);
+                if (!Cools.isEmpty(jsonObject.getString("code"))) {
+                    if (jsonObject.getString("code").equals("200")) {
+                        timer.setStatus(1);
+                    }
                 }
+            }catch(Exception e){
+                e.printStackTrace();
             }
             System.out.println(timer.getCount()+1+"循环回答"+timer.getUrl());
             timer.setUpdateTime(new Date());

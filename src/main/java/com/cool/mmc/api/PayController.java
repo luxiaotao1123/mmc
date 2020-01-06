@@ -34,15 +34,18 @@ public class PayController {
         Map<String,Object> map=new HashMap<>();
         Oauth check = check(username, key);
         if (check == null) {
+            result.setCode("400");
             result.setMessage("签名验证失败");
             return result;
         }
         if(orderId == null ||money==0.00){
+            result.setCode("400");
             result.setMessage("参数缺失");
             return result;
         }
         Object msg = paymentService.executePayMoney(PayCompanyType.wxH5, orderId, money, IpTool.getRemoteAddr(request),null, null,check.getId());
         if(msg == null){
+            result.setCode("400");
             result.setMessage("订单创建失败");
             return result;
         }
@@ -50,7 +53,7 @@ public class PayController {
         map.put("orderId",orderId);
         result.setData(map);
         result.setMessage("订单创建成功");
-
+        result.setCode("200");
         return result;
     }
 
@@ -61,20 +64,24 @@ public class PayController {
         Map<String,Object> map=new HashMap();
         Oauth check = check(username, key);
         if (check == null) {
+            result.setCode("400");
             result.setMessage("签名验证失败");
             return result;
         }
         if(orderId == null ||money==0.00){
+            result.setCode("400");
             result.setMessage("参数缺失");
             return result;
         }
         Object msg = paymentService.executePayMoney(PayCompanyType.wxNative, orderId, money, IpTool.getRemoteAddr(request),null, "232",check.getId());
         if(msg == null){
+            result.setCode("400");
             result.setMessage("订单创建失败");
             return result;
         }
         map.put("data",String.valueOf(msg));
         map.put("orderId",orderId);
+        result.setCode("400");
         result.setData(map);
         result.setMessage("订单创建成功");
 

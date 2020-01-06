@@ -10,6 +10,15 @@ import java.util.Map;
 public class Result{
     private Map<String,Object> data;
     private String message;
+    private String code;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
 
     public Map<String, Object> getData() {
         return data;
