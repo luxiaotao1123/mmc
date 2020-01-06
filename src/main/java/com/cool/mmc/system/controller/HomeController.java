@@ -75,6 +75,16 @@ public class HomeController extends BaseController {
     @RequestMapping("/report")
     @ManagerAuth
     public R top(@RequestParam(defaultValue = "1", value = "type", required = false)Integer type){
+        boolean all = false;
+        if (getUserId() == 9527) {
+            all = true;
+        } else {
+            User user = userService.selectById(getUserId());
+            Role role = roleService.selectById(user.getRoleId());
+            if (role.getCode().toUpperCase().equals("ROOT") || role.getCode().toUpperCase().equals("ADMIN")) {
+                all = true;
+            }
+        }
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
 
@@ -87,14 +97,13 @@ public class HomeController extends BaseController {
             visitReport = operateLogService.getReport(calendar.get(Calendar.YEAR), null);
             visitReport = fill(visitReport, statsType.start, statsType.end);
 
-            moneyReport = payRecordService.getReport(null, calendar.get(Calendar.YEAR), null);
+            moneyReport = payRecordService.getReport(all ? null : getUserId(), calendar.get(Calendar.YEAR), null);
             moneyReport = fill(moneyReport, statsType.start, statsType.end);
-
         } else {
             visitReport = operateLogService.getReport(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1);
             visitReport = fill(visitReport, statsType.start, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
 
-            moneyReport = payRecordService.getReport(null, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1);
+            moneyReport = payRecordService.getReport(all ? null : getUserId(), calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1);
             moneyReport = fill(moneyReport, statsType.start, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         }
 

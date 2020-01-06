@@ -41,13 +41,13 @@ public class PayRecordServiceImpl extends ServiceImpl<PayRecordMapper, PayRecord
             if (Cools.isEmpty(userId)){
                 return payRecordMapper.getReportByYear(year);
             } else {
-                return payRecordMapper.getReportByYear(userId, year);
+                return payRecordMapper.getReportByYearAndUser(userId, year);
             }
         } else {
             if (Cools.isEmpty(userId)){
                 return payRecordMapper.getReportByMonth(year, month);
             } else {
-                return payRecordMapper.getReportByMonth(userId, year, month);
+                return payRecordMapper.getReportByMonthAndUser(userId, year, month);
             }
         }
     }
