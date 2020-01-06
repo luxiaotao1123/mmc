@@ -31,7 +31,7 @@ public class CallBackTask {
             String post = HttpSend.doPost(timer.getUrl(), JSONObject.parseObject(timer.getData()));
             JSONObject jsonObject = JSONObject.parseObject(post);
             if(!Cools.isEmpty(jsonObject.getString("code"))){
-                if(jsonObject.getString("code")=="200"){
+                if(jsonObject.getString("code").equals("200")){
                     timer.setStatus(1);
                 }
             }

@@ -8,10 +8,8 @@ import com.cool.mmc.common.service.PaymentService;
 import com.cool.mmc.manager.entity.Oauth;
 import com.cool.mmc.manager.service.OauthService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +27,7 @@ public class PayController {
     @Autowired
     private OauthService oauthService;
 
-    @GetMapping("/wx/h5")
+    @PostMapping("/wx/h5")
     public Result wxH5(HttpServletRequest request, @RequestParam String username, @RequestParam String key, @RequestParam String orderId,
                        @RequestParam double money){
         Result result=new Result();
@@ -56,7 +54,7 @@ public class PayController {
         return result;
     }
 
-    @GetMapping("/wx/native")
+    @PostMapping("/wx/native")
     public Result wxNative(HttpServletRequest request, @RequestParam String username, @RequestParam String key, @RequestParam String orderId,
                            @RequestParam double money){
         Result result=new Result();
@@ -70,7 +68,7 @@ public class PayController {
             result.setMessage("参数缺失");
             return result;
         }
-        Object msg = paymentService.executePayMoney(PayCompanyType.wxNative, orderId, money, IpTool.getRemoteAddr(request),null, null,check.getId());
+        Object msg = paymentService.executePayMoney(PayCompanyType.wxNative, orderId, money, IpTool.getRemoteAddr(request),null, "232",check.getId());
         if(msg == null){
             result.setMessage("订单创建失败");
             return result;

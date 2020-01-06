@@ -120,7 +120,7 @@ public class PaymentService {
         Oauth oauth = oauthService.selectOne(new EntityWrapper<Oauth>().eq("id", payRecord.getOauthId()));
         Map<String,Object> map=new HashMap<>();
         String orderId=new MD5Tool(oauth.getSign(),"MD5").encode(payRecord.getOutTradeNo());
-        map.put("out_trade_no",orderId);
+        map.put("orderId",orderId);
         map.put("code","200");
         String post = HttpSend.doPost(oauth.getCallbackUrl(), map)+"";
         JSONObject jsonObject = JSONObject.parseObject(post);
