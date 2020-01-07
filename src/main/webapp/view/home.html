@@ -231,7 +231,7 @@
         },
         // 图表上方的组件集合
         legend: {
-            data:['访问量']
+            data:['收入']
         },
         // 工具栏
         toolbox: {
@@ -264,28 +264,51 @@
         ],
         // 数据
         series : [
-                {
-                    name:'访问量',
-                    type:'line',
-                    stack: '总量',
-                    areaStyle: {
-                        normal: {
-                            // color: '#33CC99'
-                        }
-                    },
-                    lineStyle: {
-                        normal: {
-                            // color: '#33CC99'
-                        }
-                    },
-                    label: {
-                        normal: {
-                            // show: true,
-                            position: 'top'
-                        }
-                    },
-                    data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            {
+                name:'收入',
+                type:'line',
+                stack: '总量',
+                areaStyle: {
+                    normal: {
+                        // color: '#33CC99'
+                    }
                 },
+                lineStyle: {
+                    normal: {
+                        // color: '#33CC99'
+                    }
+                },
+                label: {
+                    normal: {
+                        // show: true,
+                        position: 'top'
+                    }
+                },
+                data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            },
+                // {
+                //     name:'访问量',
+                //     type:'line',
+                //     stack: '总量',
+                //     areaStyle: {
+                //         normal: {
+                //             // color: '#33CC99'
+                //         }
+                //     },
+                //     lineStyle: {
+                //         normal: {
+                //             // color: '#33CC99'
+                //         }
+                //     },
+                //     label: {
+                //         normal: {
+                //             // show: true,
+                //             position: 'top'
+                //         }
+                //     },
+                //     data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                // },
+
         ]
     };
 
@@ -320,7 +343,8 @@
     function initVisits(type) {
         var reportView = option;
         var xAxisDate = [];
-        var seriesDate=[];
+        // var seriesDate=[];
+        var moneySeriesDate=[];
         $.ajax({
             url: "/home/report",
             headers: {'token': localStorage.getItem('token')},
@@ -328,13 +352,20 @@
             method: 'POST',
             success: function (res) {
                 if (res.code === 200){
-                    var json = res.data.visits;
-                    for (var i = 0; i < json.length; i++) {
-                        xAxisDate[i]=json[i].node;
-                        seriesDate[i]=json[i].val;
+                    // var json = res.data.visits;
+                    // for (var i = 0; i < json.length; i++) {
+                    //     xAxisDate[i]=json[i].node;
+                    //     seriesDate[i]=json[i].val;
+                    // }
+                    var moneyJson = res.data.money;
+                    for (var m = 0; m < moneyJson.length; m++) {
+                        xAxisDate[m]=moneyJson[m].node;
+                        moneySeriesDate[m]=moneyJson[m].val;
                     }
+                    console.log(moneySeriesDate);
                     reportView.xAxis[0].data=xAxisDate;
-                    reportView.series[0].data=seriesDate;
+                    // reportView.series[1].data=seriesDate;
+                    reportView.series[0].data=moneySeriesDate;
                     myChart.setOption(reportView, true)
                 } else if (res.code === 403){
                     top.location.href = "/login";

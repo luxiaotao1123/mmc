@@ -94,14 +94,14 @@ public class HomeController extends BaseController {
         List<Map<String, Object>> moneyReport;
         StatsType statsType = StatsType.get(type);
         if (type == 1) {
-            visitReport = operateLogService.getReport(calendar.get(Calendar.YEAR), null);
-            visitReport = fill(visitReport, statsType.start, statsType.end);
+//            visitReport = operateLogService.getReport(calendar.get(Calendar.YEAR), null);
+//            visitReport = fill(visitReport, statsType.start, statsType.end);
 
             moneyReport = payRecordService.getReport(all ? null : getUserId(), calendar.get(Calendar.YEAR), null);
             moneyReport = fill(moneyReport, statsType.start, statsType.end);
         } else {
-            visitReport = operateLogService.getReport(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1);
-            visitReport = fill(visitReport, statsType.start, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+//            visitReport = operateLogService.getReport(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1);
+//            visitReport = fill(visitReport, statsType.start, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
 
             moneyReport = payRecordService.getReport(all ? null : getUserId(), calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1);
             moneyReport = fill(moneyReport, statsType.start, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
@@ -109,7 +109,7 @@ public class HomeController extends BaseController {
 
 
         Map<String, Object> result = new HashMap<>();
-        result.put("visits", convert(visitReport, statsType, 2));
+//        result.put("visits", convert(visitReport, statsType, 2));
         result.put("money", convert(moneyReport, statsType, 2));
         return R.ok(result);
     }
