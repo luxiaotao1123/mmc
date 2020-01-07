@@ -22,7 +22,7 @@ public class PayRecordServiceImpl extends ServiceImpl<PayRecordMapper, PayRecord
         if (Cools.isEmpty(userId)) {
             return payRecordMapper.selectCountByCurrentYear();
         } else {
-            return payRecordMapper.selectCountByCurrentYear(userId);
+            return payRecordMapper.selectCountByCurrentYearAndUser(userId);
         }
     }
 
@@ -31,7 +31,7 @@ public class PayRecordServiceImpl extends ServiceImpl<PayRecordMapper, PayRecord
         if (Cools.isEmpty(userId)) {
             return payRecordMapper.selectMoney();
         } else {
-            return payRecordMapper.selectMoney(userId);
+            return payRecordMapper.selectMoneyByUser(userId);
         }
     }
 
