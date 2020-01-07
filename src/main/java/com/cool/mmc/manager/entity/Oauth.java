@@ -31,7 +31,7 @@ public class Oauth implements Serializable {
     private Long userId;
 
     /**
-     * 账户
+     * appId
      */
     private String account;
 

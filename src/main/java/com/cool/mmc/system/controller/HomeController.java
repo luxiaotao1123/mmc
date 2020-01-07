@@ -40,8 +40,6 @@ public class HomeController extends BaseController {
     @RequestMapping("/top")
     @ManagerAuth
     public R top(){
-//        int logTotal = operateLogService.selectCount(new EntityWrapper<>());
-//        int logWeek = operateLogService.selectCountByCurrentWeek();
         boolean admin = isAdmin(getUserId());
         int logWeek = payRecordService.selectOrderCountByCurrentWeek(admin?null:getUserId());
         int logTotal = payRecordService.selectOrderCount(admin?null:getUserId());
