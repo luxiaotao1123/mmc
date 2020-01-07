@@ -3,12 +3,13 @@ package com.cool.mmc.manager.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
-import com.core.common.DateUtils;
+import com.cool.mmc.common.web.BaseController;
 import com.cool.mmc.manager.entity.Oauth;
 import com.cool.mmc.manager.service.OauthService;
+import com.core.annotations.ManagerAuth;
 import com.core.common.Cools;
+import com.core.common.DateUtils;
 import com.core.common.R;
-import com.core.controller.AbstractBaseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @Controller
-public class OauthController extends AbstractBaseController {
+public class OauthController extends BaseController {
 
     @Autowired
     private OauthService oauthService;
@@ -31,10 +32,35 @@ public class OauthController extends AbstractBaseController {
         return "oauth/oauth_detail";
     }
 
+    @RequestMapping("/ownOauth")
+    public String ownOauth(){
+        return "oauth/own_oauth";
+    }
+
     @RequestMapping(value = "/oauth/{id}/auth")
     @ResponseBody
     public R get(@PathVariable("id") Long id) {
         return R.ok(oauthService.selectById(String.valueOf(id)));
+    }
+
+    @RequestMapping("/user/oauth/auth")
+    @ManagerAuth
+    @ResponseBody
+    public R userDetail(){
+        return R.ok(oauthService.selectOne(new EntityWrapper<Oauth>().eq("user_id", getUserId())));
+    }
+
+    @RequestMapping("/own/oauth/auth")
+    @ManagerAuth
+    @ResponseBody
+    public R oauthDetail(Oauth oauth){
+        if (Cools.isEmpty(oauth) || null==oauth.getId()){
+            return R.error();
+        }
+        Oauth oauth1 = oauthService.selectById(oauth.getId());
+        oauth1.setCallbackUrl(oauth.getCallbackUrl());
+        oauthService.updateById(oauth1);
+        return R.ok();
     }
 
     @RequestMapping(value = "/oauth/list/auth")
