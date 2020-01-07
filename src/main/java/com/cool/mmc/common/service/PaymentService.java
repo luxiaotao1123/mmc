@@ -121,19 +121,18 @@ public class PaymentService {
     public void oauthSend(PayRecord payRecord) {
         System.out.println("回调！oauthSend");
         Oauth oauth = oauthService.selectOne(new EntityWrapper<Oauth>().eq("id", payRecord.getOauthId()));
-        Map<String,Object> map=new HashMap<>();
         long timestamp = new Date().getTime();
         Map<String, Object> param = new HashMap<>();
         param.put("appId", oauth.getAccount());
         param.put("outTradeNo", payRecord.getOutTradeNo());
         param.put("timestamp", timestamp);
         param.put("money", payRecord.getMoney());
-        map.put("code","200");
+        param.put("code","200");
         String sign=SignUtils.sign(param, oauth.getSign());
         param.put("sign",sign);
         String post="";
         try {
-            post = HttpSend.doPost(oauth.getCallbackUrl(), map);
+            post = HttpSend.doPost(oauth.getCallbackUrl(), param);
             JSONObject jsonObject = JSONObject.parseObject(post);
             System.out.println(jsonObject);
             if(!Cools.isEmpty(jsonObject.getString("code"))){
@@ -146,7 +145,7 @@ public class PaymentService {
         }
         Timer timer=new Timer();
         timer.setUrl(oauth.getCallbackUrl());
-        timer.setData(JSON.toJSONString(map));
+        timer.setData(JSON.toJSONString(param));
         timer.setCreateTime(new Date());
         timer.setStatus(0);
         timer.setCount(0);
