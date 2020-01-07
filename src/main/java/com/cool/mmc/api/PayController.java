@@ -63,13 +63,48 @@ public class PayController {
             return new Result(402, "签名错误");
         }
         // 请求支付
-        Object msg = paymentService.executePayMoney(PayCompanyType.wxH5, outTradeNo, money, IpTool.getRemoteAddr(request),null, null,oauth.getId());
+        Object msg = paymentService.executePayMoney(PayCompanyType.wxH5, outTradeNo, money, IpTool.getRemoteAddr(request),null, "232",oauth.getId());
         // 返回结果
         Map<String,Object> map = new HashMap<>();
         map.put("mwebUrl", msg);
         return new Result(200, "请求支付成功", map);
     }
+    @PostMapping("/wx/native")
+    public Result wxNative(HttpServletRequest request
+            , @RequestParam(value = "appId", required = false) String appId
+            , @RequestParam(value = "outTradeNo", required = false) String outTradeNo
+            , @RequestParam(value = "timestamp", required = false) String timestamp
+            , @RequestParam(value = "money", required = false) Double money
+            , @RequestParam(value = "sign", required = false) String sign) {
 
+        // 非空校验
+        if (Cools.isEmpty(appId) || Cools.isEmpty(outTradeNo) || Cools.isEmpty(timestamp) || Cools.isEmpty(money) || Cools.isEmpty(sign)) {
+            return new Result(400, "参数错误");
+        }
+        if (money <= 0.0D) {
+            return new Result(401, "金额错误");
+        }
+        // 账户校验
+        Oauth oauth = oauthService.selectOne(new EntityWrapper<Oauth>().eq("account", appId));
+        if (Cools.isEmpty(oauth) || oauth.getStatus() == 0) {
+            return new Result(403, "账户已被禁用");
+        }
+        // 验签
+        Map<String, Object> param = new HashMap<>();
+        param.put("appId", appId);
+        param.put("outTradeNo", outTradeNo);
+        param.put("timestamp", timestamp);
+        param.put("money", money);
+        if (!sign.equals(SignUtils.sign(param, oauth.getSign()))) {
+            return new Result(402, "签名错误");
+        }
+        // 请求支付
+        Object msg = paymentService.executePayMoney(PayCompanyType.wxNative, outTradeNo, money, IpTool.getRemoteAddr(request),null, "232",oauth.getId());
+        // 返回结果
+        Map<String,Object> map = new HashMap<>();
+        map.put("mwebUrl", msg);
+        return new Result(200, "请求支付成功", map);
+    }
 //    @PostMapping("/wx/native")
 //    public Result wxNative(HttpServletRequest request, @RequestParam String appId, @RequestParam String orderId,
 //                           @RequestParam double money,@RequestParam String sign){
@@ -101,18 +136,18 @@ public class PayController {
 //        return result;
 //    }
 
-    private Oauth check(String appId,String orderId,double money,String sign){
-        Oauth oauth = oauthService.selectOne(new EntityWrapper<Oauth>().eq("account", appId));
-        if(oauth==null){
-            return null;
-        }
-        String str=appId+"&"+orderId+"&"+money;
-        String encode = new MD5Tool(oauth.getSign(), "MD5").encode(str);
-        if (encode.equals(sign)){
-            return oauth;
-        }
-        return null;
-    }
+//    private Oauth check(String appId,String orderId,double money,String sign){
+//        Oauth oauth = oauthService.selectOne(new EntityWrapper<Oauth>().eq("account", appId));
+//        if(oauth==null){
+//            return null;
+//        }
+//        String str=appId+"&"+orderId+"&"+money;
+//        String encode = new MD5Tool(oauth.getSign(), "MD5").encode(str);
+//        if (encode.equals(sign)){
+//            return oauth;
+//        }
+//        return null;
+//    }
 
 
 }
