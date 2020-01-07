@@ -2,7 +2,6 @@ package com.cool.mmc.api;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.cool.mmc.api.tools.IpTool;
-import com.cool.mmc.api.tools.MD5Tool;
 import com.cool.mmc.api.tools.Result;
 import com.cool.mmc.common.entity.enums.PayCompanyType;
 import com.cool.mmc.common.service.PaymentService;
@@ -69,6 +68,7 @@ public class PayController {
         map.put("mwebUrl", msg);
         return new Result(200, "请求支付成功", map);
     }
+
     @PostMapping("/wx/native")
     public Result wxNative(HttpServletRequest request
             , @RequestParam(value = "appId", required = false) String appId
@@ -102,53 +102,9 @@ public class PayController {
         Object msg = paymentService.executePayMoney(PayCompanyType.wxNative, outTradeNo, money, IpTool.getRemoteAddr(request),null, "232",oauth.getId());
         // 返回结果
         Map<String,Object> map = new HashMap<>();
-        map.put("mwebUrl", msg);
+        map.put("codeUrl", msg);
         return new Result(200, "请求支付成功", map);
     }
-//    @PostMapping("/wx/native")
-//    public Result wxNative(HttpServletRequest request, @RequestParam String appId, @RequestParam String orderId,
-//                           @RequestParam double money,@RequestParam String sign){
-//        Result result=new Result();
-//        Map<String,Object> map=new HashMap();
-//        Oauth check = check(appId,orderId,money, sign);
-//        if (check == null) {
-//            result.setCode("400");
-//            result.setMessage("签名验证失败");
-//            return result;
-//        }
-//        if(orderId == null ||money==0.00){
-//            result.setCode("400");
-//            result.setMessage("参数缺失");
-//            return result;
-//        }
-//        Object msg = paymentService.executePayMoney(PayCompanyType.wxNative, orderId, money, IpTool.getRemoteAddr(request),null, "232",check.getId());
-//        if(msg == null){
-//            result.setCode("400");
-//            result.setMessage("订单创建失败");
-//            return result;
-//        }
-//        map.put("data",String.valueOf(msg));
-//        map.put("orderId",orderId);
-//        result.setCode("200");
-//        result.setData(map);
-//        result.setMessage("订单创建成功");
-//
-//        return result;
-//    }
-
-//    private Oauth check(String appId,String orderId,double money,String sign){
-//        Oauth oauth = oauthService.selectOne(new EntityWrapper<Oauth>().eq("account", appId));
-//        if(oauth==null){
-//            return null;
-//        }
-//        String str=appId+"&"+orderId+"&"+money;
-//        String encode = new MD5Tool(oauth.getSign(), "MD5").encode(str);
-//        if (encode.equals(sign)){
-//            return oauth;
-//        }
-//        return null;
-//    }
-
 
 }
 
