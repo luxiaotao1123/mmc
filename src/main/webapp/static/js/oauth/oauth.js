@@ -18,8 +18,8 @@ layui.use(['table','laydate', 'form'], function(){
         cols: [[
             {type: 'checkbox', fixed: 'left'}
             ,{field: 'id', title: 'ID', sort: true,align: 'center', fixed: 'left', width: 80}
-            ,{field: 'userId$', align: 'center',title: '所属商户',event: 'userId', style: 'text-decoration: underline;cursor:pointer'}
-            ,{field: 'account', align: 'center',title: '账户'}
+            ,{field: 'userId$', align: 'center',title: '所属会员',event: 'userId', style: 'text-decoration: underline;cursor:pointer'}
+            ,{field: 'account', align: 'center',title: 'appId'}
             ,{field: 'sign', align: 'center',title: '密钥'}
             ,{field: 'callbackUrl', align: 'center',title: '回调地址'}
             ,{field: 'createTime$', align: 'center',title: '添加时间'}

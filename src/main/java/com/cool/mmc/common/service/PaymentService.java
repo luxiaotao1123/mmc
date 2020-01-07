@@ -151,7 +151,6 @@ public class PaymentService {
         timer.setStatus(0);
         timer.setCount(0);
         timerService.insert(timer);
-        return;
     }
 
 }

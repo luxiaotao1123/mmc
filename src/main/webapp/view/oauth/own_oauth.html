@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+    <style>
+        #container {
+            padding: 15px;
+            margin-top: 15px
+        }
+        .layui-card-body {
+            padding: 20px 15px 5px 15px;
+        }
+        .layui-form-item {
+            margin-bottom: 18px;
+        }
+        .layui-form-label {
+            color: #999!important;;
+            width: 60px;
+        }
+        .layui-input-block {
+            margin-left: 90px;
+        }
+        #update-password {
+            padding: 0 20px 0 15px;
+        }
+        .layui-btn .layui-icon {
+            margin-right: 0;
+        }
+        .layui-input-inline.cool-long {
+            width: 420px;
+        }
+    </style>
+</head>
+<body id="body">
+<div id="container">
+    <fieldset class="layui-elem-field">
+        <legend>设置我的应用</legend>
+        <div class="layui-card-body">
+            <div id="oauth-detail" class="layui-form">
+                <div class="layui-form-item" style="display: none">
+                    <label class="layui-form-label">编号</label>
+                    <div class="layui-input-inline">
+                        <input id="id" class="layui-input" type="text" placeholder="请输入" autocomplete="off">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">用户名</label>
+                    <div class="layui-input-inline">
+                        <input id="userId$" class="layui-input" type="text" placeholder="请输入" autocomplete="off" disabled="disabled">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">appId</label>
+                    <div class="layui-input-inline">
+                        <input id="account" class="layui-input" type="text" placeholder="请输入" autocomplete="off" disabled="disabled">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">密钥</label>
+                    <div class="layui-input-inline cool-long">
+                        <input id="sign" class="layui-input" type="text" placeholder="请输入" autocomplete="off" disabled="disabled">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">请勿泄漏！生成签名使用</div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">回调地址</label>
+                    <div class="layui-input-inline cool-long">
+                        <input id="callbackUrl" class="layui-input" type="text" placeholder="请输入" autocomplete="off">
+                    </div>
+                    <div class="layui-form-mid layui-word-aux">重要！应用平台异步通知地址</div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">状态</label>
+                    <div class="layui-input-inline">
+                        <input id="status$" class="layui-input" type="text" placeholder="请输入" autocomplete="off" disabled="disabled">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button type="button" class="layui-btn layui-btn-normal" lay-submit lay-filter="save">确认修改</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</div>
+</body>
+<script type="text/javascript" src="/static/js/jquery/jquery-3.3.1.min.js"></script>
+<script src="/static/layui/layui.js"></script>
+<script>
+    layui.use(['form'], function(){
+        var form = layui.form,
+            layer = layui.layer,
+            $ = layui.jquery;
+
+        // 初始化表单数据
+        $.ajax({
+            url: "/user/oauth/auth",
+            headers: {'token': localStorage.getItem('token')},
+            method: 'POST',
+            success: function (res) {
+                if (res.code === 200){
+                    var oauth = res.data;
+                    for (var val in oauth) {
+                        $('#oauth-detail').find(":input[id='" + val + "']").val(oauth[val]);
+                    }
+                } else if (res.code === 403){
+                    top.location.href = "/";
+                } else {
+                    layer.msg(res.msg);
+                }
+            }
+        });
+
+        // 保存修改
+        form.on('submit(save)', function (data) {
+            var oauth = {
+                id: $('#id').val(),
+                callbackUrl: $('#callbackUrl').val(),
+            };
+            layer.confirm('确定修改资料吗？', function(){
+                $.ajax({
+                    url: "/own/oauth/auth",
+                    headers: {'token': localStorage.getItem('token')},
+                    data: oauth,
+                    method: 'POST',
+                    success: function (res) {
+                        if (res.code === 200){
+                            layer.msg(res.msg);
+                        } else if (res.code === 403){
+                            top.location.href = "/";
+                        } else {
+                            layer.msg(res.msg);
+                        }
+                    }
+                });
+            });
+            return false;
+        });
+    });
+</script>
+</html>

@@ -1,7 +1,12 @@
 package com.cool.mmc.system.controller;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.cool.mmc.common.web.BaseController;
+import com.cool.mmc.manager.service.PayRecordService;
+import com.cool.mmc.system.entity.Role;
+import com.cool.mmc.system.entity.User;
 import com.cool.mmc.system.service.OperateLogService;
+import com.cool.mmc.system.service.RoleService;
 import com.cool.mmc.system.service.UserLoginService;
 import com.cool.mmc.system.service.UserService;
 import com.core.annotations.ManagerAuth;
@@ -19,51 +24,78 @@ import java.util.*;
  */
 @RestController
 @RequestMapping("/home")
-public class HomeController {
+public class HomeController extends BaseController {
 
     @Autowired
     private OperateLogService operateLogService;
     @Autowired
     private UserService userService;
     @Autowired
+    private RoleService roleService;
+    @Autowired
     private UserLoginService userLoginService;
+    @Autowired
+    private PayRecordService payRecordService;
 
     @RequestMapping("/top")
     @ManagerAuth
     public R top(){
-        int logTotal = operateLogService.selectCount(new EntityWrapper<>());
-        int logWeek = operateLogService.selectCountByCurrentWeek();
+        boolean admin = isAdmin(getUserId());
+        int logWeek = payRecordService.selectOrderCountByCurrentWeek(admin?null:getUserId());
+        int logTotal = payRecordService.selectOrderCount(admin?null:getUserId());
+
         int userTotal = userService.selectCount(new EntityWrapper<>());
         int loginWeek = userLoginService.selectCountByCurrentWeek();
+        boolean all = false;
+        if (getUserId() == 9527) {
+            all = true;
+        } else {
+            User user = userService.selectById(getUserId());
+            Role role = roleService.selectById(user.getRoleId());
+            if (role.getCode().toUpperCase().equals("ROOT") || role.getCode().toUpperCase().equals("ADMIN")) {
+                all = true;
+            }
+        }
+        Double moneyYear = payRecordService.selectMoneyByCurrentYear(all ? null : getUserId());
+        Double totalMoney = payRecordService.selectMoney(all ? null : getUserId());
 
         Map<String, Object> result = new HashMap<>();
         result.put("logTotal", logTotal);
         result.put("logWeek", logWeek);
         result.put("userTotal", userTotal);
         result.put("live", Arith.multiplys(0, Arith.divides(2, loginWeek, userTotal), 100)+"%");
+        result.put("moneyYear", moneyYear);
+        result.put("totalMoney", totalMoney);
         return R.ok(result);
     }
 
-
+    /**
+     * 报表统计
+     * @param type 类型：1，本年月份；2，本月日分
+     */
     @RequestMapping("/report")
     @ManagerAuth
     public R top(@RequestParam(defaultValue = "1", value = "type", required = false)Integer type){
+        boolean admin = isAdmin(getUserId());
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
 
-        List<Map<String, Object>> report;
+        // 访问量报表
+        List<Map<String, Object>> visitReport;
+        // 金额统计报表
+        List<Map<String, Object>> moneyReport;
         StatsType statsType = StatsType.get(type);
         if (type == 1) {
-            report = operateLogService.getReport(calendar.get(Calendar.YEAR), null);
-            report = fill(report, statsType.start, statsType.end);
+            moneyReport = payRecordService.getReport(admin ? null : getUserId(), calendar.get(Calendar.YEAR), null);
+            moneyReport = fill(moneyReport, statsType.start, statsType.end);
         } else {
-            report = operateLogService.getReport(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1);
-            report = fill(report, statsType.start, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+            moneyReport = payRecordService.getReport(admin ? null : getUserId(), calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1);
+            moneyReport = fill(moneyReport, statsType.start, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         }
 
 
         Map<String, Object> result = new HashMap<>();
-        result.put("visits", convert(report, statsType, 2));
+        result.put("money", convert(moneyReport, statsType, 2));
         return R.ok(result);
     }
 
@@ -138,6 +170,20 @@ public class HomeController {
             throw new RuntimeException("找不到StatsType类型");
         }
 
+    }
+
+    private boolean isAdmin(Long userId){
+        boolean result = false;
+        if (userId == 9527) {
+            result = true;
+        } else {
+            User user = userService.selectById(userId);
+            Role role = roleService.selectById(user.getRoleId());
+            if (role.getCode().toUpperCase().equals("ROOT") || role.getCode().toUpperCase().equals("ADMIN")) {
+                result = true;
+            }
+        }
+        return result;
     }
 
 }

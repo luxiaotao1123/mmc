@@ -101,14 +101,14 @@
     <div id="container-top">
         <div class="layui-row">
             <div class="layui-col-md4 col layui-card">
-                <div class="layui-card-header">访问量<span class="layui-badge layui-bg-blue">周</span></div>
+                <div class="layui-card-header">订单量<span class="layui-badge layui-bg-blue">周</span></div>
                 <div class="layui-card-body">
-                    <p id="logWeek" class="cool-home-top-count">999999</p>
+                    <p id="logWeek" class="cool-home-top-count">0</p>
                     <p class="cool-home-top-total">
-                        总访问量
+                        总订单量
                         <span class="cool-home-top-count-span">
                     <span id="logTotal" >
-                        88万
+                        0
                     </span>
                     <i class="layui-inline layui-icon layui-icon-flag"></i>
                 </span>
@@ -118,12 +118,12 @@
             <div class="layui-col-md4 col layui-card">
                 <div class="layui-card-header">用户量<span class="layui-badge layui-bg-yellow">总</span></div>
                 <div class="layui-card-body">
-                    <p id="userTotal" class="cool-home-top-count">999999</p>
+                    <p id="userTotal" class="cool-home-top-count">0</p>
                     <p class="cool-home-top-total">
                         活跃度
                         <span class="cool-home-top-count-span">
                     <span id="live" >
-                        15%
+                        0%
                     </span>
                     <i class="layui-inline layui-icon layui-icon-face-smile"></i>
                 </span>
@@ -133,8 +133,8 @@
             <div class="layui-col-md4 col layui-card">
                 <div class="layui-card-header">收入<span class="layui-badge layui-bg-green">年</span></div>
                 <div class="layui-card-body">
-                    <p class="cool-home-top-count">999999</p>
-                    <p class="cool-home-top-total">总收入<span class="cool-home-top-count-span">88万<i class="layui-inline layui-icon layui-icon-dollar"></i></span></p>
+                    <p id="moneyYear" class="cool-home-top-count">0</p>
+                    <p class="cool-home-top-total">总收入<span id="totalMoney" class="cool-home-top-count-span">0<i class="layui-inline layui-icon layui-icon-dollar"></i></span></p>
                 </div>
             </div>
         </div>
@@ -231,7 +231,7 @@
         },
         // 图表上方的组件集合
         legend: {
-            data:['访问量']
+            data:['收入']
         },
         // 工具栏
         toolbox: {
@@ -264,28 +264,51 @@
         ],
         // 数据
         series : [
-                {
-                    name:'访问量',
-                    type:'line',
-                    stack: '总量',
-                    areaStyle: {
-                        normal: {
-                            // color: '#33CC99'
-                        }
-                    },
-                    lineStyle: {
-                        normal: {
-                            // color: '#33CC99'
-                        }
-                    },
-                    label: {
-                        normal: {
-                            // show: true,
-                            position: 'top'
-                        }
-                    },
-                    data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            {
+                name:'收入',
+                type:'line',
+                stack: '总量',
+                areaStyle: {
+                    normal: {
+                        // color: '#33CC99'
+                    }
                 },
+                lineStyle: {
+                    normal: {
+                        // color: '#33CC99'
+                    }
+                },
+                label: {
+                    normal: {
+                        // show: true,
+                        position: 'top'
+                    }
+                },
+                data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            },
+                // {
+                //     name:'访问量',
+                //     type:'line',
+                //     stack: '总量',
+                //     areaStyle: {
+                //         normal: {
+                //             // color: '#33CC99'
+                //         }
+                //     },
+                //     lineStyle: {
+                //         normal: {
+                //             // color: '#33CC99'
+                //         }
+                //     },
+                //     label: {
+                //         normal: {
+                //             // show: true,
+                //             position: 'top'
+                //         }
+                //     },
+                //     data:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                // },
+
         ]
     };
 
@@ -305,6 +328,8 @@
                     $('#logTotal').text(res.data.logTotal);
                     $('#userTotal').text(res.data.userTotal);
                     $('#live').text(res.data.live);
+                    $('#moneyYear').text(res.data.moneyYear);
+                    $('#totalMoney').text(res.data.totalMoney + " 元");
                 } else if (res.code === 403){
                     top.location.href = "/login";
                 } else {
@@ -318,7 +343,8 @@
     function initVisits(type) {
         var reportView = option;
         var xAxisDate = [];
-        var seriesDate=[];
+        // var seriesDate=[];
+        var moneySeriesDate=[];
         $.ajax({
             url: "/home/report",
             headers: {'token': localStorage.getItem('token')},
@@ -326,13 +352,19 @@
             method: 'POST',
             success: function (res) {
                 if (res.code === 200){
-                    var json = res.data.visits;
-                    for (var i = 0; i < json.length; i++) {
-                        xAxisDate[i]=json[i].node;
-                        seriesDate[i]=json[i].val;
+                    // var json = res.data.visits;
+                    // for (var i = 0; i < json.length; i++) {
+                    //     xAxisDate[i]=json[i].node;
+                    //     seriesDate[i]=json[i].val;
+                    // }
+                    var moneyJson = res.data.money;
+                    for (var m = 0; m < moneyJson.length; m++) {
+                        xAxisDate[m]=moneyJson[m].node;
+                        moneySeriesDate[m]=moneyJson[m].val;
                     }
                     reportView.xAxis[0].data=xAxisDate;
-                    reportView.series[0].data=seriesDate;
+                    // reportView.series[1].data=seriesDate;
+                    reportView.series[0].data=moneySeriesDate;
                     myChart.setOption(reportView, true)
                 } else if (res.code === 403){
                     top.location.href = "/login";

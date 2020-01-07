@@ -11,8 +11,6 @@ import static javax.xml.bind.JAXBIntrospector.getValue;
  */
 public class SignUtils {
 
-    private static char[] hexDigits = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
-
     /**
      * 生成签名
      * （规则如下：
@@ -66,14 +64,6 @@ public class SignUtils {
         }
     }
 
-    public static void main(String[] args) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("isd", "2321");
-        map.put("osd", "2321");
-        map.put("asd", "2321");
-        map.put("zsd", "2321");
-        map.put("fsd", "2321");
-        sign(map, "sds");
-    }
+    private static char[] hexDigits = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
 }

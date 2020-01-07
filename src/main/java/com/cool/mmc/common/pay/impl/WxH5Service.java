@@ -11,9 +11,6 @@ import com.core.common.Cools;
 import com.core.exception.CoolException;
 import org.springframework.stereotype.Service;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
 /**
  * 微信h5支付服务类
  * Created by vincent on 2019-12-28
@@ -99,14 +96,6 @@ public class WxH5Service extends WxPaymentServiceSupport {
             e.printStackTrace();
             return false;
         }
-    }
-
-
-    public static void main(String[] args) throws UnsupportedEncodingException {
-        String s = "weixin://wap/pay?prepayid%3Dwx03094832961805ed1e075bb51304517000&package=1585930875&noncestr=1578016381&sign=56fc17dfbd61ef0d012a6097bf021ccb";
-        String redirect_url = "";
-        String result = s.concat("redirect_url").concat(URLEncoder.encode(redirect_url, "utf-8"));
-        System.out.println(result);
     }
 
 }
