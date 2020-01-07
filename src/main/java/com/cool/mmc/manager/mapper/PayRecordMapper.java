@@ -14,6 +14,20 @@ import java.util.Map;
 @Repository
 public interface PayRecordMapper extends BaseMapper<PayRecord> {
 
+    // 订单量
+    @Select("select count(1) as count from man_pay_record mpr left join man_merchant mm on mpr.merchant_id = mm.id left join sys_user su on su.id = mm.user_id where 1 = 1 and mpr.state = 3")
+    Integer selectOrderCount();
+
+    @Select("select count(1) as count from man_pay_record mpr left join man_merchant mm on mpr.merchant_id = mm.id left join sys_user su on su.id = mm.user_id where 1 = 1 and su.id = #{userId} and mpr.state = 3")
+    Integer selectOrderCountByUser(@Param("userId") Long userId);
+
+    @Select("select count(1) as count from man_pay_record mpr left join man_merchant mm on mpr.merchant_id = mm.id left join sys_user su on su.id = mm.user_id where 1 = 1 and mpr.state = 3 and yearweek( date_format(mpr.create_time , '%Y-%m-%d')) = yearweek(now())")
+    Integer selectOrderCountByCurrentWeek();
+
+    @Select("select count(1) as count from man_pay_record mpr left join man_merchant mm on mpr.merchant_id = mm.id left join sys_user su on su.id = mm.user_id where 1 = 1 and su.id = #{userId} and mpr.state = 3 and yearweek( date_format(mpr.create_time , '%Y-%m-%d')) = yearweek(now())")
+    Integer selectOrderCountByCurrentWeekAndUser(@Param("userId") Long userId);
+
+    // 金额 ----
     @Select("select sum(mpr.money) as money from man_pay_record mpr left join man_merchant mm on mpr.merchant_id = mm.id left join sys_user su on su.id = mm.user_id where 1 = 1 and su.id = #{userId} and mpr.state = 3 and year(mpr.create_time) = year(now())")
     Double selectCountByCurrentYearAndUser(@Param("userId") Long userId);
 

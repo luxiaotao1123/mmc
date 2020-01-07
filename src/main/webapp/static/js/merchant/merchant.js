@@ -25,17 +25,17 @@ layui.use(['table','laydate', 'form'], function(){
             ,{field: 'partner', align: 'center',title: '商户号'}
             ,{field: 'subject', align: 'center',title: '标题'}
             ,{field: 'privateKey', align: 'center',title: '密钥'}
-            ,{field: 'publicKey', align: 'center',title: '公钥'}
-            ,{field: 'certPath', align: 'center',title: '证书路径'}
-            ,{field: 'certPwd', align: 'center',title: '证书密码'}
-            ,{field: 'weight', align: 'center',title: '权重值'}
-            ,{field: 'sort', align: 'center',title: '排序'}
+            // ,{field: 'publicKey', align: 'center',title: '公钥'}
+            // ,{field: 'certPath', align: 'center',title: '证书路径'}
+            // ,{field: 'certPwd', align: 'center',title: '证书密码'}
+            // ,{field: 'weight', align: 'center',title: '权重值'}
+            // ,{field: 'sort', align: 'center',title: '排序'}
             ,{field: 'state$', align: 'center',title: '轮回状态'}
-            ,{field: 'memo', align: 'center',title: '备注'}
+            // ,{field: 'memo', align: 'center',title: '备注'}
             ,{field: 'createTime$', align: 'center',title: '添加时间'}
-            ,{field: 'updateTime$', align: 'center',title: '修改时间'}
-            ,{field: 'editor$', align: 'center',title: '操作人',event: 'editor', style: 'text-decoration: underline;cursor:pointer'}
-            ,{field: 'status$', align: 'center',title: '状态'}
+            // ,{field: 'updateTime$', align: 'center',title: '修改时间'}
+            // ,{field: 'editor$', align: 'center',title: '操作人',event: 'editor', style: 'text-decoration: underline;cursor:pointer'}
+            // ,{field: 'status$', align: 'center',title: '状态'}
 
             ,{fixed: 'right', title:'操作', align: 'center', toolbar: '#operate', width:150}
         ]],

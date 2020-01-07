@@ -18,7 +18,25 @@ public class PayRecordServiceImpl extends ServiceImpl<PayRecordMapper, PayRecord
     private PayRecordMapper payRecordMapper;
 
     @Override
-    public Double selectCountByCurrentYear(Long userId) {
+    public Integer selectOrderCount(Long userId) {
+        if (Cools.isEmpty(userId)) {
+            return payRecordMapper.selectOrderCount();
+        } else {
+            return payRecordMapper.selectOrderCountByUser(userId);
+        }
+    }
+
+    @Override
+    public Integer selectOrderCountByCurrentWeek(Long userId) {
+        if (Cools.isEmpty(userId)) {
+            return payRecordMapper.selectOrderCountByCurrentWeek();
+        } else {
+            return payRecordMapper.selectOrderCountByCurrentWeekAndUser(userId);
+        }
+    }
+
+    @Override
+    public Double selectMoneyByCurrentYear(Long userId) {
         if (Cools.isEmpty(userId)) {
             return payRecordMapper.selectCountByCurrentYear();
         } else {
@@ -27,7 +45,7 @@ public class PayRecordServiceImpl extends ServiceImpl<PayRecordMapper, PayRecord
     }
 
     @Override
-    public Double selectCount(Long userId) {
+    public Double selectMoney(Long userId) {
         if (Cools.isEmpty(userId)) {
             return payRecordMapper.selectMoney();
         } else {

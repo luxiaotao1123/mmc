@@ -8,9 +8,13 @@ import java.util.Map;
 
 public interface PayRecordService extends IService<PayRecord> {
 
-    Double selectCountByCurrentYear(Long userId);
+    Integer selectOrderCount(Long userId);
 
-    Double selectCount(Long userId);
+    Integer selectOrderCountByCurrentWeek(Long userId);
+
+    Double selectMoneyByCurrentYear(Long userId);
+
+    Double selectMoney(Long userId);
 
     List<Map<String, Object>> getReport(Long userId, Integer year, Integer month);
 

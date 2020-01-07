@@ -40,8 +40,12 @@ public class HomeController extends BaseController {
     @RequestMapping("/top")
     @ManagerAuth
     public R top(){
-        int logTotal = operateLogService.selectCount(new EntityWrapper<>());
-        int logWeek = operateLogService.selectCountByCurrentWeek();
+//        int logTotal = operateLogService.selectCount(new EntityWrapper<>());
+//        int logWeek = operateLogService.selectCountByCurrentWeek();
+        boolean admin = isAdmin(getUserId());
+        int logWeek = payRecordService.selectOrderCountByCurrentWeek(admin?null:getUserId());
+        int logTotal = payRecordService.selectOrderCount(admin?null:getUserId());
+
         int userTotal = userService.selectCount(new EntityWrapper<>());
         int loginWeek = userLoginService.selectCountByCurrentWeek();
         boolean all = false;
@@ -54,8 +58,8 @@ public class HomeController extends BaseController {
                 all = true;
             }
         }
-        Double moneyYear = payRecordService.selectCountByCurrentYear(all ? null : getUserId());
-        Double totalMoney = payRecordService.selectCount(all ? null : getUserId());
+        Double moneyYear = payRecordService.selectMoneyByCurrentYear(all ? null : getUserId());
+        Double totalMoney = payRecordService.selectMoney(all ? null : getUserId());
 
         Map<String, Object> result = new HashMap<>();
         result.put("logTotal", logTotal);
@@ -70,21 +74,11 @@ public class HomeController extends BaseController {
     /**
      * 报表统计
      * @param type 类型：1，本年月份；2，本月日分
-     * @return
      */
     @RequestMapping("/report")
     @ManagerAuth
     public R top(@RequestParam(defaultValue = "1", value = "type", required = false)Integer type){
-        boolean all = false;
-        if (getUserId() == 9527) {
-            all = true;
-        } else {
-            User user = userService.selectById(getUserId());
-            Role role = roleService.selectById(user.getRoleId());
-            if (role.getCode().toUpperCase().equals("ROOT") || role.getCode().toUpperCase().equals("ADMIN")) {
-                all = true;
-            }
-        }
+        boolean admin = isAdmin(getUserId());
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
 
@@ -94,22 +88,15 @@ public class HomeController extends BaseController {
         List<Map<String, Object>> moneyReport;
         StatsType statsType = StatsType.get(type);
         if (type == 1) {
-//            visitReport = operateLogService.getReport(calendar.get(Calendar.YEAR), null);
-//            visitReport = fill(visitReport, statsType.start, statsType.end);
-
-            moneyReport = payRecordService.getReport(all ? null : getUserId(), calendar.get(Calendar.YEAR), null);
+            moneyReport = payRecordService.getReport(admin ? null : getUserId(), calendar.get(Calendar.YEAR), null);
             moneyReport = fill(moneyReport, statsType.start, statsType.end);
         } else {
-//            visitReport = operateLogService.getReport(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1);
-//            visitReport = fill(visitReport, statsType.start, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-
-            moneyReport = payRecordService.getReport(all ? null : getUserId(), calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1);
+            moneyReport = payRecordService.getReport(admin ? null : getUserId(), calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1);
             moneyReport = fill(moneyReport, statsType.start, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         }
 
 
         Map<String, Object> result = new HashMap<>();
-//        result.put("visits", convert(visitReport, statsType, 2));
         result.put("money", convert(moneyReport, statsType, 2));
         return R.ok(result);
     }
@@ -185,6 +172,20 @@ public class HomeController extends BaseController {
             throw new RuntimeException("找不到StatsType类型");
         }
 
+    }
+
+    private boolean isAdmin(Long userId){
+        boolean result = false;
+        if (userId == 9527) {
+            result = true;
+        } else {
+            User user = userService.selectById(userId);
+            Role role = roleService.selectById(user.getRoleId());
+            if (role.getCode().toUpperCase().equals("ROOT") || role.getCode().toUpperCase().equals("ADMIN")) {
+                result = true;
+            }
+        }
+        return result;
     }
 
 }
