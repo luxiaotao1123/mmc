@@ -127,7 +127,6 @@ public class PaymentService {
         param.put("outTradeNo", payRecord.getOutTradeNo());
         param.put("timestamp", timestamp);
         param.put("money", payRecord.getMoney());
-        param.put("code","200");
         String sign=SignUtils.sign(param, oauth.getSign());
         param.put("sign",sign);
         String post="";
