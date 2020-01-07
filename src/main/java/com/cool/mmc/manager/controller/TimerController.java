@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.core.common.DateUtils;
 import com.cool.mmc.manager.entity.Timer;
 import com.cool.mmc.manager.service.TimerService;
+import com.core.annotations.ManagerAuth;
 import com.core.common.Cools;
 import com.core.common.R;
 import com.core.controller.AbstractBaseController;
@@ -33,12 +34,14 @@ public class TimerController extends AbstractBaseController {
 
     @RequestMapping(value = "/timer/{id}/auth")
     @ResponseBody
+    @ManagerAuth
     public R get(@PathVariable("id") Long id) {
         return R.ok(timerService.selectById(String.valueOf(id)));
     }
 
     @RequestMapping(value = "/timer/list/auth")
     @ResponseBody
+    @ManagerAuth
     public R list(@RequestParam(defaultValue = "1")Integer curr,
                   @RequestParam(defaultValue = "10")Integer limit,
                   @RequestParam Map<String, Object> param){
@@ -63,6 +66,7 @@ public class TimerController extends AbstractBaseController {
 
     @RequestMapping(value = "/timer/edit/auth")
     @ResponseBody
+    @ManagerAuth
     public R edit(Timer timer) {
         if (Cools.isEmpty(timer)){
             return R.error();
@@ -77,6 +81,7 @@ public class TimerController extends AbstractBaseController {
 
     @RequestMapping(value = "/timer/add/auth")
     @ResponseBody
+    @ManagerAuth
     public R add(Timer timer) {
         timerService.insert(timer);
         return R.ok();
@@ -94,6 +99,7 @@ public class TimerController extends AbstractBaseController {
 
     @RequestMapping(value = "/timer/delete/auth")
     @ResponseBody
+    @ManagerAuth
     public R delete(Integer[] ids){
         if (Cools.isEmpty(ids)){
             return R.error();
@@ -104,6 +110,7 @@ public class TimerController extends AbstractBaseController {
 
     @RequestMapping(value = "/timer/export/auth")
     @ResponseBody
+    @ManagerAuth
     public R export(@RequestBody JSONObject param){
         List<String> fields = JSONObject.parseArray(param.getJSONArray("fields").toJSONString(), String.class);
         EntityWrapper<Timer> wrapper = new EntityWrapper<>();
@@ -115,6 +122,7 @@ public class TimerController extends AbstractBaseController {
 
     @RequestMapping(value = "/timerQuery/auth")
     @ResponseBody
+    @ManagerAuth
     public R query(String condition) {
         EntityWrapper<Timer> wrapper = new EntityWrapper<>();
         wrapper.like("id", condition);

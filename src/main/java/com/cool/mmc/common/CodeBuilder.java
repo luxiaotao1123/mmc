@@ -12,7 +12,7 @@ public class CodeBuilder {
         generator.url="47.111.25.152:3306/mmc";
         generator.username="root";
         generator.password="liU8huhUmznydHlq";
-        generator.table="man_pay_record";
+        generator.table="man_timer";
         generator.packagePath="com.cool.mmc.manager";
         generator.build();
     }

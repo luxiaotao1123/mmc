@@ -22,6 +22,18 @@
             </div>
         </div>
         <div class="layui-inline"  style="width:31%;">
+            <label class="layui-form-label"><span class="not-null">*</span>订　　单：</label>
+            <div class="layui-input-inline cool-auto-complete">
+                <input id="payRecordId" class="layui-input" type="text" lay-verify="required"  style="display: none">
+                <input id="payRecordId$" class="layui-input cool-auto-complete-div" onclick="autoShow(this.id)" type="text" placeholder="请输入..." onfocus=this.blur()>
+                <div class="cool-auto-complete-window">
+                    <input class="cool-auto-complete-window-input" data-key="payRecordQueryBypayRecordId" onkeyup="autoLoad(this.getAttribute('data-key'))">
+                    <select class="cool-auto-complete-window-select" data-key="payRecordQueryBypayRecordIdSelect" onchange="confirmed(this.getAttribute('data-key'))" multiple="multiple">
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-inline"  style="width:31%;">
             <label class="layui-form-label"><span class="not-null">*</span>地　　址：</label>
             <div class="layui-input-inline">
                 <input id="url" class="layui-input" type="text" lay-verify="required" >

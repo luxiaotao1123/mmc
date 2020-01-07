@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.cool.mmc.api.tools.HttpSend;
-import com.cool.mmc.api.tools.MD5Tool;
 import com.cool.mmc.common.CodeRes;
 import com.cool.mmc.common.entity.PayConfig;
 import com.cool.mmc.common.entity.enums.PayCompanyType;
@@ -44,6 +43,7 @@ public class PaymentService {
     private OauthService oauthService;
     @Autowired
     private TimerService timerService;
+
     /**
      * 发起支付，获取支付串
      * @param orderId 外部订单号
@@ -96,7 +96,7 @@ public class PaymentService {
         // 更新支付日志
         System.out.println("回调！executePaySuccess");
         PayRecord payRecord = payRecordService.selectOne(new EntityWrapper<PayRecord>().eq("out_trade_no", out_trade_no));
-        payRecord.setState((short) 3);
+        payRecord.setState((short) 2);
         payRecordService.updateById(payRecord);
         oauthSend(payRecord);
     }
@@ -129,13 +129,14 @@ public class PaymentService {
         param.put("money", payRecord.getMoney());
         String sign=SignUtils.sign(param, oauth.getSign());
         param.put("sign",sign);
-        String post="";
         try {
-            post = HttpSend.doPost(oauth.getCallbackUrl(), param);
-            JSONObject jsonObject = JSONObject.parseObject(post);
+            String response = HttpSend.doPost(oauth.getCallbackUrl(), param);
+            JSONObject jsonObject = JSONObject.parseObject(response);
             System.out.println(jsonObject);
             if(!Cools.isEmpty(jsonObject.getString("code"))){
                 if(jsonObject.getString("code").equals("200")){
+                    payRecord.setState((short) 3);
+                    payRecordService.updateById(payRecord);
                     return;
                 }
             }
@@ -143,6 +144,7 @@ public class PaymentService {
             e.printStackTrace();
         }
         Timer timer=new Timer();
+        timer.setPayRecordId(payRecord.getId());
         timer.setUrl(oauth.getCallbackUrl());
         timer.setData(JSON.toJSONString(param));
         timer.setCreateTime(new Date());

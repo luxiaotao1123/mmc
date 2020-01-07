@@ -2,7 +2,9 @@ package com.cool.mmc.api.tools;
 
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.cool.mmc.manager.entity.PayRecord;
 import com.cool.mmc.manager.entity.Timer;
+import com.cool.mmc.manager.service.PayRecordService;
 import com.cool.mmc.manager.service.TimerService;
 import com.core.common.Cools;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +23,13 @@ import java.util.List;
 @EnableScheduling
 @Component
 public class CallBackTask {
+
     @Autowired
     private TimerService timerService;
+
+    @Autowired
+    private PayRecordService payRecordService;
+
     @Scheduled(fixedRate=5000)
     public void callback() {
         List<Timer> timers = timerService.selectList(new EntityWrapper<Timer>().eq("status", 0));
@@ -32,6 +39,11 @@ public class CallBackTask {
                 JSONObject jsonObject = JSONObject.parseObject(post);
                 if (!Cools.isEmpty(jsonObject.getString("code"))) {
                     if (jsonObject.getString("code").equals("200")) {
+                        PayRecord payRecord = payRecordService.selectById(timer.getPayRecordId());
+                        if (payRecord != null) {
+                            payRecord.setState((short) 3);
+                            payRecordService.updateById(payRecord);
+                        }
                         timer.setStatus(1);
                     }
                 }

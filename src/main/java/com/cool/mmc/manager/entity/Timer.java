@@ -1,15 +1,16 @@
 package com.cool.mmc.manager.entity;
 
-import com.core.common.Cools;import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.enums.IdType;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import com.baomidou.mybatisplus.annotations.TableField;
+import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.enums.IdType;
+import com.cool.mmc.manager.service.PayRecordService;
+import com.core.common.Cools;
+import com.core.common.SpringUtils;
+
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
-import com.baomidou.mybatisplus.annotations.TableName;
-import java.io.Serializable;
 
 @TableName("man_timer")
 public class Timer implements Serializable {
@@ -20,7 +21,13 @@ public class Timer implements Serializable {
      * 编号
      */
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private Long id;
+
+    /**
+     * 订单
+     */
+    @TableField("pay_record_id")
+    private Long payRecordId;
 
     /**
      * 地址
@@ -56,7 +63,8 @@ public class Timer implements Serializable {
 
     public Timer() {}
 
-    public Timer(String url,String data,Integer count,Date createTime,Date updateTime,Integer status) {
+    public Timer(Long payRecordId,String url,String data,Integer count,Date createTime,Date updateTime,Integer status) {
+        this.payRecordId = payRecordId;
         this.url = url;
         this.data = data;
         this.count = count;
@@ -66,6 +74,7 @@ public class Timer implements Serializable {
     }
 
 //    Timer timer = new Timer(
+//            null,    // 订单[非空]
 //            null,    // 地址[非空]
 //            null,    // 数据
 //            null,    // 次数
@@ -74,12 +83,29 @@ public class Timer implements Serializable {
 //            null    // 状态[非空]
 //    );
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getPayRecordId() {
+        return payRecordId;
+    }
+
+    public String getPayRecordId$(){
+        PayRecordService service = SpringUtils.getBean(PayRecordService.class);
+        PayRecord payRecord = service.selectById(this.payRecordId);
+        if (!Cools.isEmpty(payRecord)){
+            return String.valueOf(payRecord.getId());
+        }
+        return null;
+    }
+
+    public void setPayRecordId(Long payRecordId) {
+        this.payRecordId = payRecordId;
     }
 
     public String getUrl() {
