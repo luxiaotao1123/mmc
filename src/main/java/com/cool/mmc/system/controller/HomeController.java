@@ -43,29 +43,18 @@ public class HomeController extends BaseController {
         boolean admin = isAdmin(getUserId());
         int logWeek = payRecordService.selectOrderCountByCurrentWeek(admin?null:getUserId());
         int logTotal = payRecordService.selectOrderCount(admin?null:getUserId());
-
         int userTotal = userService.selectCount(new EntityWrapper<>());
         int loginWeek = userLoginService.selectCountByCurrentWeek();
-        boolean all = false;
-        if (getUserId() == 9527) {
-            all = true;
-        } else {
-            User user = userService.selectById(getUserId());
-            Role role = roleService.selectById(user.getRoleId());
-            if (role.getCode().toUpperCase().equals("ROOT") || role.getCode().toUpperCase().equals("ADMIN")) {
-                all = true;
-            }
-        }
-        Double moneyYear = payRecordService.selectMoneyByCurrentYear(all ? null : getUserId());
-        Double totalMoney = payRecordService.selectMoney(all ? null : getUserId());
+        Double moneyYear = payRecordService.selectMoneyByCurrentYear(admin ? null : getUserId());
+        Double totalMoney = payRecordService.selectMoney(admin ? null : getUserId());
 
         Map<String, Object> result = new HashMap<>();
         result.put("logTotal", logTotal);
         result.put("logWeek", logWeek);
         result.put("userTotal", userTotal);
         result.put("live", Arith.multiplys(0, Arith.divides(2, loginWeek, userTotal), 100)+"%");
-        result.put("moneyYear", moneyYear);
-        result.put("totalMoney", totalMoney);
+        result.put("moneyYear", moneyYear==null?0.0D:moneyYear);
+        result.put("totalMoney", totalMoney==null?0.0D:totalMoney);
         return R.ok(result);
     }
 
