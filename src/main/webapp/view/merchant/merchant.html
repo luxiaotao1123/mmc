@@ -44,6 +44,12 @@
             </div>
         </div>
     </div>
+    <div class="layui-inline" >
+        <label class="layui-form-label">商家姓名：</label>
+        <div class="layui-input-inline">
+            <input name="name" class="layui-input" type="text">
+        </div>
+    </div>
     <div class="layui-inline">
         <label class="layui-form-label">操 作 人：</label>
         <div class="layui-input-inline cool-auto-complete">
@@ -54,6 +60,16 @@
                 <select class="cool-auto-complete-window-select" data-key="userQueryByeditorSelect" onchange="confirmed(this.getAttribute('data-key'))" multiple="multiple">
                 </select>
             </div>
+        </div>
+    </div>
+    <div class="layui-inline" >
+        <label class="layui-form-label">轮回状态：</label>
+        <div class="layui-input-inline">
+            <select name="state">
+                <option value="" style="display: none"></option>
+                <option value="1">开启</option>
+                <option value="0">关闭</option>
+            </select>
         </div>
     </div>
 

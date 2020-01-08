@@ -21,18 +21,6 @@
         </div>
     </div>
     <div class="layui-inline">
-        <label class="layui-form-label">所属会员：</label>
-        <div class="layui-input-inline cool-auto-complete">
-            <input id="userId" class="layui-input" name="user_id" type="text" placeholder="请输入" autocomplete="off" style="display: none">
-            <input id="userId$" class="layui-input cool-auto-complete-div" onclick="autoShow(this.id)" type="text" placeholder="请输入" onfocus=this.blur()>
-            <div class="cool-auto-complete-window">
-                <input class="cool-auto-complete-window-input" data-key="userQueryByuserId" onkeyup="autoLoad(this.getAttribute('data-key'))">
-                <select class="cool-auto-complete-window-select" data-key="userQueryByuserIdSelect" onchange="confirmed(this.getAttribute('data-key'))" multiple="multiple">
-                </select>
-            </div>
-        </div>
-    </div>
-    <div class="layui-inline">
         <label class="layui-form-label">所属接口：</label>
         <div class="layui-input-inline cool-auto-complete">
             <input id="productId" class="layui-input" name="product_id" type="text" placeholder="请输入" autocomplete="off" style="display: none">
@@ -45,15 +33,19 @@
         </div>
     </div>
     <div class="layui-inline">
-        <label class="layui-form-label">操 作 人：</label>
-        <div class="layui-input-inline cool-auto-complete">
-            <input id="editor" class="layui-input" name="editor" type="text" placeholder="请输入" autocomplete="off" style="display: none">
-            <input id="editor$" class="layui-input cool-auto-complete-div" onclick="autoShow(this.id)" type="text" placeholder="请输入" onfocus=this.blur()>
-            <div class="cool-auto-complete-window">
-                <input class="cool-auto-complete-window-input" data-key="userQueryByeditor" onkeyup="autoLoad(this.getAttribute('data-key'))">
-                <select class="cool-auto-complete-window-select" data-key="userQueryByeditorSelect" onchange="confirmed(this.getAttribute('data-key'))" multiple="multiple">
-                </select>
-            </div>
+        <label class="layui-form-label">商家姓名：</label>
+        <div class="layui-input-inline">
+            <input name="name" class="layui-input" type="text">
+        </div>
+    </div>
+    <div class="layui-inline">
+        <label class="layui-form-label">轮回状态：</label>
+        <div class="layui-input-inline">
+            <select name="state">
+                <option value="" style="display: none"></option>
+                <option value="1">开启</option>
+                <option value="0">关闭</option>
+            </select>
         </div>
     </div>
 
