@@ -121,8 +121,10 @@ public class PaymentService {
     public void oauthSend(PayRecord payRecord) {
         System.out.println("回调！oauthSend");
         Oauth oauth = oauthService.selectOne(new EntityWrapper<Oauth>().eq("id", payRecord.getOauthId()));
+        Product product = productService.selectById(payRecord.getId());
         long timestamp = new Date().getTime();
         Map<String, Object> param = new HashMap<>();
+        param.put("payType", product.getFlag());
         param.put("appId", oauth.getAccount());
         param.put("outTradeNo", payRecord.getOutTradeNo());
         param.put("timestamp", timestamp);
