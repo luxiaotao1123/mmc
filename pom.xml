@@ -70,7 +70,7 @@
     </dependencies>
 
     <build>
-        <finalName>cool-framework-demo</finalName>
+        <finalName>mmc</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
