@@ -1,17 +1,15 @@
 package com.cool.mmc.manager.entity;
 
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableName;
-import com.baomidou.mybatisplus.enums.IdType;
 import com.cool.mmc.system.entity.User;
 import com.cool.mmc.system.service.UserService;
-import com.core.common.Cools;
+import com.core.common.Cools;import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.enums.IdType;
 import com.core.common.SpringUtils;
-
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotations.TableField;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import com.baomidou.mybatisplus.annotations.TableName;
+import java.io.Serializable;
 
 @TableName("man_oauth")
 public class Oauth implements Serializable {
@@ -31,7 +29,7 @@ public class Oauth implements Serializable {
     private Long userId;
 
     /**
-     * appId
+     * 账户
      */
     private String account;
 
@@ -47,6 +45,11 @@ public class Oauth implements Serializable {
     private String callbackUrl;
 
     /**
+     * 会员划算比例
+     */
+    private Double ratio;
+
+    /**
      * 添加时间
      */
     @TableField("create_time")
@@ -59,28 +62,32 @@ public class Oauth implements Serializable {
     private Date updateTime;
 
     /**
-     * 状态 1: 正常  0: 禁用
+     * 状态 1: 正常  0: 禁用  
      */
     private Short status;
 
     public Oauth() {}
 
-    public Oauth(Long userId,String account,String sign,String callbackUrl,Date createTime,Date updateTime) {
+    public Oauth(Long userId,String account,String sign,String callbackUrl,Double ratio,Date createTime,Date updateTime,Short status) {
         this.userId = userId;
         this.account = account;
         this.sign = sign;
         this.callbackUrl = callbackUrl;
+        this.ratio = ratio;
         this.createTime = createTime;
         this.updateTime = updateTime;
+        this.status = status;
     }
 
 //    Oauth oauth = new Oauth(
-//            null,    // 所属商户[非空]
+//            null,    // 所属会员[非空]
 //            null,    // 账户[非空]
 //            null,    // 密钥[非空]
 //            null,    // 回调地址
+//            null,    // 会员划算比例
 //            null,    // 添加时间[非空]
-//            null    // 修改时间
+//            null,    // 修改时间
+//            null    // 状态[非空]
 //    );
 
     public Long getId() {
@@ -130,6 +137,14 @@ public class Oauth implements Serializable {
 
     public void setCallbackUrl(String callbackUrl) {
         this.callbackUrl = callbackUrl;
+    }
+
+    public Double getRatio() {
+        return ratio;
+    }
+
+    public void setRatio(Double ratio) {
+        this.ratio = ratio;
     }
 
     public Date getCreateTime() {

@@ -19,9 +19,10 @@ layui.use(['table','laydate', 'form'], function(){
             {type: 'checkbox', fixed: 'left'}
             ,{field: 'id', title: 'ID', sort: true,align: 'center', fixed: 'left', width: 80}
             ,{field: 'userId$', align: 'center',title: '所属会员',event: 'userId', style: 'text-decoration: underline;cursor:pointer'}
-            ,{field: 'account', align: 'center',title: 'appId'}
+            ,{field: 'account', align: 'center',title: '账户'}
             ,{field: 'sign', align: 'center',title: '密钥'}
             ,{field: 'callbackUrl', align: 'center',title: '回调地址'}
+            ,{field: 'ratio', align: 'center',title: '会员划算比例'}
             ,{field: 'createTime$', align: 'center',title: '添加时间'}
             ,{field: 'updateTime$', align: 'center',title: '修改时间'}
             ,{field: 'status$', align: 'center',title: '状态'}
@@ -166,6 +167,17 @@ layui.use(['table','laydate', 'form'], function(){
                         layer.getChildFrame('#data-detail-submit', index).hide();
                         detailScreen(index);
                         layero.find('iframe')[0].contentWindow.layui.form.render('select');
+
+                        $.ajax({
+                            url: "/home/ratioMoney",
+                            headers: {'token': localStorage.getItem('token')},
+                            data: {"ouathId": data.id},
+                            method: 'GET',
+                            success: function (data) {
+                                layer.getChildFrame('#data-detail-btn', index).before("<a>此商户 总收入："+data.money+" 划算后收入："+data.ratioMoney+"</a>");}
+                        });
+
+
                     }
                 });
                 break;
@@ -236,6 +248,7 @@ layui.use(['table','laydate', 'form'], function(){
             account: $('#account').val(),
             sign: $('#sign').val(),
             callbackUrl: $('#callbackUrl').val(),
+            ratio: $('#ratio').val(),
             createTime: top.strToDate($('#createTime\\$').val()),
             updateTime: top.strToDate($('#updateTime\\$').val()),
             status: $('#status').val(),

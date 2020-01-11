@@ -134,7 +134,7 @@
                 <div class="layui-card-header">收入<span class="layui-badge layui-bg-green">年</span></div>
                 <div class="layui-card-body">
                     <p id="moneyYear" class="cool-home-top-count">0</p>
-                    <p class="cool-home-top-total">总收入<span id="totalMoney" class="cool-home-top-count-span">0<i class="layui-inline layui-icon layui-icon-dollar"></i></span></p>
+                    <p id="totalMoneyP" class="cool-home-top-total">总收入<span id="totalMoney" class="cool-home-top-count-span">0<i class="layui-inline layui-icon layui-icon-dollar"></i></span></p>
                 </div>
             </div>
         </div>
@@ -328,8 +328,16 @@
                     $('#logTotal').text(res.data.logTotal);
                     $('#userTotal').text(res.data.userTotal);
                     $('#live').text(res.data.live);
+
                     $('#moneyYear').text(res.data.moneyYear);
                     $('#totalMoney').text(res.data.totalMoney + " 元");
+                    if(res.data.ratio!=null){
+                        var Percentage=1-res.data.ratio;
+                        var moneyYearRatio=res.data.moneyYear*Percentage;
+                        var totalMoneyRatio=res.data.totalMoney*Percentage;
+                        $('#moneyYear').append("<p id=\"moneyYearRatio\" class=\"cool-home-top-count\">划算后年收入:"+moneyYearRatio+"</p>");
+                        $('#totalMoneyP').append("<p class=\"cool-home-top-total\">划算后总收入<span id=\"totalMoneyRatio\" class=\"cool-home-top-count-span\">"+totalMoneyRatio+"元</span></p>");
+                    }
                 } else if (res.code === 403){
                     top.location.href = "/login";
                 } else {

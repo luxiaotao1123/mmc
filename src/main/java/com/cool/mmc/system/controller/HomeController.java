@@ -2,6 +2,8 @@ package com.cool.mmc.system.controller;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.cool.mmc.common.web.BaseController;
+import com.cool.mmc.manager.entity.Oauth;
+import com.cool.mmc.manager.service.OauthService;
 import com.cool.mmc.manager.service.PayRecordService;
 import com.cool.mmc.system.entity.Role;
 import com.cool.mmc.system.entity.User;
@@ -11,6 +13,7 @@ import com.cool.mmc.system.service.UserLoginService;
 import com.cool.mmc.system.service.UserService;
 import com.core.annotations.ManagerAuth;
 import com.core.common.Arith;
+import com.core.common.Cools;
 import com.core.common.R;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,6 +31,8 @@ public class HomeController extends BaseController {
 
     @Autowired
     private OperateLogService operateLogService;
+    @Autowired
+    private OauthService oauthService;
     @Autowired
     private UserService userService;
     @Autowired
@@ -47,7 +52,6 @@ public class HomeController extends BaseController {
         int loginWeek = userLoginService.selectCountByCurrentWeek();
         Double moneyYear = payRecordService.selectMoneyByCurrentYear(admin ? null : getUserId());
         Double totalMoney = payRecordService.selectMoney(admin ? null : getUserId());
-
         Map<String, Object> result = new HashMap<>();
         result.put("logTotal", logTotal);
         result.put("logWeek", logWeek);
@@ -55,6 +59,15 @@ public class HomeController extends BaseController {
         result.put("live", Arith.multiplys(0, Arith.divides(2, loginWeek, userTotal), 100)+"%");
         result.put("moneyYear", moneyYear==null?0.0D:moneyYear);
         result.put("totalMoney", totalMoney==null?0.0D:totalMoney);
+        if(!admin){
+            Oauth oauth = oauthService.selectList(new EntityWrapper<Oauth>().eq("user_id", getUserId()).eq("status", "1")).get(0);
+            if(Cools.isEmpty(oauth.getRatio())){
+                result.put("ratio",oauth.getRatio());
+            }
+            else{
+                result.put("ratio",0);
+            }
+        }
         return R.ok(result);
     }
 
@@ -85,9 +98,34 @@ public class HomeController extends BaseController {
 
         Map<String, Object> result = new HashMap<>();
         result.put("money", convert(moneyReport, statsType, 2));
+        if(!admin){
+            Oauth oauth = oauthService.selectList(new EntityWrapper<Oauth>().eq("user_id", getUserId()).eq("status", "1")).get(0);
+            result.put("ratio",oauth.getRatio());
+        }
         return R.ok(result);
     }
+    /**
+     * 报表统计
+     * @param ouathId 平台Id
+     */
+    @RequestMapping("/ratioMoney")
+    @ManagerAuth
+    public Map<String,Object> ratioMoney(Integer ouathId){
+        Map<String,Object> map=new HashMap<>();
+        Oauth oauth = oauthService.selectOne(new EntityWrapper<Oauth>().eq("id", ouathId));
+        Double totalMoney = payRecordService.selectMoney(oauth.getUserId());
+        double a=1-oauth.getRatio();
+        if(!Cools.isEmpty(totalMoney)){
+            map.put("money",totalMoney);
+            map.put("ratioMoney",totalMoney*a);
+        }
+        else{
+            map.put("money",0);
+            map.put("ratioMoney",0);
+        }
+        return map;
 
+    }
 
     /**
      * 自动补零

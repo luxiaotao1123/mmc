@@ -34,7 +34,7 @@
             </div>
         </div>
         <div class="layui-inline"  style="width:31%;">
-            <label class="layui-form-label"><span class="not-null">*</span>appId：</label>
+            <label class="layui-form-label"><span class="not-null">*</span>账　　户：</label>
             <div class="layui-input-inline">
                 <input id="account" class="layui-input" type="text" lay-verify="required" >
             </div>
@@ -45,10 +45,16 @@
                 <input id="sign" class="layui-input" type="text" lay-verify="required" >
             </div>
         </div>
-        <div class="layui-inline"  style="width:31%;">
+        <div class="layui-inline"  style="width:64%;">
             <label class="layui-form-label">回调地址：</label>
             <div class="layui-input-inline">
                 <input id="callbackUrl" class="layui-input" type="text">
+            </div>
+        </div>
+        <div class="layui-inline"  style="width:31%;">
+            <label class="layui-form-label" style="font-size: x-small">会员划算比例：</label>
+            <div class="layui-input-inline">
+                <input id="ratio" class="layui-input" type="text">
             </div>
         </div>
         <div class="layui-inline"  style="width:31%;">
@@ -74,7 +80,8 @@
             </div>
         </div>
 
-        <hr class="layui-bg-gray">
+
+        <hr id="layui-bg-gray" class="layui-bg-gray">
 
         <div id="data-detail-btn" class="layui-btn-container layui-form-item">
             <div id="data-detail-submit" type="button" class="layui-btn layui-btn-normal" lay-submit lay-filter="edit">保存</div>
