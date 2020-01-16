@@ -55,19 +55,19 @@ public class HomeController extends BaseController {
         Map<String, Object> result = new HashMap<>();
         result.put("logTotal", logTotal);
         result.put("logWeek", logWeek);
-        result.put("userTotal", userTotal);
-        result.put("live", Arith.multiplys(0, Arith.divides(2, loginWeek, userTotal), 100)+"%");
+//        result.put("userTotal", userTotal);
+//        result.put("live", Arith.multiplys(0, Arith.divides(2, loginWeek, userTotal), 100)+"%");
         result.put("moneyYear", moneyYear==null?0.0D:moneyYear);
         result.put("totalMoney", totalMoney==null?0.0D:totalMoney);
+        Double ratio = 1.0D;
         if(!admin){
-            Oauth oauth = oauthService.selectList(new EntityWrapper<Oauth>().eq("user_id", getUserId()).eq("status", "1")).get(0);
-            if(Cools.isEmpty(oauth.getRatio())){
-                result.put("ratio",oauth.getRatio());
-            }
-            else{
-                result.put("ratio",0);
+            Oauth oauth = oauthService.selectOne(new EntityWrapper<Oauth>().eq("user_id", getUserId()).eq("status", "1"));
+            if(!Cools.isEmpty(oauth.getRatio())){
+                ratio = oauth.getRatio();
             }
         }
+        result.put("totalRatioMoney", totalMoney==null?0.0D:Arith.multiplys(2, totalMoney, ratio));
+        result.put("ratio", Arith.multiplys(2, ratio, 100)+"%");
         return R.ok(result);
     }
 
