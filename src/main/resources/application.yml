@@ -1,12 +1,12 @@
 server:
-  port: 80
+  port: 8080
 
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://47.111.25.152:3306/mmc?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
-    password: liU8huhUmznydHlq
+    password: ykBmgA5TPoc
     hikari:
       max-lifetime: 1000000
   mvc:
